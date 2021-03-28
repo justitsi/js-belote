@@ -2,15 +2,17 @@ import { HashRouter, Route } from 'react-router-dom'
 import styles from './App.module.scss'
 import i18n from './i18n';
 import { I18nextProvider } from 'react-i18next';
-import MainPage from './Content/MainPage';
+import MainPage from './content/MainPage';
+import BelotePage from './content/BelotePage';
+
+
 
 function App() {
   return (
     <I18nextProvider i18n={i18n}>
       <HashRouter>
-        <Route path="/">
-          <MainPage />
-        </Route>
+        <Route exact path='/' component={MainPage} />
+        <Route exact path='/belote/:roomID' component={BelotePage} />
       </HashRouter>
     </I18nextProvider>
   );

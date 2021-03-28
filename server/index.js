@@ -15,7 +15,7 @@ const rooms = [];
 const room_limit = 4;
 
 io.on("connection", (socket) => {
-    // Join a conversation
+    // Join a room
     const room_id = socket.handshake.query.room;
     const client = socket.handshake.query.client;
 
@@ -95,46 +95,6 @@ io.on("connection", (socket) => {
     });
 
     // console.log(rooms)
-    socket.on('message', (args) => {
-        console.log(`Received message ${JSON.stringify(args)}`)
-        const incoming_message = {
-            sender: args.sender,
-            contents: args.message,
-            timestamp: new Date().getTime()
-        }
-        room_entry.messages.push(incoming_message);
-
-        console.log('Room data:')
-        console.log(room_entry)
-
-        io.emit('messages', room_entry.messages);
-    });
-
-    socket.on('get_all_messages', (args) => {
-        // console.log(`Received request for all messages: ${JSON.stringify(args)}`)
-        console.log(room_entry.messages)
-        io.emit('messages', room_entry.messages);
-    });
-
-    socket.on('setConnectionInfo', (args) => {
-        console.log(`Received conn info: ${JSON.stringify(args)}`);
-
-        let set = false;
-        for (conn_entry of room_entry.connections) {
-            if (conn_entry.id = args.id) {
-                conn_entry.info = args.info;
-                set = true;
-                break;
-            }
-        }
-        if (!set) {
-            conn_entry.connections.push({
-                id: args.id,
-                info: args.info
-            })
-        }
-        io.to(room_id).emit('newConnection', { id: args.id, info: args.info });
-    });
 
     socket.on('getConnectionInfo', (args) => {
         console.log(`Giving out info ${JSON.stringify(room_entry.connections)}`);
