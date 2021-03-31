@@ -26,11 +26,23 @@ function Card(props) {
     }
     // handle a card the player doesn't see
     else {
-        return (
-            <div className={styles.cardContainer} >
-                <div className={styles.emptyCard} />
-            </div >
-        );
+        if (props.displayEmpty) {
+            return (
+                <div
+                    className={styles.cardContainer}
+                    style={{
+                        backgroundColor: "green"
+                    }}
+                />
+            );
+        }
+        else {
+            return (
+                <div className={styles.cardContainer} >
+                    <div className={styles.emptyCard} />
+                </div >
+            );
+        }
     }
 }
 

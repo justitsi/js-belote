@@ -7,6 +7,8 @@ function MainPage() {
     return (
         <div className={styles.page}>
             {t('test')}
+            <br />
+            <a href='#/belote/123'>the interesting stuff...</a>
         </div>
     );
 }

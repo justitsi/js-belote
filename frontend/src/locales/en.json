@@ -5,5 +5,8 @@
         "D": "D",
         "H": "H",
         "S": "S"
+    },
+    "gameBoard": {
+        "playerTurnIndicator": "Player turn:"
     }
 }

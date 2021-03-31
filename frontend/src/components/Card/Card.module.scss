@@ -1,12 +1,15 @@
 .cardContainer {
-    height: 8rem;
-    width: 6rem;
+    height: 6rem;
+    width: 4rem;
     border: 1px solid black;
+    border-radius: 4%;
+    margin: auto;
+    background-color: white;
 }
 
 .selectedCardContainer {
-    height: 8rem;
-    width: 6rem;
+    height: 6rem;
+    width: 4rem;
     border: 3px solid green;
 }
 
