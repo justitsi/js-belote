@@ -5,7 +5,7 @@ class Card {
     }
 }
 
-//TODO: enable card shuffling!! - it was disabled for development
+//TODO: enable card shuffling on init()!! - it was disabled for development
 class Deck {
     // clubs, diamonds, hearts, spades
     // this is the rank of the suits in belote
@@ -20,7 +20,7 @@ class Deck {
         for (const suit of this.validSuits)
             for (const rank of this.validRanks)
                 this.cards.push(new Card(suit, rank))
-        // this.cards = this.shuffle(this.cards)
+        // this.shuffle()
     }
     // ^^ enable card shuffle ^^
 
@@ -47,7 +47,8 @@ class Deck {
             this.addCardToTop(card)
     }
 
-    shuffle(array) {
+    shuffle() {
+        const array = this.cards;
         var currentIndex = array.length, temporaryValue, randomIndex;
 
         // While there remain elements to shuffle...
@@ -63,7 +64,7 @@ class Deck {
             array[randomIndex] = temporaryValue;
         }
 
-        return array;
+        this.cards = array;
     }
 
     split(pos) {
@@ -80,7 +81,6 @@ class Team {
     constructor(p1, p2) {
         this.p1 = p1;
         this.p2 = p2;
-        this.score = 0;
     }
 
     isReady() {
@@ -113,6 +113,10 @@ class Hand {
         card = card[0]
         card.placedBy = this.playerName
         return card;
+    }
+
+    grabCardsFromTop(numOfCards) {
+        return this.cards.splice(this.cards.length - numOfCards, this.cards.length)
     }
 }
 
@@ -247,6 +251,7 @@ class Round {
         this.valid_premiums = []
         this.teamCardScores = [0, 0]
         this.teamPremiumScores = [0, 0]
+        this.teamNumberOfHands = [0, 0]
     }
 
     splitDeck(playername, splitPos) {
@@ -297,12 +302,18 @@ class Round {
             }
             else {
                 this.consecutivePasses++;
-                //end round if three passes
+                //start round if three passes
                 if (this.consecutivePasses == 3) {
                     if (this.suit) this.status = this.status_options[2];
                 }
+                //end round if four passes - also return cards to main deck
                 if (this.consecutivePasses == 4) {
                     this.status = this.status_options[4];
+                    for (const hand of this.hands) {
+                        for (const card of hand.cards) {
+                            this.mainDeck.addCardsToTop(hand.grabCardsFromTop(hand.cards.length));
+                        }
+                    }
                 }
 
             }
@@ -368,7 +379,6 @@ class Round {
         }
     }
 
-    // TODO calc premiums at end of game
     // NOTE: after this function has been called by the server, check for new premiums - belote may have been anounced automatically :/
     placeCard(playerName, cardSuit, cardRank) {
         // check if card CAN be placed on table
@@ -406,6 +416,8 @@ class Round {
             const strongest = this.getStrongestCard(this.cardsOnTable.cards)
             this.playerTurn = this.players.indexOf(strongest.placedBy)
             this.teamPiles[this.getPlayerTeam(strongest.placedBy)].addCardsToTop(this.cardsOnTable.grabCardsFromTop(4))
+            // count number of hands that each team collects to their piles
+            this.teamNumberOfHands[this.getPlayerTeam(strongest.placedBy)]++
 
             //check if hands are empty - game should be over
             let empty = true
@@ -566,7 +578,6 @@ class Round {
         return true
     }
 
-    // to do - make belote options actually work - this should be fine now *only moderetly tested*
     getPlayerPremiumOptions(playerName) {
         //check if player can call premiums at all
         let options = { 'S': [], 'C': [], 'B': [] }
@@ -867,8 +878,12 @@ class Round {
 
     getRoundResults() {
         return {
+            team_hand_count: this.teamNumberOfHands,
             card_scores: this.teamCardScores,
             premium_scores: this.teamPremiumScores,
+            suit: this.suit,
+            callerTeam: this.callerTeam,
+            lastHandTeam: this.getPlayerTeam(this.playerTurn),
             modifier: this.modifier,
             validPremiums: this.valid_premiums
         }
@@ -878,95 +893,291 @@ class Round {
 class Game {
     constructor(players) {
         //teams are 'crossed' in the rounds
-        this.t1 = new Team(players[0], players[1])
-        this.t2 = new Team(players[2], players[3])
-        this.teamsValid = this.t1.isReady() && this.t2.isReady()
+        this.t1 = new Team(players[0], players[1]);
+        this.t2 = new Team(players[2], players[3]);
+        this.teamsValid = this.t1.isReady() && this.t2.isReady();
+        this.teamScores = [0, 0];
+        this.roundNum = 0;
+        this.hangingPoints = 0
+        this.gameStatus = 'in_progress';
+        this.winningTeam = null;
+        this.consecutivePasses = 0;
 
         this.deck = new Deck();
-        this.deck.initDeck()
-        this.pastRounds = []
+        this.deck.initDeck();
+        this.pastRounds = [];
 
-        this.currentRound = new Round(this.deck, this.t1, this.t2, 0)
+        this.currentRound = new Round(this.deck, this.t1, this.t2, this.roundNum);
+    }
+
+    endCurrentRound() {
+        this.roundNum++;
+
+        // get deck from current round and cleanup it from placedBy 
+        this.deck = this.currentRound.mainDeck;
+        for (const card of this.deck.cards)
+            delete card.placedBy;
+
+
+        // check if game was played or passed
+        if (this.currentRound.consecutivePasses == 4) {
+            this.consecutivePasses++;
+            // shuffle cards on 4 passes
+            if (this.consecutivePasses == 4) {
+                this.deck.shuffle();
+                this.consecutivePasses = 0;
+            }
+        }
+
+        // calc game points from round 
+        console.log(this.calculateGamePoints())
+        const pointsArr = this.calculateGamePoints()
+        this.teamScores[0] += pointsArr[0]
+        this.teamScores[1] += pointsArr[1]
+
+        // check if game is over
+        if (this.teamScores[0] > 151 || this.teamScores[1] > 151) {
+            if (this.teamScores[0] > 151) this.winningTeam = 0
+            else this.winningTeam = 1
+            this.gameStatus = 'over'
+        }
+        else {
+            // archive current round and start new one
+            this.pastRounds.push(this.currentRound);
+            this.currentRound = new Round(this.deck, this.t1, this.t2, this.roundNum);
+        }
+
+        this.roundNum++;
+    }
+
+    calculateGamePoints() {
+        let final_points = [0, 0]
+
+        const roundInfo = this.currentRound.getRoundResults()
+        //check if game has been played
+        if (roundInfo.suit) {
+            //calculate team scores
+            console.log(roundInfo)
+            const teamTotalScores = [0, 0]
+            teamTotalScores[0] += roundInfo.card_scores[0]
+            teamTotalScores[1] += roundInfo.card_scores[1]
+            teamTotalScores[0] += roundInfo.premium_scores[0]
+            teamTotalScores[1] += roundInfo.premium_scores[1]
+
+            // calculate 10 points from last hand
+            teamTotalScores[roundInfo.lastHandTeam] += 10
+
+            // check if game was not played on (N)o trump
+            if (roundInfo.suit == 'N') {
+                teamTotalScores[0] = teamTotalScores[0] * 2
+                teamTotalScores[1] = teamTotalScores[1] * 2
+            }
+
+            // check if calling team lost
+            if (teamTotalScores[roundInfo.callerTeam] < teamTotalScores[(roundInfo.callerTeam + 1) % 2]) {
+                // if calling team lost give all their points to the other team
+                teamTotalScores[(roundInfo.callerTeam + 1) % 2] += teamTotalScores[roundInfo.callerTeam]
+                teamTotalScores[roundInfo.callerTeam] = 0
+                // check for modifier
+                teamTotalScores[(roundInfo.callerTeam + 1) % 2] = [(roundInfo.callerTeam + 1) % 2] * roundInfo.modifier
+            }
+            else {
+                //calc points regardless if the game is equal
+                if (roundInfo.suit == 'N') {
+                    // handle no trump here
+                    teamTotalScores[roundInfo.callerTeam] += 5
+                    teamTotalScores[(roundInfo.callerTeam + 1) % 2] += 5
+
+                    final_points[roundInfo.callerTeam] = Math.floor(teamTotalScores[roundInfo.callerTeam] / 10);
+                    final_points[(roundInfo.callerTeam + 1) % 2] = Math.floor(teamTotalScores[(roundInfo.callerTeam + 1) % 2] / 10);
+                }
+                else {
+                    if (roundInfo.suit == 'A') {
+                        // handle all trump suit here
+                        teamTotalScores[roundInfo.callerTeam] += 5;
+                        teamTotalScores[(roundInfo.callerTeam + 1) % 2] += 6
+
+                        final_points[roundInfo.callerTeam] = Math.floor(teamTotalScores[roundInfo.callerTeam] / 10);
+                        final_points[(roundInfo.callerTeam + 1) % 2] = Math.floor(teamTotalScores[(roundInfo.callerTeam + 1) % 2] / 10);
+                    }
+                    else {
+                        // handle color suits here
+                        teamTotalScores[roundInfo.callerTeam] += 3;
+                        teamTotalScores[(roundInfo.callerTeam + 1) % 2] += 4
+
+                        final_points[roundInfo.callerTeam] = Math.floor(teamTotalScores[roundInfo.callerTeam] / 10);
+                        final_points[(roundInfo.callerTeam + 1) % 2] = Math.floor(teamTotalScores[(roundInfo.callerTeam + 1) % 2] / 10);
+                    }
+                }
+                // handle round modifier
+                final_points[0] = final_points[0] * roundInfo.modifier
+                final_points[1] = final_points[1] * roundInfo.modifier
+
+                // handle equal game here
+                if (teamTotalScores[roundInfo.callerTeam] == teamTotalScores[(roundInfo.callerTeam + 1) % 2]) {
+                    if (roundInfo.modifier == 1) {
+                        // defending team gets their points, atacking team doesn't
+                        this.hangingPoints += final_points[roundInfo.callerTeam]
+                        final_points[roundInfo.callerTeam] = 0
+                        teamTotalScores[roundInfo.callerTeam] = 0
+                    }
+                    else {
+                        // both team don't get any points and everything is put as hanging
+                        this.hangingPoints += final_points[0]
+                        this.hangingPoints += final_points[1]
+
+                        final_points[0] = 0
+                        final_points[1] = 0
+
+                        teamTotalScores[0] = 0
+                        teamTotalScores[1] = 0
+                    }
+                }
+            }
+            // add 9 big points for beating the other team with them not getting any hands
+            if (roundInfo.team_hand_count[0] == 0) roundInfo.team_hand_count[1] += 9
+            if (roundInfo.team_hand_count[1] == 0) roundInfo.team_hand_count[0] += 9
+        }
+
+        // handle hanging points from previous round
+        if (this.hangingPoints > 0) {
+            if (teamTotalScores[roundInfo.callerTeam] > 0 && teamTotalScores[(roundInfo.callerTeam + 1) % 2] > 0)
+                if (teamTotalScores[roundInfo.callerTeam] != teamTotalScores[(roundInfo.callerTeam + 1) % 2]) {
+                    if (teamTotalScores[roundInfo.callerTeam] > teamTotalScores[(roundInfo.callerTeam + 1) % 2]) final_points[roundInfo.callerTeam] += hangingPoints
+                    else final_points[[(roundInfo.callerTeam + 1) % 2]] += hangingPoints
+                }
+        }
+
+        return final_points
+    }
+
+    getGameInfo() {
+        return {
+            gameStatus: this.gameStatus,
+            teams: [this.t1, this.t2],
+            teamScores: this.teamScores,
+            roundNum: this.roundNum,
+            winningTeam: this.winningTeam,
+            consecutivePasses: this.consecutivePasses,
+            teamsValid: this.teamsValid
+        }
     }
 }
 
+module.exports = Game;
 
-const game = new Game(['s', 'e', 'n', 'w'])
-game.currentRound.splitDeck('s', 4)
+// const game = new Game(['s', 'e', 'n', 'w'])
+// game.currentRound.splitDeck('s', 4)
 
-game.currentRound.callSuit('n', 'A', 1)
-game.currentRound.callSuit('w', 'P', 1)
-game.currentRound.callSuit('s', 'P', 1)
-game.currentRound.callSuit('e', 'P', 1)
-game.currentRound.initPlayStage()
-// for (const hand of game.currentRound.hands) console.log(hand)
+// game.currentRound.callSuit('n', 'A', 1)
+// game.currentRound.callSuit('w', 'P', 1)
+// game.currentRound.callSuit('s', 'P', 1)
+// game.currentRound.callSuit('e', 'P', 1)
+// game.currentRound.initPlayStage()
+// // for (const hand of game.currentRound.hands) console.log(hand)
 
+// // game.currentRound.placeCard('n', 'C', '8')
+
+// // console.log(game.currentRound.hands[0])
+// game.currentRound.anouncePlayerPremium('n', [{ suit: 'C', rank: '8' }, { suit: 'C', rank: '9' }, { suit: 'C', rank: '10' }], 'C')
+// game.currentRound.anouncePlayerPremium('n', [{ suit: 'D', rank: 'Q' }, { suit: 'D', rank: 'K' }, { suit: 'D', rank: 'A' }], 'C')
+// game.currentRound.placeCard('n', 'D', 'Q')
+
+// game.currentRound.anouncePlayerPremium('w', [{ suit: 'D', rank: '9' }, { suit: 'D', rank: '10' }, { suit: 'D', rank: 'J' }], 'C')
+// game.currentRound.placeCard('w', 'D', '10')
+
+// game.currentRound.anouncePlayerPremium('s', [{ suit: 'S', rank: 'Q' }, { suit: 'S', rank: 'J' }, { suit: 'S', rank: '10' }], 'C')
+// game.currentRound.placeCard('s', 'D', '7')
+
+// game.currentRound.anouncePlayerPremium('e', [{ suit: 'S', rank: '7' }, { suit: 'S', rank: '8' }, { suit: 'S', rank: '9' }], 'C')
+// game.currentRound.anouncePlayerPremium('e', [{ suit: 'C', rank: 'J' }, { suit: 'C', rank: 'Q' }, { suit: 'C', rank: 'K' }], 'C')
+// game.currentRound.placeCard('e', 'S', '7')
+
+// // start 2 врътка
+// game.currentRound.placeCard('w', 'H', 'J')
+// game.currentRound.placeCard('s', 'H', '10')
+// game.currentRound.placeCard('e', 'H', '7')
+// game.currentRound.placeCard('n', 'H', 'K')
+
+// // start 3 врътка
+// game.currentRound.placeCard('w', 'D', 'J')
+// game.currentRound.placeCard('s', 'D', '8')
+// game.currentRound.placeCard('e', 'H', '8')
+// game.currentRound.placeCard('n', 'D', 'K')
+
+// // start 4 врътка
+// game.currentRound.placeCard('w', 'D', '9')
+// game.currentRound.placeCard('s', 'S', 'Q')
+// game.currentRound.placeCard('e', 'S', '8')
+// game.currentRound.placeCard('n', 'D', 'A')
+
+// // start 5 врътка
+// game.currentRound.placeCard('w', 'H', 'Q')
+// game.currentRound.placeCard('s', 'H', '9')
+// game.currentRound.placeCard('e', 'C', 'Q')
+// game.currentRound.placeCard('n', 'H', 'A')
+
+// // start 6 врътка
+// game.currentRound.placeCard('s', 'S', 'J')
+// game.currentRound.placeCard('e', 'S', '9')
+// game.currentRound.placeCard('n', 'C', '10')
+// game.currentRound.placeCard('w', 'S', 'K')
+
+// // start 7 врътка
+// game.currentRound.placeCard('s', 'C', 'A')
+// game.currentRound.placeCard('e', 'C', 'J')
 // game.currentRound.placeCard('n', 'C', '8')
+// game.currentRound.placeCard('w', 'C', '7')
 
-// console.log(game.currentRound.hands[0])
-game.currentRound.anouncePlayerPremium('n', [{ suit: 'C', rank: '8' }, { suit: 'C', rank: '9' }, { suit: 'C', rank: '10' }], 'C')
-game.currentRound.anouncePlayerPremium('n', [{ suit: 'D', rank: 'Q' }, { suit: 'D', rank: 'K' }, { suit: 'D', rank: 'A' }], 'C')
-game.currentRound.placeCard('n', 'D', 'Q')
-
-game.currentRound.anouncePlayerPremium('w', [{ suit: 'D', rank: '9' }, { suit: 'D', rank: '10' }, { suit: 'D', rank: 'J' }], 'C')
-game.currentRound.placeCard('w', 'D', '10')
-
-game.currentRound.anouncePlayerPremium('s', [{ suit: 'S', rank: 'Q' }, { suit: 'S', rank: 'J' }, { suit: 'S', rank: '10' }], 'C')
-game.currentRound.placeCard('s', 'D', '7')
-
-game.currentRound.anouncePlayerPremium('e', [{ suit: 'S', rank: '7' }, { suit: 'S', rank: '8' }, { suit: 'S', rank: '9' }], 'C')
-game.currentRound.anouncePlayerPremium('e', [{ suit: 'C', rank: 'J' }, { suit: 'C', rank: 'Q' }, { suit: 'C', rank: 'K' }], 'C')
-game.currentRound.placeCard('e', 'S', '7')
-
-// start 2 врътка
-game.currentRound.placeCard('w', 'H', 'J')
-game.currentRound.placeCard('s', 'H', '10')
-game.currentRound.placeCard('e', 'H', '7')
-game.currentRound.placeCard('n', 'H', 'K')
-
-// start 3 врътка
-game.currentRound.placeCard('w', 'D', 'J')
-game.currentRound.placeCard('s', 'D', '8')
-game.currentRound.placeCard('e', 'H', '8')
-game.currentRound.placeCard('n', 'D', 'K')
-
-// start 4 врътка
-game.currentRound.placeCard('w', 'D', '9')
-game.currentRound.placeCard('s', 'S', 'Q')
-game.currentRound.placeCard('e', 'S', '8')
-game.currentRound.placeCard('n', 'D', 'A')
-
-// start 5 врътка
-game.currentRound.placeCard('w', 'H', 'Q')
-game.currentRound.placeCard('s', 'H', '9')
-game.currentRound.placeCard('e', 'C', 'Q')
-game.currentRound.placeCard('n', 'H', 'A')
-
-// start 6 врътка
-game.currentRound.placeCard('s', 'S', 'J')
-game.currentRound.placeCard('e', 'S', '9')
-game.currentRound.placeCard('n', 'C', '10')
-game.currentRound.placeCard('w', 'S', 'K')
-
-// start 7 врътка
-game.currentRound.placeCard('s', 'C', 'A')
-game.currentRound.placeCard('e', 'C', 'J')
-game.currentRound.placeCard('n', 'C', '8')
-game.currentRound.placeCard('w', 'C', '7')
-
-// start 8 врътка
-game.currentRound.placeCard('e', 'C', 'K')
-game.currentRound.placeCard('n', 'C', '9')
-game.currentRound.placeCard('w', 'S', 'A')
-game.currentRound.placeCard('s', 'S', '10')
+// // start 8 врътка
+// game.currentRound.placeCard('e', 'C', 'K')
+// game.currentRound.placeCard('n', 'C', '9')
+// game.currentRound.placeCard('w', 'S', 'A')
+// game.currentRound.placeCard('s', 'S', '10')
 
 
-// console.log(game.currentRound.getPlayerOptions('s'))
-// console.log(game.currentRound.getPlayerPremiumOptions('e'))
+// // console.log(game.currentRound.getPlayerOptions('s'))
+// // console.log(game.currentRound.getPlayerPremiumOptions('e'))
 
 
-console.log(game.currentRound.getRoundStatus())
-console.log(game.currentRound.getRoundResults())
+// // console.log(game.currentRound.getRoundStatus())
+// // console.log(game.currentRound.getRoundResults())
+// game.endCurrentRound()
+// game.currentRound.splitDeck('e', 4)
+
+// game.currentRound.callSuit('w', 'P', 1)
+// game.currentRound.callSuit('s', 'P', 1)
+// game.currentRound.callSuit('e', 'P', 1)
+// game.currentRound.callSuit('n', 'P', 1)
+
+// game.endCurrentRound()
+// game.currentRound.splitDeck('n', 4)
+
+// game.currentRound.callSuit('s', 'P', 1)
+// game.currentRound.callSuit('e', 'P', 1)
+// game.currentRound.callSuit('n', 'P', 1)
+// game.currentRound.callSuit('w', 'P', 1)
+
+// game.endCurrentRound()
+// game.currentRound.splitDeck('w', 4)
+
+// game.currentRound.callSuit('e', 'P', 1)
+// game.currentRound.callSuit('n', 'P', 1)
+// game.currentRound.callSuit('w', 'P', 1)
+// game.currentRound.callSuit('s', 'P', 1)
 
 
+// game.endCurrentRound()
+// game.currentRound.splitDeck('s', 4)
 
+
+// game.currentRound.callSuit('n', 'P', 1)
+// game.currentRound.callSuit('w', 'P', 1)
+// game.currentRound.callSuit('s', 'P', 1)
+// game.currentRound.callSuit('e', 'P', 1)
+
+// // console.log(game.currentRound.getRoundStatus())
+// // console.log(game.currentRound.mainDeck)
+
+// game.endCurrentRound()
+// // console.log(game.currentRound.mainDeck)

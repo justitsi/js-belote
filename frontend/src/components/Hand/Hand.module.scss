@@ -1,0 +1,26 @@
+.handContainer {
+    display: grid;
+    width: 100%
+}
+
+.playCardButton {
+    width: 10.5rem;
+    margin-left: 2.5rem;
+}
+
+.horizontalList {
+    list-style-type: none;
+}
+.horizontalListItem {
+    float: left;
+    margin-left: 0.125rem;
+    display: inline;
+}
+
+.verticalList{
+    list-style-type: none;
+} 
+
+.verticalListItem{
+    margin-bottom: 0.125rem;
+}

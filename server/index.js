@@ -1,4 +1,5 @@
 const { emit } = require('process');
+const Game = require('./modules/gameObjects')
 
 var app = require('express')();
 var server = require('http').Server(app);
@@ -18,6 +19,7 @@ io.on("connection", (socket) => {
     // Join a room
     const room_id = socket.handshake.query.room;
     const client = socket.handshake.query.client;
+    const displayName = socket.handshake.query.displayName;
 
     // get rooms arr entry
     let room_entry = null
@@ -31,8 +33,8 @@ io.on("connection", (socket) => {
         const room_data = {
             id: room_id,
             clients: [],
+            gameInstance: null,
             messages: [],
-            connections: []
         }
         rooms.push(room_data);
         room_entry = room_data
@@ -43,7 +45,7 @@ io.on("connection", (socket) => {
     for (const client_entry of room_entry.clients) {
         if (client_entry.id == client) {
             isInRoom = true
-            console.log(`${client} already in room ${room_id}`)
+            // console.log(`${client} already in room ${room_id}`)
         }
     }
 
@@ -55,14 +57,28 @@ io.on("connection", (socket) => {
     }
 
     // update rooms arr entry and join
+    // init game object for room if enough players are there
     if (!isInRoom && !isRoomFull) {
         socket.join(room_id);
         const new_connection = {
             id: client,
+            displayName: displayName
         }
         room_entry.clients.push(new_connection);
-        console.log(`${client} joined ${room_id}`)
-        io.to(room_id).emit(`user ${client} has joined the room`);
+        console.log(`user ${client} with username ${displayName} has joined room ${room_id}`);
+        io.to(room_id).emit(`user ${client} with username ${displayName} has joined room ${room_id}`);
+
+        //create new game if room has 4 people in it
+        if (room_entry.gameInstance == null) {
+
+            room_entry.gameInstance = new Game([
+                room_entry.clients[0].displayName,
+                'test1',
+                'test2',
+                'test3'
+            ]);
+            socket.emit('gameStatusUpdate', room_entry.gameInstance.getGameInfo())
+        }
     }
 
     // Leave the room if the user closes the socket
@@ -93,7 +109,6 @@ io.on("connection", (socket) => {
         }
 
     });
-
     // console.log(rooms)
 
     socket.on('getConnectionInfo', (args) => {

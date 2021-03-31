@@ -1,0 +1,37 @@
+.cardContainer {
+    height: 8rem;
+    width: 6rem;
+    border: 1px solid black;
+}
+
+.selectedCardContainer {
+    height: 8rem;
+    width: 6rem;
+    border: 3px solid green;
+}
+
+.emptyCard {
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        red 10px,
+        black 20px
+      ),
+}
+
+.textContainer {
+    margin-top: 0.25rem;
+    margin-left: 0.25rem;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */   
+}
+
+.blackSuit {
+    color: black
+}
+
+.redSuit {
+    color: red
+}

@@ -1,3 +1,9 @@
 {
-    "test": "hello world"
+    "test": "hello world",
+    "cardSuits": {
+        "C": "C",
+        "D": "D",
+        "H": "H",
+        "S": "S"
+    }
 }
