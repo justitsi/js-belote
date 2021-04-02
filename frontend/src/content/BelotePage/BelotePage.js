@@ -13,7 +13,7 @@ function BelotePage(props) {
     const { t } = useTranslation('translations');
     // server conn vars
     const [server, setServer] = useState(CONSTANTS.game_server_addr)
-    const [roomID, setRoomID] = useState()
+    const [roomID, setRoomID] = useState(props.match.params.roomID)
     const [clientID, setClientID] = useState(uuidv4())
     const [displayName, setDisplayName] = useState(null)
     const [socket, setSocket] = useState(null)
@@ -63,7 +63,7 @@ function BelotePage(props) {
 
             setSocket(socket_connection)
         }
-    }, [roomID, clientID, displayName]);
+    }, [roomID, clientID, displayName, usernameSet]);
 
     const handleDeckSplit = (index) => {
         socket.emit("splitDeck", index);
@@ -79,7 +79,6 @@ function BelotePage(props) {
 
     const handleReadyToConnect = () => {
         setUsernameSet(true);
-        setRoomID(props.match.params.roomID)
     }
 
     return (
