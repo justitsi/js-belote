@@ -23,15 +23,59 @@
     width: 100%;
 }
 
+.horizontalPlayerTag {
+    text-align: center;
+}
+
+.verticalPlayerTagLeft {
+    margin: auto;
+    transform: rotate(90deg);
+}
+
+.verticalPlayerTagRight {
+    margin: auto;
+    transform: rotate(-90deg);
+}
+
+.displayElementsInOneLine {
+    display: flex
+}
+
 .tableContainer {
     padding-top: 6rem;
     height: 18rem;
-    padding-left: 30%;
-    width: 40%;
+    padding-left: 20%;
+    width: 60%;
 }
 
 .tableGrid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
+}
+
+.splitPromptContainer {
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 1%;
+    height: 100%;
+    text-align: center;
+}
+
+.splitPromptTextContainerErrorText{
+    margin-top: -1rem;
+    color:red;
+}
+
+.splitPromptTextContainer{
+    margin: 0.5rem;
+}
+
+.splitPromptFromSubmitButton {
+    margin-top: 1rem;
+}
+
+.roundOverTable{
+    margin:auto;
+    width: 90%;
 }

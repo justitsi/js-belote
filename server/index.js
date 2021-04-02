@@ -5,7 +5,7 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
@@ -18,7 +18,7 @@ const room_limit = 4;
 io.on("connection", (socket) => {
     // Join a room
     const room_id = socket.handshake.query.room;
-    const client = socket.handshake.query.client;
+    const client_id = socket.handshake.query.client;
     const displayName = socket.handshake.query.displayName;
 
     // get rooms arr entry
@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
     // check if user is already in room
     let isInRoom = false;
     for (const client_entry of room_entry.clients) {
-        if (client_entry.id == client) {
+        if (client_entry.id == client_id) {
             isInRoom = true
             // console.log(`${client} already in room ${room_id}`)
         }
@@ -58,42 +58,48 @@ io.on("connection", (socket) => {
 
     // update rooms arr entry and join
     // init game object for room if enough players are there
+    // todo fix game initialization to actually work with 4 people
     if (!isInRoom && !isRoomFull) {
-        socket.join(room_id);
+        socket.join(client_id);
         const new_connection = {
-            id: client,
+            id: client_id,
             displayName: displayName
         }
         room_entry.clients.push(new_connection);
-        console.log(`user ${client} with username ${displayName} has joined room ${room_id}`);
-        io.to(room_id).emit(`user ${client} with username ${displayName} has joined room ${room_id}`);
+        console.log(`client ${client_id} with username ${displayName} has joined room ${room_id}`);
+
+        sendToAllPlayersInRoom(room_entry, 'lobbyUpdate', `client ${client_id} with username ${displayName} has joined room ${room_id}`)
 
         //create new game if room has 4 people in it
-        if (room_entry.gameInstance == null) {
 
-            room_entry.gameInstance = new Game([
-                room_entry.clients[0].displayName,
-                'test1',
-                'test2',
-                'test3'
-            ]);
-            socket.emit('gameStatusUpdate', room_entry.gameInstance.getGameInfo())
+        console.log(room_entry.clients)
+        room_entry.gameInstance = new Game([
+            room_entry.clients[0] ? room_entry.clients[0].displayName : null,
+            room_entry.clients[1] ? room_entry.clients[1].displayName : null,
+            room_entry.clients[2] ? room_entry.clients[2].displayName : null,
+            room_entry.clients[3] ? room_entry.clients[3].displayName : null,
+        ]);
+        sendToAllPlayersInRoom(room_entry, 'gameStatusUpdate', room_entry.gameInstance.getGameInfo())
+
+        if (room_entry.gameInstance.getGameInfo().teamsValid == true) {
+            sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
         }
+
     }
 
     // Leave the room if the user closes the socket
     socket.on("disconnect", () => {
         socket.leave(room_id);
-        console.log(`${client} left ${room_id}`)
+        console.log(`${client_id} left ${room_id}`)
         for (const client_entry of room_entry.clients) {
-            if (client_entry.id == client) {
+            if (client_entry.id == client_id) {
                 const index = room_entry.clients.indexOf(client_entry);
                 if (index > -1) {
                     room_entry.clients.splice(index, 1);
                 }
             }
         }
-        io.to(room_id).emit(`user ${client} has left the room`);
+        io.to(room_id).emit(`user ${client_id} has left the room`);
 
         // delete the room if all users have left
         if (room_entry.clients.length == 0) {
@@ -109,10 +115,75 @@ io.on("connection", (socket) => {
         }
 
     });
-    // console.log(rooms)
 
-    socket.on('getConnectionInfo', (args) => {
-        console.log(`Giving out info ${JSON.stringify(room_entry.connections)}`);
-        socket.emit('connectionInfo', room_entry.connections)
+    socket.on('splitDeck', (args) => {
+        console.log(`Getting command to split deck: ${args} from ${displayName} (${client_id})`);
+        const splitRes = room_entry.gameInstance.currentRound.splitDeck(displayName, args)
+        console.log(splitRes)
+        if (splitRes) {
+            sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+            sendMoveOptionsToPlayers(room_entry)
+        }
+    });
+
+    socket.on('suitSelect', (args) => {
+        console.log(`Getting command to select suit: ${args} from ${displayName} (${client_id})`);
+
+
+        let suitRes = false;
+        if (args === 'x2' || args === 'x4') {
+            currentSuit = room_entry.gameInstance.currentRound.suit;
+            suitRes = room_entry.gameInstance.currentRound.callSuit(displayName, currentSuit, args.charAt(1))
+        }
+        else {
+            suitRes = room_entry.gameInstance.currentRound.callSuit(displayName, args, 1)
+        }
+
+        if (suitRes) {
+            let roundStatus = room_entry.gameInstance.currentRound.getRoundStatus()
+
+            if (room_entry.gameInstance.currentRound.getRoundStatus().status == 'suit_selected') {
+                room_entry.gameInstance.currentRound.initPlayStage()
+                roundStatus = room_entry.gameInstance.currentRound.getRoundStatus()
+            }
+
+            sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', roundStatus)
+            sendMoveOptionsToPlayers(room_entry)
+        }
+    });
+
+    socket.on('cardPlay', async (args) => {
+        console.log(`Getting command to play card: ${JSON.stringify(args)} from ${displayName} (${client_id})`);
+        if (room_entry.gameInstance.currentRound.placeCard(displayName, args.suit, args.rank)) {
+            sendMoveOptionsToPlayers(room_entry)
+            sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+
+            if (room_entry.gameInstance.currentRound.getRoundStatus().status === 'over') {
+                sendToAllPlayersInRoom(room_entry, 'roundScoreUpdate', room_entry.gameInstance.currentRound.getRoundResults())
+                //sleep for 5 secs before starting new round
+                await new Promise(resolve => setTimeout(resolve, 10000));
+                room_entry.gameInstance.endCurrentRound()
+                sendMoveOptionsToPlayers(room_entry)
+                sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+                sendToAllPlayersInRoom(room_entry, 'gameStatusUpdate', room_entry.gameInstance.getGameInfo())
+            }
+        }
     });
 });
+
+const sendMoveOptionsToPlayers = (room) => {
+    for (const player of room.clients) {
+        io.to(player.id).emit('playerHandUpdate', room.gameInstance.currentRound.getPlayerHand(player.displayName));
+        io.to(player.id).emit('playerValidSuitOptionsUpdate', room.gameInstance.currentRound.getValidPlayerSuitCalls(player.displayName));
+
+        if (room.gameInstance.currentRound.getRoundStatus().pTurnName === player.displayName)
+            io.to(player.id).emit('playerHandValidOptionsUpdate', room.gameInstance.currentRound.getPlayerOptions(player.displayName));
+        else io.to(player.id).emit('playerHandValidOptionsUpdate', []);
+    }
+}
+
+const sendToAllPlayersInRoom = (room, evntType, data) => {
+    for (const player of room.clients) {
+        io.to(player.id).emit(evntType, data)
+    }
+}

@@ -318,6 +318,7 @@ class Round {
 
             }
             this.playerTurn = ((this.playerTurn + 1) % 4)
+            return true;
         }
     }
 
@@ -340,7 +341,7 @@ class Round {
             //check if multiplier is being changed
             if (suitIndex == currentSuitIndex) {
                 // check if new mofier is bigger
-                if (modifier < this.modifier) return false
+                if (modifier <= this.modifier) return false
                 else {
                     //check if new modifier is not too big
                     if (modifier / this.modifier != 2) return false
@@ -353,6 +354,41 @@ class Round {
         }
 
         return true
+    }
+
+    getValidPlayerSuitCalls(playerName) {
+        //check if it's time to call suits at all
+        if (this.status != this.status_options[1]) return [];
+        //check if it's the player's turn to call
+        if (playerName != this.players[this.playerTurn]) return [];
+
+        const validSuits = ['P']
+
+        if (this.suit) {
+            const suitIndex = this.suit_ranks.indexOf(this.suit);
+            //check for higher suit calls
+            for (let i = suitIndex; i < this.suit_ranks.length; i++)
+                if (this.checkSuitCallValid(playerName, this.suit_ranks[i], 1)) validSuits.push(this.suit_ranks[i])
+
+            //check for higher modifier calls
+            if (this.checkSuitCallValid(playerName, this.suit, 2)) validSuits.push('x2')
+            if (this.checkSuitCallValid(playerName, this.suit, 4)) validSuits.push('x4')
+        }
+        else {
+            // if no one has announced so far everything is fair game
+            validSuits.push('C')
+            validSuits.push('H')
+            validSuits.push('D')
+            validSuits.push('S')
+            validSuits.push('N')
+            validSuits.push('A')
+        }
+        return validSuits;
+    }
+
+    getPlayerHand(playerName) {
+        const pIndex = this.players.indexOf(playerName);
+        return this.hands[pIndex]
     }
 
     getPlayerTeam(playerName) {
@@ -382,13 +418,13 @@ class Round {
     // NOTE: after this function has been called by the server, check for new premiums - belote may have been anounced automatically :/
     placeCard(playerName, cardSuit, cardRank) {
         // check if card CAN be placed on table
-        if (!this.checkIfCardCanBePlaced(playerName, cardSuit, cardRank)) return false;
+        if (!this.checkIfCardCanBePlaced(playerName, cardSuit, cardRank)) return -1;
 
         // check if player has the card they want to place and find it's index
         let hand = this.hands[this.playerTurn]
         let index = -1;
         for (const card of hand.cards) if (card.rank == cardRank && card.suit == cardSuit) index = hand.cards.indexOf(card);
-        if (index == -1) return false
+        if (index == -1) return -2
 
         // check for belote premium
         if (cardRank == 'Q' || cardRank == 'K') {
@@ -854,7 +890,7 @@ class Round {
             status: this.status,
             pTurn: this.playerTurn,
             pTurnName: this.players[this.playerTurn],
-            teams: this.players,
+            players: this.players,
             cardsOnTable: this.cardsOnTable.cards,
             premiums: this.premiums,
             suitInfo: {
@@ -896,18 +932,20 @@ class Game {
         this.t1 = new Team(players[0], players[1]);
         this.t2 = new Team(players[2], players[3]);
         this.teamsValid = this.t1.isReady() && this.t2.isReady();
-        this.teamScores = [0, 0];
-        this.roundNum = 0;
-        this.hangingPoints = 0
-        this.gameStatus = 'in_progress';
-        this.winningTeam = null;
-        this.consecutivePasses = 0;
+        if (this.teamsValid) {
+            this.teamScores = [0, 0];
+            this.roundNum = 0;
+            this.hangingPoints = 0
+            this.gameStatus = 'in_progress';
+            this.winningTeam = null;
+            this.consecutivePasses = 0;
 
-        this.deck = new Deck();
-        this.deck.initDeck();
-        this.pastRounds = [];
+            this.deck = new Deck();
+            this.deck.initDeck();
+            this.pastRounds = [];
 
-        this.currentRound = new Round(this.deck, this.t1, this.t2, this.roundNum);
+            this.currentRound = new Round(this.deck, this.t1, this.t2, this.roundNum);
+        }
     }
 
     endCurrentRound() {
@@ -930,7 +968,7 @@ class Game {
         }
 
         // calc game points from round 
-        console.log(this.calculateGamePoints())
+        // console.log(this.calculateGamePoints())
         const pointsArr = this.calculateGamePoints()
         this.teamScores[0] += pointsArr[0]
         this.teamScores[1] += pointsArr[1]
@@ -957,7 +995,7 @@ class Game {
         //check if game has been played
         if (roundInfo.suit) {
             //calculate team scores
-            console.log(roundInfo)
+            // console.log(roundInfo)
             const teamTotalScores = [0, 0]
             teamTotalScores[0] += roundInfo.card_scores[0]
             teamTotalScores[1] += roundInfo.card_scores[1]
@@ -1054,7 +1092,7 @@ class Game {
     getGameInfo() {
         return {
             gameStatus: this.gameStatus,
-            teams: [this.t1, this.t2],
+            teams: [[this.t1.p1, this.t2.p1], [this.t1.p2, this.t2.p2]],
             teamScores: this.teamScores,
             roundNum: this.roundNum,
             winningTeam: this.winningTeam,
@@ -1068,8 +1106,9 @@ module.exports = Game;
 
 // const game = new Game(['s', 'e', 'n', 'w'])
 // game.currentRound.splitDeck('s', 4)
+// game.currentRound.callSuit('n', 'H', 1)
+// // console.log(game.currentRound.getValidPlayerSuitCalls('w'))
 
-// game.currentRound.callSuit('n', 'A', 1)
 // game.currentRound.callSuit('w', 'P', 1)
 // game.currentRound.callSuit('s', 'P', 1)
 // game.currentRound.callSuit('e', 'P', 1)
@@ -1097,6 +1136,7 @@ module.exports = Game;
 // game.currentRound.placeCard('w', 'H', 'J')
 // game.currentRound.placeCard('s', 'H', '10')
 // game.currentRound.placeCard('e', 'H', '7')
+// console.log(game.currentRound.getRoundStatus())
 // game.currentRound.placeCard('n', 'H', 'K')
 
 // // start 3 врътка
@@ -1129,6 +1169,9 @@ module.exports = Game;
 // game.currentRound.placeCard('n', 'C', '8')
 // game.currentRound.placeCard('w', 'C', '7')
 
+// // console.log(game.currentRound.getRoundStatus())
+
+
 // // start 8 врътка
 // game.currentRound.placeCard('e', 'C', 'K')
 // game.currentRound.placeCard('n', 'C', '9')
@@ -1136,12 +1179,12 @@ module.exports = Game;
 // game.currentRound.placeCard('s', 'S', '10')
 
 
-// // console.log(game.currentRound.getPlayerOptions('s'))
-// // console.log(game.currentRound.getPlayerPremiumOptions('e'))
+// console.log(game.currentRound.getPlayerOptions('s'))
+// console.log(game.currentRound.getPlayerPremiumOptions('e'))
 
 
-// // console.log(game.currentRound.getRoundStatus())
-// // console.log(game.currentRound.getRoundResults())
+// console.log(game.currentRound.getRoundStatus())
+// console.log(game.currentRound.getRoundResults())
 // game.endCurrentRound()
 // game.currentRound.splitDeck('e', 4)
 

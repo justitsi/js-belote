@@ -6,7 +6,19 @@
         "H": "H",
         "S": "S"
     },
+    "premiumTypes": {
+        "B": "Belote ",
+        "C": "Card Series ",
+        "S": "4 of the Same "
+    },
     "gameBoard": {
-        "playerTurnIndicator": "Player turn:"
+        "playerTurnIndicator": "Player turn:",
+        "deckSplitPromptText": "Enter the card on which to split the deck",
+        "deckSplitPromptSubmitButtonText": "Split",
+        "suitSelectPromptText": "Please select a suit to call",
+        "roundOverPromptText": "Round Over"
+    },
+    "playerHand": {
+        "playButtonLable": "Play"
     }
 }

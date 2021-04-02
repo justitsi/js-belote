@@ -7,10 +7,20 @@
     background-color: white;
 }
 
+.inactiveOverlay {
+    opacity: 0.65;
+    height: 100%;
+    margin-top: -0.25rem;
+    background-color: gray;
+}
+
 .selectedCardContainer {
     height: 6rem;
     width: 4rem;
     border: 3px solid green;
+    border-radius: 4%;
+
+    // padding: 3px solid green;
 }
 
 .emptyCard {

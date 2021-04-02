@@ -5,7 +5,8 @@ function Card(props) {
     const { t } = useTranslation('translations');
 
     const handleOnCLick = () => {
-        props.handleOnCLick(props.index)
+        if (props.active)
+            props.handleOnCLick(props.index)
     }
 
     // handle a card the player sees
@@ -16,10 +17,12 @@ function Card(props) {
             <div className={props.selected ? styles.selectedCardContainer : styles.cardContainer}
                 onClick={handleOnCLick}
             >
-                <div className={styles.textContainer}>
-                    <div className={textClass} >
-                        {props.rank} {t(`cardSuits.${props.suit}`)}
-                    </div >
+                <div className={props.active ? null : styles.inactiveOverlay}>
+                    <div className={styles.textContainer}>
+                        <div className={textClass} >
+                            {props.rank}{t(`cardSuits.${props.suit}`)}
+                        </div >
+                    </div>
                 </div>
             </div >
         );
