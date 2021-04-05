@@ -475,6 +475,7 @@ class Round {
 
                 this.status = this.status_options[4];
             }
+            return true;
         }
         else {
             this.playerTurn = (this.playerTurn + 1) % 4;

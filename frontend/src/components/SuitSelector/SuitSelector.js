@@ -8,7 +8,8 @@ function SuitSelector(props) {
     const { t } = useTranslation('translations');
     const [selectedSuit, setSelectedSuit] = useState('P')
 
-    const handleOptionSelect = () => {
+    const handleOptionSelect = (event) => {
+        event.preventDefault();
         props.handleSuitSelect(selectedSuit)
     }
 
@@ -28,13 +29,15 @@ function SuitSelector(props) {
         <div className={styles.suitSelectionGridContainer}>
             <div />
             <div className={styles.suitSelectionGrid}>
-                <select
-                    name="suits"
-                    onChange={event => setSelectedSuit(event.target.value)}
-                >
-                    {listOfSuits}
-                </select>
-                <button onClick={handleOptionSelect}>Select suit</button>
+                <form>
+                    <select
+                        name="suits"
+                        onChange={event => setSelectedSuit(event.target.value)}
+                    >
+                        {listOfSuits}
+                    </select>
+                    <button onClick={handleOptionSelect}>Select suit</button>
+                </form>
                 <div>
                     <br />
                     Current Suit: {props.suit}

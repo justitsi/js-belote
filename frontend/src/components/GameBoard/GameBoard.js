@@ -40,7 +40,8 @@ function GameBoard(props) {
         if (props.roundStatus.status === 'waiting_for_split') {
             if (props.roundStatus.pTurnName === props.localUsername) {
 
-                const handleSplitIndexSelect = () => {
+                const handleSplitIndexSelect = (event) => {
+                    event.preventDefault();
                     if (splitOnCardIndex > 0 && splitOnCardIndex < 32) {
                         // console.log(splitOnCardIndex)
                         props.handleDeckSplit(splitOnCardIndex)
