@@ -8,6 +8,7 @@ import GameStatusIndicator from './../../components/GameStatusIndicator'
 import PremiumIndicator from './../../components/PremiumIndicator'
 import Hand from './../../components/Hand'
 import GameBoard from './../../components/GameBoard'
+import RoomChat from './../../components/RoomChat'
 
 function BelotePage(props) {
     const { t } = useTranslation('translations');
@@ -25,6 +26,7 @@ function BelotePage(props) {
     const [validSuitOptions, setValidSuitOptions] = useState([])
     const [playerHand, setPlayerHand] = useState([])
     const [playerHandValidOptions, setPlayerHandValidOptions] = useState([])
+    const [lobbyEvents, setLobbyEvents] = useState([])
 
     // manage socket communication
     useEffect(() => {
@@ -59,6 +61,13 @@ function BelotePage(props) {
             socket_connection.on('roundScoreUpdate', (args) => {
                 console.log(`Received round score update ${JSON.stringify(args)}`)
                 setRoundScore(args)
+            })
+
+            socket_connection.on('lobbyUpdate', (args) => {
+                console.log(`Receivedlobby update ${JSON.stringify(args)}`)
+                const events = lobbyEvents
+                events.push(args)
+                setLobbyEvents(events)
             })
 
             setSocket(socket_connection)
@@ -124,6 +133,9 @@ function BelotePage(props) {
                     <br />
                     <br />
                     <PremiumIndicator premiums={roundStatus.premiums} />
+                    {lobbyEvents.length > 0 &&
+                        <RoomChat events={lobbyEvents} />
+                    }
                 </div>
             </div>
 

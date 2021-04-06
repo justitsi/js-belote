@@ -1,0 +1,23 @@
+.roomChatContainer {
+}
+
+.roomChatListContainer {
+    background-color: #c5c5c5;
+    border: 1px solid black;
+}
+
+.roomChatList {
+    list-style: none;
+}
+
+.roomChatListItem {
+    margin-left: -1.5rem;
+}
+
+.playerJoinText {
+    color: green;
+}
+
+.playerLeaveText {
+    color: red;
+}
