@@ -2,6 +2,7 @@ import styles from './RoomChat.module.scss'
 
 function RoomChat(props) {
     const lines = []
+
     for (const event of props.events) {
         let line;
         if (event.action === "joined") {
@@ -26,6 +27,7 @@ function RoomChat(props) {
         lines.push(line)
     }
 
+    lines.reverse()
 
     return (
         <div className={styles.roomChatContainer}>

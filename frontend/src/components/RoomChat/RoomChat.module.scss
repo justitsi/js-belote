@@ -1,9 +1,13 @@
 .roomChatContainer {
+    max-height: 10rem;
 }
 
 .roomChatListContainer {
     background-color: #c5c5c5;
     border: 1px solid black;
+    overflow: auto;
+    max-height: 17.5rem;
+
 }
 
 .roomChatList {
