@@ -9,6 +9,7 @@ import PremiumIndicator from './../../components/PremiumIndicator'
 import Hand from './../../components/Hand'
 import GameBoard from './../../components/GameBoard'
 import RoomChat from './../../components/RoomChat'
+import { sortCards } from './../../modules/GameFunctions'
 
 function BelotePage(props) {
     const { t } = useTranslation('translations');
@@ -117,7 +118,7 @@ function BelotePage(props) {
                             showCards={true}
                             vertical={false}
                             cardCount={playerHand.length}
-                            cards={playerHand}
+                            cards={sortCards(playerHand)}
                             validOptions={playerHandValidOptions}
                             roundStatus={roundStatus.status}
                             playSelectedCard={handleCardPlay}
