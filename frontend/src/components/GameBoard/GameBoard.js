@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Card from './../Card';
 import Hand from './../Hand';
 import SuitSelector from './../SuitSelector';
+import RoundScoreTable from './../RoundScoreTable';
 
 function GameBoard(props) {
     const { t } = useTranslation('translations');
@@ -97,7 +98,6 @@ function GameBoard(props) {
 
             if (props.roundStatus.status === 'started_selecting_suit') {
                 if (props.roundStatus.pTurnName === props.localUsername) {
-                    let selectedSuit = 'P';
 
                     let suitOptions = []
                     if (props.validSuitOptions) suitOptions = props.validSuitOptions
@@ -143,42 +143,15 @@ function GameBoard(props) {
                                 </p>
                             </div>
                             {props.roundScore &&
-                                <table className={styles.roundOverTable}>
-                                    <tr>
-                                        <th />
-                                        <th>Team 1 points</th>
-                                        <th>Team 2 points</th>
-                                    </tr>
-                                    {props.roundScore.card_scores &&
-                                        <tr>
-                                            <th>Points from cards</th>
-                                            <td>{props.roundScore.card_scores[0]}</td>
-                                            <td>{props.roundScore.card_scores[1]}</td>
-                                        </tr>
-                                    }
-                                    {props.roundScore.premium_scores &&
-                                        <tr>
-                                            <th>Points from premiums</th>
-                                            <td>{props.roundScore.premium_scores[0]}</td>
-                                            <td>{props.roundScore.premium_scores[1]}</td>
-                                        </tr>
-                                    }
-                                    {props.roundScore.premium_scores && props.roundScore.card_scores &&
-                                        <tr>
-                                            <th>Total</th>
-                                            <th>{(props.roundScore.card_scores[0] + props.roundScore.premium_scores[0])}</th>
-                                            <th>{(props.roundScore.card_scores[1] + props.roundScore.premium_scores[1])}</th>
-                                        </tr>
-                                    }
-                                </table>
-
+                                <RoundScoreTable
+                                    gameStatus={props.gameStatus}
+                                    roundScore={props.roundScore}
+                                />
                             }
-                            <p>Next round will start in 10 secs</p>
                         </div >
                     );
                 }
                 else {
-
                     //figure out local table card placements
                     for (const card of props.roundStatus.cardsOnTable) {
                         const tmpIndex = localPlayerPositions.indexOf(card.placedBy);

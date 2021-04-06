@@ -95,6 +95,7 @@ function BelotePage(props) {
                         </div>
                     }
                     <GameBoard
+                        gameStatus={gameStatus}
                         roundStatus={roundStatus}
                         localUsername={displayName}
                         validSuitOptions={validSuitOptions}

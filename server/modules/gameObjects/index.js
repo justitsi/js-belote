@@ -935,6 +935,7 @@ class Game {
         this.teamsValid = this.t1.isReady() && this.t2.isReady();
         if (this.teamsValid) {
             this.teamScores = [0, 0];
+            this.teamLastRoundScores = [0, 0];
             this.roundNum = 0;
             this.hangingPoints = 0
             this.gameStatus = 'in_progress';
@@ -971,6 +972,10 @@ class Game {
         // calc game points from round 
         // console.log(this.calculateGamePoints())
         const pointsArr = this.calculateGamePoints()
+        // memorise score from last round so that the difference can be shown in the front end
+        this.teamLastRoundScores[0] = this.teamScores[0]
+        this.teamLastRoundScores[1] = this.teamScores[1]
+
         this.teamScores[0] += pointsArr[0]
         this.teamScores[1] += pointsArr[1]
 
@@ -1095,6 +1100,7 @@ class Game {
             gameStatus: this.gameStatus,
             teams: [[this.t1.p1, this.t2.p1], [this.t1.p2, this.t2.p2]],
             teamScores: this.teamScores,
+            teamLastRoundScores: this.teamLastRoundScores,
             roundNum: this.roundNum,
             winningTeam: this.winningTeam,
             consecutivePasses: this.consecutivePasses,
