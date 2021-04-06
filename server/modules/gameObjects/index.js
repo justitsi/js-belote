@@ -972,6 +972,7 @@ class Game {
         // calc game points from round 
         // console.log(this.calculateGamePoints())
         const pointsArr = this.calculateGamePoints()
+        console.log(pointsArr)
         // memorise score from last round so that the difference can be shown in the front end
         this.teamLastRoundScores[0] = this.teamScores[0]
         this.teamLastRoundScores[1] = this.teamScores[1]
@@ -1023,7 +1024,8 @@ class Game {
                 teamTotalScores[(roundInfo.callerTeam + 1) % 2] += teamTotalScores[roundInfo.callerTeam]
                 teamTotalScores[roundInfo.callerTeam] = 0
                 // check for modifier
-                teamTotalScores[(roundInfo.callerTeam + 1) % 2] = [(roundInfo.callerTeam + 1) % 2] * roundInfo.modifier
+                teamTotalScores[(roundInfo.callerTeam + 1) % 2] = teamTotalScores[(roundInfo.callerTeam + 1) % 2] * roundInfo.modifier
+                final_points[(roundInfo.callerTeam + 1) % 2] = Math.floor(teamTotalScores[(roundInfo.callerTeam + 1) % 2] / 10);
             }
             else {
                 //calc points regardless if the game is equal
@@ -1112,6 +1114,22 @@ class Game {
 module.exports = Game;
 
 // const game = new Game(['s', 'e', 'n', 'w'])
+
+// game.currentRound.consecutivePasses = 0;
+// game.currentRound.teamNumberOfHands = [8, 0]
+// game.currentRound.teamCardScores = [152, 0]
+// game.currentRound.teamPremiumScores = [0, 0]
+// game.currentRound.suit = 'H'
+// game.currentRound.callerTeam = 1
+// game.currentRound.playerTurn = 3
+// game.currentRound.modifier = 1
+// game.currentRound.valid_premiums = []
+
+
+// game.endCurrentRound()
+// console.log(game)
+
+
 // game.currentRound.splitDeck('s', 4)
 // game.currentRound.callSuit('n', 'H', 1)
 // // console.log(game.currentRound.getValidPlayerSuitCalls('w'))
