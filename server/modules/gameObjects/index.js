@@ -596,7 +596,7 @@ class Round {
     }
 
     // only allow for belote premium when player is playing Q or K - handled in place card function
-    // TODO make sure players don't call the same premium twice - this shouldn't be a problem irl
+    // make sure players don't call the same premium twice - handled in getPlayerPremiumOptions()
     anouncePlayerPremium(playerName, cards, premiumType) {
         const sortedCards = this.sortCards(cards)
         const premiumOptions = this.getPlayerPremiumOptions(playerName);
@@ -647,6 +647,22 @@ class Round {
                         }
                         if (cardsAreTheSame) {
                             options.C.splice(optionIndex, 1)
+                        }
+                    }
+                }
+            }
+            if (premium.premiumType === 'S') {
+                if (premium.belongsTo === playerName) {
+                    for (let optionIndex = 0; optionIndex < options.S.length; optionIndex++) {
+                        const option = options.S[optionIndex]
+                        let cardsAreTheSame = true;
+                        for (let i = 0; i < premium.cards.length; i++) {
+                            if (option[i].rank !== premium.cards[i].rank) cardsAreTheSame = false;
+                            if (option[i].suit !== premium.cards[i].suit) cardsAreTheSame = false;
+                            if (!cardsAreTheSame) break;
+                        }
+                        if (cardsAreTheSame) {
+                            options.S.splice(optionIndex, 1)
                         }
                     }
                 }
@@ -912,13 +928,25 @@ class Round {
     }
 
     getRoundStatus() {
+        // save some bandwidth
+        const premiumInfo = []
+        for (const premium of this.premiums) {
+            premiumInfo.push({
+                belongsTo: premium.belongsTo,
+                premiumType: premium.premiumType,
+                cards: premium.cards,
+                valid: premium.valid,
+                points: premium.points
+            })
+        }
+
         return {
             status: this.status,
             pTurn: this.playerTurn,
             pTurnName: this.players[this.playerTurn],
             players: this.players,
             cardsOnTable: this.cardsOnTable.cards,
-            premiums: this.premiums,
+            premiums: premiumInfo,
             suitInfo: {
                 suit: this.suit,
                 modifier: this.modifier,

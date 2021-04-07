@@ -114,7 +114,6 @@ io.on("connection", async (socket) => {
                     if (startingRoundState.cardsOnTable.length === 3) {
                         await delayCollectingCards(startingRoundState, args, displayName, room_entry)
                     }
-
                     sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
 
                     if (room_entry.gameInstance.currentRound.getRoundStatus().status === 'over') {
