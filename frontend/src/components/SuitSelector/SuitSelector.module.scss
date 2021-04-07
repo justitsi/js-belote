@@ -1,5 +1,36 @@
 .suitSelectionGridContainer{
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 3fr 1fr;
 }
 
+.suitSelectionForm {
+    display:flex;
+    height: 2rem;
+}
+
+.suitSelectionFormSelect {
+    
+}
+
+.suitSelectionFormSpacer {
+    margin-left: auto;
+}
+
+.suitSelectionFormBtn {
+    
+}
+
+.previousBidsContainer {
+    overflow: auto;
+    max-height: 7.5rem;
+    border: 1px solid #d3d3d3;
+    background-color: #e3e3e3;
+    width: 100%;
+}
+
+.previousBidsListItem {
+    margin: 0rem;
+    margin-top: -0.25rem;
+    margin-bottom: -0.125rem;
+
+}

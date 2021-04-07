@@ -88,24 +88,30 @@ function PremiumOptions(props) {
         availablePremiumsList.push(option)
     }
 
-    return (
-        <div>
-            {availablePremiumsList.length > 0 &&
-                <div className={styles.premiumOptionsContainer}>
-                    <b className={styles.premiumsListLabel}> {t('premuimOptions.listLabel')} </b>
-                    <div className={styles.premiumsList}>
-                        {availablePremiumsList}
-                        <button
-                            className={styles.premiumOptionsAnounceBtn}
-                            onClick={handleAnouncePremiumsClick}
-                        >
-                            {t('premuimOptions.anounceBtnLabel')}
-                        </button>
+    if (props.roundStatus)
+        return (
+            <div>
+                {availablePremiumsList.length > 0 && props.roundStatus.pTurnName === props.displayName &&
+                    < div className={styles.premiumOptionsContainer}>
+                        <b className={styles.premiumsListLabel}> {t('premuimOptions.listLabel')} </b>
+                        <div className={styles.premiumsList}>
+                            {availablePremiumsList}
+                            <button
+                                className={styles.premiumOptionsAnounceBtn}
+                                onClick={handleAnouncePremiumsClick}
+                            >
+                                {t('premuimOptions.anounceBtnLabel')}
+                            </button>
+                        </div>
                     </div>
-                </div>
-            }
-        </div>
-    )
+                }
+            </div >
+        )
+    else {
+        return (
+            <div />
+        )
+    }
 }
 
 export default PremiumOptions;

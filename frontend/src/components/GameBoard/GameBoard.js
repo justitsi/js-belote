@@ -33,7 +33,7 @@ function GameBoard(props) {
     if (props.roundStatus) {
         localPlayerPositions = reArrangeArrToLocalOrder([...props.roundStatus.players])
         const playerIndicator = (
-            <div style={{ color: "black", textAlign: "center", margin: "auto" }}>
+            <div className={styles.currentPlayerLabel}>
                 {t('gameBoard.playerTurnIndicator')} {props.roundStatus.pTurnName}
             </div>
         );
@@ -114,6 +114,7 @@ function GameBoard(props) {
                                 options={suitOptions}
                                 suit={props.roundStatus.suitInfo.suit}
                                 calledBy={props.roundStatus.suitInfo.caller}
+                                suitSelectionHistory={props.suitSelectionHistory}
                                 handleSuitSelect={props.handleSuitSelect}
                             />
                         </div >

@@ -9,15 +9,20 @@ function PremiumIndicator(props) {
         const premiums = []
 
         for (const premium of props.premiums) {
-            const listItem = <li key={props.premiums.indexOf(premium)}>
-                {premium.belongsTo} anounced {t(`premiumTypes.${premium.premiumType}`)}
+            const listItem = (
+                <li
+                    key={props.premiums.indexOf(premium)}
+                    className={styles.premiumsListItem}
+                >
+                    {premium.belongsTo} anounced {t(`premiumTypes.${premium.premiumType}`)}
 
-                {premium.premiumType === 'C' &&
-                    `(${premium.cards.length} Cards) `
-                }
+                    {premium.premiumType === 'C' &&
+                        `(${premium.cards.length} Cards) `
+                    }
 
                 for {premium.points} points.
-            </li>
+                </li>
+            );
             premiums.push(listItem)
         }
 
@@ -33,7 +38,7 @@ function PremiumIndicator(props) {
     else {
         return (
             <div>
-                No premiums yet
+                No premiums passed
             </div>
         );
     }

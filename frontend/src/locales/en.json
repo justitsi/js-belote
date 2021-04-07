@@ -22,12 +22,40 @@
         "playButtonLable": "Play"
     },
     "premuimOptions": {
-        "listLabel": "Premium Option list",
-        "anounceBtnLabel": "Anounce Premiums"
+        "listLabel": "Premium option list",
+        "anounceBtnLabel": "Anounce Premium(s)"
     },
     "premiumOption": {
         "cardSeriesLabel": "Card Series",
         "sameCardsLabel": "4 of the same",
         "cards": "cards"
+    },
+    "suitSelector": {
+        "selectBtnLabel": "Select suit",
+        "currentSuitLabel": "Current suit:",
+        "anouncedByLabel": "Anounced by:",
+        "previousBidsLabel": "Previous bids:",
+        "anounced": "anounced",
+        "suits": {
+            "C": "Clubs",
+            "D": "Diamonds",
+            "H": "Hearts",
+            "S": "Spades",
+            "A": "All Trumps",
+            "N": "No Trump",
+            "x2": "Counter",
+            "x4": "Re-Counter"
+        }
+    },
+    "gameStatusIndicator": {
+        "containerLabel": "Game Score",
+        "scoreLabel": "Score",
+        "roundNumberLabel": "Round Number",
+        "consecutivePassedGamesLabel": "Consecutive Passed Games",
+        "roundSuitLabel": "Round Suit",
+        "roundSuitCallerLabel": "Round Suit Caller",
+        "winningTeamLabel": "WINNING TEAM",
+        "waitingForLabelsToConnectLabel": "Waiting for 4 players to connect",
+        "waitingToConnectToServerLabel": "Please connect to a server..."
     }
 }

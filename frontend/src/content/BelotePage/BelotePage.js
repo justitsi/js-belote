@@ -30,6 +30,7 @@ function BelotePage(props) {
     const [playerHandValidOptions, setPlayerHandValidOptions] = useState([])
     const [lobbyEvents, setLobbyEvents] = useState([])
     const [premiumOptions, setPremiumOptions] = useState({ 'C': [], 'S': [] })
+    const [suitSelectionHistory, setSuitSelectionHistory] = useState([])
 
     // manage socket communication
     useEffect(() => {
@@ -43,6 +44,8 @@ function BelotePage(props) {
 
             socket_connection.on("roundStatusUpdate", (args) => {
                 console.log(`Received round status update ${JSON.stringify(args)}`)
+                // reset suit selections if new selection has sterted - suit would be undefined
+                if (args.suitInfo.suit === null && args.suitInfo.modifier === 1) setSuitSelectionHistory([])
                 setRoundStatus(args)
             });
 
@@ -76,6 +79,13 @@ function BelotePage(props) {
             socket_connection.on('playerPremiumValidOptions', (args) => {
                 console.log(`Received player valid premium options update ${JSON.stringify(args)}`)
                 setPremiumOptions(args)
+            })
+
+            socket_connection.on('suitSelectionUpdate', (args) => {
+                console.log(`Received suit selection update ${JSON.stringify(args)}`)
+                const selections = suitSelectionHistory
+                selections.push(args)
+                setSuitSelectionHistory(selections)
             })
 
             setSocket(socket_connection)
@@ -120,12 +130,15 @@ function BelotePage(props) {
                         roundStatus={roundStatus}
                         localUsername={displayName}
                         validSuitOptions={validSuitOptions}
+                        suitSelectionHistory={suitSelectionHistory}
                         roundScore={roundScore}
                         handleDeckSplit={handleDeckSplit}
                         handleSuitSelect={handleSuitSelect}
                     />
                     <div className={styles.handContainer}>
                         <PremiumOptions
+                            roundStatus={roundStatus}
+                            displayName={displayName}
                             availablePremiums={premiumOptions}
                             handleAnouncePremiums={handleAnouncePremiums}
                         />
@@ -133,7 +146,7 @@ function BelotePage(props) {
                             showCards={true}
                             vertical={false}
                             cardCount={playerHand.length}
-                            cards={sortCards(playerHand)}
+                            cards={sortCards(playerHand, roundStatus)}
                             validOptions={playerHandValidOptions}
                             roundStatus={roundStatus.status}
                             playSelectedCard={handleCardPlay}
@@ -145,10 +158,9 @@ function BelotePage(props) {
                         gameStatus={gameStatus}
                         roundStatus={roundStatus}
                     />
-                    <br />
-                    <br />
-                    <br />
-                    <PremiumIndicator premiums={roundStatus.premiums} />
+                    <PremiumIndicator
+                        premiums={roundStatus.premiums}
+                    />
                     {lobbyEvents.length > 0 &&
                         <RoomChat events={lobbyEvents} />
                     }

@@ -74,10 +74,6 @@ io.on("connection", async (socket) => {
             }
         });
 
-        //Getting command to anounce premiums:
-        // [{"cards":[{"suit":"S","rank":"8"},{"suit":"S","rank":"9"},{"suit":"S","rank":"10"}],"type":"C"},{"cards":[{"suit":"D","rank":"Q"},{"suit":"D","rank":"K"},{"suit":"D","rank":"A"}],"type":"C"}] from h1 (d153a04d-2c8f-44b1-a77f-0706847a3f2b)
-
-
         socket.on('suitSelect', (args) => {
             console.log(`Getting command to select suit: ${args} from ${displayName} (${client_id})`);
 
@@ -99,6 +95,7 @@ io.on("connection", async (socket) => {
                         roundStatus = room_entry.gameInstance.currentRound.getRoundStatus()
                     }
 
+                    sendToAllPlayersInRoom(room_entry, 'suitSelectionUpdate', { suitSelection: args, madeBy: displayName })
                     sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', roundStatus)
                     sendMoveOptionsToPlayers(room_entry)
                 }
@@ -154,10 +151,10 @@ const sendMoveOptionsToPlayers = async (room) => {
     for (const player of room.clients) {
         await io.to(player.id).emit('playerHandUpdate', room.gameInstance.currentRound.getPlayerHand(player.displayName));
         await io.to(player.id).emit('playerValidSuitOptionsUpdate', room.gameInstance.currentRound.getValidPlayerSuitCalls(player.displayName));
+        await io.to(player.id).emit('playerPremiumValidOptions', room.gameInstance.currentRound.getPlayerPremiumOptions(player.displayName));
 
         if (room.gameInstance.currentRound.getRoundStatus().pTurnName === player.displayName) {
             await io.to(player.id).emit('playerHandValidOptionsUpdate', room.gameInstance.currentRound.getPlayerOptions(player.displayName));
-            await io.to(player.id).emit('playerPremiumValidOptions', room.gameInstance.currentRound.getPlayerPremiumOptions(player.displayName));
         }
         else await io.to(player.id).emit('playerHandValidOptionsUpdate', []);
     }
@@ -240,6 +237,7 @@ const getRoomEntryAndJoin = async (socket) => {
 
             if (room_entry.gameInstance.getGameInfo().teamsValid == true) {
                 sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+                sendMoveOptionsToPlayers(room_entry)
             }
             else {
                 room_entry.gameInstance = null;
@@ -255,7 +253,6 @@ const getRoomEntryAndJoin = async (socket) => {
     return (room_entry);
 }
 
-// this doesnt work...
 const shouldCreateNewGame = (currentInstance, clients) => {
     if (currentInstance === null) return true;
     else {
