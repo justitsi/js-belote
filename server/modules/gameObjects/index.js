@@ -599,10 +599,11 @@ class Round {
         const sortedCards = this.sortCards(cards)
         const premiumOptions = this.getPlayerPremiumOptions(playerName);
         for (const cardSeries of premiumOptions[premiumType]) {
-            if (this.checkIfCardArraysMatch(cardSeries, sortedCards)) {
-                this.premiums.push(new Premium(playerName, premiumType, this.suit, cards))
-                return true;
-            }
+            if (cardSeries.length > 0)
+                if (this.checkIfCardArraysMatch(cardSeries, sortedCards)) {
+                    this.premiums.push(new Premium(playerName, premiumType, this.suit, cards))
+                    return true;
+                }
         }
         return false;
     }
@@ -629,6 +630,27 @@ class Round {
         }
         // get belote options everytime
         options['B'] = this.checkForBelotePremiums(playerHand)
+        // make sure premium options haven't been played before
+        for (const premium of this.premiums) {
+            // console.log(premium)
+            if (premium.premiumType === 'C') {
+                if (premium.belongsTo === playerName) {
+                    for (let optionIndex = 0; optionIndex < options.C.length; optionIndex++) {
+                        const option = options.C[optionIndex]
+                        let cardsAreTheSame = true;
+                        for (let i = 0; i < premium.cards.length; i++) {
+                            if (option[i].rank !== premium.cards[i].rank) cardsAreTheSame = false;
+                            if (option[i].suit !== premium.cards[i].suit) cardsAreTheSame = false;
+                            if (!cardsAreTheSame) break;
+                        }
+                        if (cardsAreTheSame) {
+                            options.C.splice(optionIndex, 1)
+                        }
+                    }
+                }
+            }
+
+        }
         return options
     }
 
@@ -731,6 +753,7 @@ class Round {
             return 0;
         }
         return sortedCards.sort(compareCards);
+
     }
 
     checkFor4CPremiums(hand) {
@@ -972,7 +995,7 @@ class Game {
         // calc game points from round 
         // console.log(this.calculateGamePoints())
         const pointsArr = this.calculateGamePoints()
-        console.log(pointsArr)
+        // console.log(pointsArr)
         // memorise score from last round so that the difference can be shown in the front end
         this.teamLastRoundScores[0] = this.teamScores[0]
         this.teamLastRoundScores[1] = this.teamScores[1]
@@ -1113,7 +1136,7 @@ class Game {
 
 module.exports = Game;
 
-// const game = new Game(['s', 'e', 'n', 'w'])
+const game = new Game(['s', 'e', 'n', 'w'])
 
 // game.currentRound.consecutivePasses = 0;
 // game.currentRound.teamNumberOfHands = [8, 0]
@@ -1132,17 +1155,17 @@ module.exports = Game;
 
 // game.currentRound.splitDeck('s', 4)
 // game.currentRound.callSuit('n', 'H', 1)
-// // console.log(game.currentRound.getValidPlayerSuitCalls('w'))
+// // // // console.log(game.currentRound.getValidPlayerSuitCalls('w'))
 
 // game.currentRound.callSuit('w', 'P', 1)
 // game.currentRound.callSuit('s', 'P', 1)
 // game.currentRound.callSuit('e', 'P', 1)
 // game.currentRound.initPlayStage()
-// // for (const hand of game.currentRound.hands) console.log(hand)
+// // // for (const hand of game.currentRound.hands) console.log(hand)
 
-// // game.currentRound.placeCard('n', 'C', '8')
+// // // game.currentRound.placeCard('n', 'C', '8')
 
-// // console.log(game.currentRound.hands[0])
+// // // console.log(game.currentRound.hands[0])
 // game.currentRound.anouncePlayerPremium('n', [{ suit: 'C', rank: '8' }, { suit: 'C', rank: '9' }, { suit: 'C', rank: '10' }], 'C')
 // game.currentRound.anouncePlayerPremium('n', [{ suit: 'D', rank: 'Q' }, { suit: 'D', rank: 'K' }, { suit: 'D', rank: 'A' }], 'C')
 // game.currentRound.placeCard('n', 'D', 'Q')

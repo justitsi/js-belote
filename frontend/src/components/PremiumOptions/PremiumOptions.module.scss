@@ -1,0 +1,27 @@
+.premiumOptionsContainer {
+    margin-bottom: -0.375rem;
+}
+
+.premiumsListLabel {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+}
+
+.premiumsList{
+    display: flex;
+    margin-top: -0.125rem;
+} 
+
+.premiumsListItem {
+    margin-left: 0.125rem;
+    display: inline;
+    height: 3.375rem;
+}
+
+.premiumOptionsAnounceBtn {
+    height: 2rem;
+    justify-self: center;
+    align-self: center;
+}

@@ -9,6 +9,7 @@ import PremiumIndicator from './../../components/PremiumIndicator'
 import Hand from './../../components/Hand'
 import GameBoard from './../../components/GameBoard'
 import RoomChat from './../../components/RoomChat'
+import PremiumOptions from './../../components/PremiumOptions'
 import { sortCards } from './../../modules/GameFunctions'
 
 function BelotePage(props) {
@@ -28,6 +29,7 @@ function BelotePage(props) {
     const [playerHand, setPlayerHand] = useState([])
     const [playerHandValidOptions, setPlayerHandValidOptions] = useState([])
     const [lobbyEvents, setLobbyEvents] = useState([])
+    const [premiumOptions, setPremiumOptions] = useState({ 'C': [], 'S': [] })
 
     // manage socket communication
     useEffect(() => {
@@ -71,6 +73,11 @@ function BelotePage(props) {
                 setLobbyEvents(events)
             })
 
+            socket_connection.on('playerPremiumValidOptions', (args) => {
+                console.log(`Received player valid premium options update ${JSON.stringify(args)}`)
+                setPremiumOptions(args)
+            })
+
             setSocket(socket_connection)
         }
     }, [roomID, clientID, displayName, usernameSet]);
@@ -89,6 +96,10 @@ function BelotePage(props) {
 
     const handleReadyToConnect = () => {
         setUsernameSet(true);
+    }
+
+    const handleAnouncePremiums = (premiums) => {
+        socket.emit("anouncePremium", premiums);
     }
 
     return (
@@ -114,6 +125,10 @@ function BelotePage(props) {
                         handleSuitSelect={handleSuitSelect}
                     />
                     <div className={styles.handContainer}>
+                        <PremiumOptions
+                            availablePremiums={premiumOptions}
+                            handleAnouncePremiums={handleAnouncePremiums}
+                        />
                         <Hand
                             showCards={true}
                             vertical={false}

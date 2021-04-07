@@ -20,5 +20,14 @@
     },
     "playerHand": {
         "playButtonLable": "Play"
+    },
+    "premuimOptions": {
+        "listLabel": "Premium Option list",
+        "anounceBtnLabel": "Anounce Premiums"
+    },
+    "premiumOption": {
+        "cardSeriesLabel": "Card Series",
+        "sameCardsLabel": "4 of the same",
+        "cards": "cards"
     }
 }

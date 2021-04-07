@@ -62,6 +62,22 @@ io.on("connection", async (socket) => {
             }
         });
 
+        socket.on('anouncePremium', (args) => {
+            console.log(`Getting command to anounce premiums: ${JSON.stringify(args)} from ${displayName} (${client_id})`);
+
+            for (const premium of args) {
+                if (room_entry.gameInstance)
+                    if (room_entry.gameInstance.currentRound.anouncePlayerPremium(displayName, premium.cards, premium.type)) {
+                        sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+                        sendMoveOptionsToPlayers(room_entry)
+                    }
+            }
+        });
+
+        //Getting command to anounce premiums:
+        // [{"cards":[{"suit":"S","rank":"8"},{"suit":"S","rank":"9"},{"suit":"S","rank":"10"}],"type":"C"},{"cards":[{"suit":"D","rank":"Q"},{"suit":"D","rank":"K"},{"suit":"D","rank":"A"}],"type":"C"}] from h1 (d153a04d-2c8f-44b1-a77f-0706847a3f2b)
+
+
         socket.on('suitSelect', (args) => {
             console.log(`Getting command to select suit: ${args} from ${displayName} (${client_id})`);
 
@@ -97,12 +113,11 @@ io.on("connection", async (socket) => {
 
                 if (room_entry.gameInstance.currentRound.placeCard(displayName, args.suit, args.rank)) {
                     // pause for 2 secs if there's 4 cards on the table so players can see them
+                    sendMoveOptionsToPlayers(room_entry)
                     if (startingRoundState.cardsOnTable.length === 3) {
                         await delayCollectingCards(startingRoundState, args, displayName, room_entry)
                     }
 
-
-                    sendMoveOptionsToPlayers(room_entry)
                     sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
 
                     if (room_entry.gameInstance.currentRound.getRoundStatus().status === 'over') {
@@ -140,8 +155,10 @@ const sendMoveOptionsToPlayers = async (room) => {
         await io.to(player.id).emit('playerHandUpdate', room.gameInstance.currentRound.getPlayerHand(player.displayName));
         await io.to(player.id).emit('playerValidSuitOptionsUpdate', room.gameInstance.currentRound.getValidPlayerSuitCalls(player.displayName));
 
-        if (room.gameInstance.currentRound.getRoundStatus().pTurnName === player.displayName)
+        if (room.gameInstance.currentRound.getRoundStatus().pTurnName === player.displayName) {
             await io.to(player.id).emit('playerHandValidOptionsUpdate', room.gameInstance.currentRound.getPlayerOptions(player.displayName));
+            await io.to(player.id).emit('playerPremiumValidOptions', room.gameInstance.currentRound.getPlayerPremiumOptions(player.displayName));
+        }
         else await io.to(player.id).emit('playerHandValidOptionsUpdate', []);
     }
 }
