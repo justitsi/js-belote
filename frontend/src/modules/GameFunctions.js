@@ -1,5 +1,5 @@
-export const sort_rank_order_normal = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-export const sort_rank_order_trump = ['7', '8', '10', 'Q', 'K', 'A', '9', 'J']
+export const sort_rank_order_normal = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A']
+export const sort_rank_order_trump = ['7', '8', 'Q', 'K', '10', 'A', '9', 'J']
 export const sort_suit_order = ['C', 'D', 'H', 'S']
 
 export function sortCards(cards, roundStatus) {

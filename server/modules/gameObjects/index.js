@@ -182,6 +182,8 @@ class Premium {
     }
 
     checkValidCardSequence() {
+        //check card series length  
+        if (this.cards.length < 3) return false;
         for (let i = 0; i < this.cards.length - 1; i++) {
             const currentIndex = this.premium_card_order.indexOf(this.cards[i].rank);
             const nextIndex = this.premium_card_order.indexOf(this.cards[i + 1].rank);
