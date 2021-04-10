@@ -1,6 +1,6 @@
 import styles from './PremiumIndicator.module.scss'
 import { useTranslation } from 'react-i18next';
-
+import IndicatorBox from './../IndicatorBox'
 
 function PremiumIndicator(props) {
     const { t } = useTranslation('translations');
@@ -27,19 +27,19 @@ function PremiumIndicator(props) {
         }
 
         return (
-            <div className={styles.premiumIndicatorContainer}>
-                <h3 className={styles.premiumIndicatorLabel}>Premiums</h3>
+            <IndicatorBox
+            header={"Premiums"}
+            content={
                 <ul className={styles.premiumsList}>
                     {premiums}
                 </ul>
-            </div >
+            }
+        />
         );
     }
     else {
         return (
-            <div>
-                No premiums passed
-            </div>
+            <div/>
         );
     }
 }

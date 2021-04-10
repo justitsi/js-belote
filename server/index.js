@@ -142,7 +142,7 @@ const delayCollectingCards = async (startingRoundState, args, displayName, room_
         })
         sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', startingRoundState)
         //sleep for 1 sec before hiding the cards
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 1500));
     }
 }
 

@@ -1,25 +1,11 @@
-.roomChatContainer {
-    max-height: 10rem;
-}
-
-.roomChatListContainer {
-    background-color: lightgray;
-    border: 1px solid black;
-    border-radius: 2%;
-    overflow: auto;
-    max-height: 17.5rem;
-
-}
-
 .roomChatList {
     list-style: none;
 }
 
 .roomChatListItem {
-    margin-top: -0.625rem;
     margin-bottom: -0.625rem;
     line-height: 1.25;
-    margin-left: -2rem;
+    margin-left: -2.35rem;
 }
 
 .playerJoinText {

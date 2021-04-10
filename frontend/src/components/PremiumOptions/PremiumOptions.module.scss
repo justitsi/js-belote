@@ -1,5 +1,6 @@
 .premiumOptionsContainer {
     margin-bottom: -0.375rem;
+    margin-top: -1rem;
 }
 
 .premiumsListLabel {
@@ -12,12 +13,14 @@
 .premiumsList{
     display: flex;
     margin-top: -0.125rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
 } 
 
 .premiumsListItem {
     margin-left: 0.125rem;
     display: inline;
-    height: 3.375rem;
+    height: 100%;
 }
 
 .premiumOptionsAnounceBtn {

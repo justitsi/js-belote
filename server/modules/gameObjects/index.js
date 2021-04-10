@@ -1004,8 +1004,6 @@ class Game {
     }
 
     endCurrentRound() {
-        this.roundNum++;
-
         // get deck from current round and cleanup it from placedBy 
         this.deck = this.currentRound.mainDeck;
         for (const card of this.deck.cards)
@@ -1078,7 +1076,7 @@ class Game {
                 teamTotalScores[roundInfo.callerTeam] = 0
                 // check for modifier
                 teamTotalScores[(roundInfo.callerTeam + 1) % 2] = teamTotalScores[(roundInfo.callerTeam + 1) % 2] * roundInfo.modifier
-                final_points[(roundInfo.callerTeam + 1) % 2] = Math.floor(teamTotalScores[(roundInfo.callerTeam + 1) % 2] / 10);
+                final_points[(roundInfo.callerTeam + 1) % 2] = Math.floor((teamTotalScores[(roundInfo.callerTeam + 1) % 2] + 5) / 10);
             }
             else {
                 //calc points regardless if the game is equal

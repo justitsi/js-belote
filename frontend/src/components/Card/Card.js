@@ -20,7 +20,9 @@ function Card(props) {
                 <div className={props.active ? null : styles.inactiveOverlay}>
                     <div className={styles.textContainer}>
                         <div className={textClass} >
-                            {props.rank}{t(`cardSuits.${props.suit}`)}
+                            <h5>
+                                {props.rank}{t(`cardSuits.${props.suit}`)}
+                            </h5>
                         </div >
                     </div>
                 </div>

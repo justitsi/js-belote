@@ -1,12 +1,6 @@
 .handContainer {
     display: grid;
-    width: 100%
-}
-
-.playCardButton {
-    width: 10.5rem;
-    margin-top: 0.25rem;
-    margin-left: 0.75rem;
+    width: 100%;
 }
 
 .horizontalList {
@@ -17,16 +11,20 @@
     height: 6rem;
 }
 
-.horizontalListItem {
-    float: left;
-    margin-left: 0.125rem;
-    display: inline;
-}
-
 .verticalList{
-    list-style-type: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 4rem;
+    height: 28.25rem;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
 } 
 
 .verticalListItem{
     margin-bottom: 0.125rem;
+}
+
+.horizontalListItem {
+    padding-left: -0.125rem;
+    padding-right: -0.125rem;
+
 }

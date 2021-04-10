@@ -2,7 +2,7 @@ import styles from './GameBoard.module.scss'
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react'
 import Card from './../Card';
-import Hand from './../Hand';
+import BlankHand from './../BlankHand';
 import SuitSelector from './../SuitSelector';
 import RoundScoreTable from './../RoundScoreTable';
 
@@ -85,8 +85,8 @@ function GameBoard(props) {
                     < div className={styles.tableGrid} >
                         {/* this is a 3x3 grid */}
                         < div />< div />< div />
-                        < div /><div />< div />
                         < div />{playerIndicator}< div />
+                        < div /><div />< div />
                     </div >
                 );
             }
@@ -126,8 +126,8 @@ function GameBoard(props) {
                         < div className={styles.tableGrid} >
                             {/* this is a 3x3 grid */}
                             < div />< div />< div />
-                            < div /><div />< div />
                             < div />{playerIndicator}< div />
+                            < div /><div />< div />
                         </div >
                     );
                 }
@@ -199,8 +199,7 @@ function GameBoard(props) {
     return (
         <div className={styles.overAllContainer}>
             <div />
-            <Hand
-                showCards={false}
+            <BlankHand
                 cardCount={nNumOfCards}
                 vertical={false}
                 roundStatus={props.roundStatus.status}
@@ -208,55 +207,53 @@ function GameBoard(props) {
             <div />
             <div className={styles.handsSideBySide}>
                 <div className={styles.verticalCardContainer}>
-                    <Hand
-                        showCards={false}
+                    <BlankHand
                         cardCount={wFirstColumnCardCount}
                         vertical={true}
                         roundStatus={props.roundStatus.status}
                     />
                 </div>
                 <div className={styles.verticalCardContainer}>
-                    <Hand
-                        showCards={false}
+                    <BlankHand
                         cardCount={wSecondColumnCardCount}
                         vertical={true}
                         roundStatus={props.roundStatus.status}
                     />
                 </div>
             </div>
-            <div>
+            <div className={styles.northPTagAndGameBoardContainer}>
                 <div className={styles.horizontalPlayerTag}>
-                    {localPlayerPositions[2]}
+                    <h5>{localPlayerPositions[2]}</h5>
                 </div>
                 <div className={styles.displayElementsInOneLine}>
                     <div className={styles.verticalPlayerTagLeft}>
-                        {localPlayerPositions[3]}
+                        <h5>{localPlayerPositions[3]}</h5>
                     </div>
                     <div className={styles.gameBoardContainer}>
                         <div className={styles.tableContainer}>
-                            {tableCenter}
+                            <div /><div /><div />
+                            <div />{tableCenter}<div />
+                            <div /><div /><div />
                         </div>
                     </div >
                     <div className={styles.verticalPlayerTagRight}>
-                        {localPlayerPositions[1]}
+                        <h5>{localPlayerPositions[1]}</h5>
                     </div>
                 </div>
                 <div className={styles.horizontalPlayerTag}>
-                    {localPlayerPositions[0]}
+                    <h5>{localPlayerPositions[0]}</h5>
                 </div>
             </div>
             <div className={styles.handsSideBySide}>
                 <div className={styles.verticalCardContainer}>
-                    <Hand
-                        showCards={false}
+                    <BlankHand
                         cardCount={eFirstColumnCardCount}
                         vertical={true}
                         roundStatus={props.roundStatus.status}
                     />
                 </div>
                 <div className={styles.verticalCardContainer}>
-                    <Hand
-                        showCards={false}
+                    <BlankHand
                         cardCount={eSecondColumnCardCount}
                         vertical={true}
                         roundStatus={props.roundStatus.status}

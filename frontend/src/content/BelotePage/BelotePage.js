@@ -11,6 +11,7 @@ import GameBoard from './../../components/GameBoard'
 import RoomChat from './../../components/RoomChat'
 import PremiumOptions from './../../components/PremiumOptions'
 import { sortCards } from './../../modules/GameFunctions'
+import { Row, Col, Container } from 'react-bootstrap'
 
 function BelotePage(props) {
     const { t } = useTranslation('translations');
@@ -115,8 +116,8 @@ function BelotePage(props) {
 
     return (
         <div className={styles.page} >
-            <div className={styles.pageLayout}>
-                <div className={styles.first}>
+            <Row>
+                <Col sm={2}>
                     Belote Room ID: {roomID}
                     {usernameSet === false &&
                         <div>
@@ -126,47 +127,79 @@ function BelotePage(props) {
                             </form>
                         </div>
                     }
-                    <GameBoard
-                        gameStatus={gameStatus}
-                        roundStatus={roundStatus}
-                        localUsername={displayName}
-                        validSuitOptions={validSuitOptions}
-                        suitSelectionHistory={suitSelectionHistory}
-                        roundScore={roundScore}
-                        handleDeckSplit={handleDeckSplit}
-                        handleSuitSelect={handleSuitSelect}
-                    />
-                    <div className={styles.handContainer}>
-                        <PremiumOptions
+                </Col>
+            </Row>
+            <Row fluid='md'>
+                <Col sm={0} md={0} lg={1} xl={0} />
+                <Col sm={12} md={12} lg={10} xl={7}>
+                    <div className={styles.gameBoardAndHandContainer}>
+                        <GameBoard
+                            gameStatus={gameStatus}
                             roundStatus={roundStatus}
-                            displayName={displayName}
-                            availablePremiums={premiumOptions}
-                            handleAnouncePremiums={handleAnouncePremiums}
+                            localUsername={displayName}
+                            validSuitOptions={validSuitOptions}
+                            suitSelectionHistory={suitSelectionHistory}
+                            roundScore={roundScore}
+                            handleDeckSplit={handleDeckSplit}
+                            handleSuitSelect={handleSuitSelect}
                         />
-                        <Hand
-                            showCards={true}
-                            vertical={false}
-                            cardCount={playerHand.length}
-                            cards={sortCards(playerHand, roundStatus)}
-                            validOptions={playerHandValidOptions}
-                            roundStatus={roundStatus.status}
-                            playSelectedCard={handleCardPlay}
-                        />
+                        <div>
+                            <div className={styles.gameBoardWidthMatcherForHand}>
+                                <div />
+                                <div className={styles.handContainer}>
+                                    <PremiumOptions
+                                        roundStatus={roundStatus}
+                                        displayName={displayName}
+                                        availablePremiums={premiumOptions}
+                                        handleAnouncePremiums={handleAnouncePremiums}
+                                    />
+                                    <Hand
+                                        showCards={true}
+                                        vertical={false}
+                                        cardCount={playerHand.length}
+                                        cards={sortCards(playerHand, roundStatus)}
+                                        validOptions={playerHandValidOptions}
+                                        roundStatus={roundStatus.status}
+                                        playSelectedCard={handleCardPlay}
+                                    />
+                                </div>
+                                <div />
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <GameStatusIndicator
-                        gameStatus={gameStatus}
-                        roundStatus={roundStatus}
-                    />
-                    <PremiumIndicator
-                        premiums={roundStatus.premiums}
-                    />
-                    {lobbyEvents.length > 0 &&
-                        <RoomChat events={lobbyEvents} />
-                    }
-                </div>
-            </div>
+                </Col>
+                <Col lg={0} xl={1} />
+                <Col sm={4} md={5} lg={4} xl={2}>
+                    <div>
+                        <GameStatusIndicator
+                            gameStatus={gameStatus}
+                            roundStatus={roundStatus}
+                        />
+                        <PremiumIndicator
+                            premiums={roundStatus.premiums}
+                        />
+                        {lobbyEvents.length > 0 &&
+                            <RoomChat events={lobbyEvents} />
+                        }
+                    </div>
+                </Col>
+            </Row>
+            <Row>
+                {/* <Col>
+                    <div>
+                        <GameStatusIndicator
+                            gameStatus={gameStatus}
+                            roundStatus={roundStatus}
+                        />
+                        <PremiumIndicator
+                            premiums={roundStatus.premiums}
+                        />
+                        {lobbyEvents.length > 0 &&
+                            <RoomChat events={lobbyEvents} />
+                        }
+                    </div>
+                </Col> */}
+            </Row>
 
         </div >
     );

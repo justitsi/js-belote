@@ -115,6 +115,3 @@ function PremiumOptions(props) {
 }
 
 export default PremiumOptions;
-
-// premiums have to be anounced like so:
-// game.currentRound.anouncePlayerPremium('n', [{ suit: 'C', rank: '8' }, { suit: 'C', rank: '9' }, { suit: 'C', rank: '10' }], 'C')

@@ -36,7 +36,7 @@ function Hand(props) {
                 }
 
                 cardElement =
-                    <li className={props.vertical ? styles.verticalListItem : styles.horizontalListItem} key={i}>
+                    <div className={props.vertical ? styles.verticalListItem : styles.horizontalListItem} key={i}>
                         <Card
                             rank={props.cards[i].rank}
                             suit={props.cards[i].suit}
@@ -45,22 +45,22 @@ function Hand(props) {
                             selected={(i === selected)}
                             active={cardShouldBeActive && props.roundStatus === 'in_progress'}
                         />
-                    </li>
+                    </div>
             }
             else {
                 cardElement =
-                    <li className={props.vertical ? styles.verticalListItem : styles.horizontalListItem} key={i}>
+                    <div className={props.vertical ? styles.verticalListItem : styles.horizontalListItem} key={i}>
                         <Card />
-                    </li >
+                    </div >
             }
             cardsToShow.push(cardElement)
         }
 
     return (
         <div className={styles.handContainer}>
-            <ul className={props.vertical ? styles.verticalList : styles.horizontalList}>
+            <div className={props.vertical ? styles.verticalList : styles.horizontalList}>
                 {cardsToShow}
-            </ul>
+            </div>
             {props.showCards && selected !== -1 &&
                 <button
                     className={styles.playCardButton}

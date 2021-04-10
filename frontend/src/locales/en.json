@@ -31,7 +31,7 @@
         "cards": "cards"
     },
     "suitSelector": {
-        "selectBtnLabel": "Select suit",
+        "selectBtnLabel": "Call bid",
         "currentSuitLabel": "Current suit:",
         "anouncedByLabel": "Anounced by:",
         "previousBidsLabel": "Previous bids:",
@@ -46,6 +46,9 @@
             "x2": "Counter",
             "x4": "Re-Counter"
         }
+    },
+    "roomChat": {
+        "containerLabel": "Lobby Activity"
     },
     "gameStatusIndicator": {
         "containerLabel": "Game Score",

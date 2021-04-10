@@ -1,11 +1,19 @@
-.handContainer{
-    margin-left: 12.75rem;
-}
-
-.pageLayout {
-    display: flex;
+.page{
+    max-width: 100%;
+    overflow-x: hidden
 }
 
 .handContainer {
     display: inline-block;
+}
+
+.gameBoardWidthMatcherForHand {
+    margin-top: 3rem;
+    display:grid;
+    grid-template-columns: 2fr 7fr 2fr;
+}
+
+.gameBoardAndHandContainer {
+    display:grid;
+    grid-template-columns: 1fr;
 }
