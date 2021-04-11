@@ -65,6 +65,13 @@ function PremiumOptions(props) {
                 />
             </div>
         );
+        // preselect all indexes being rendered
+        const list = [...selectedCPremiums]
+        if (!list.includes(cIndex)) {
+            list.push(cIndex)
+            setSelectedCPremiums(list)
+        }
+
         cIndex++;
         availablePremiumsList.push(option)
     }
@@ -84,6 +91,13 @@ function PremiumOptions(props) {
                 />
             </div>
         );
+        // preselect all indexes being rendered
+        const list = [...selectedSPremiums]
+        if (!list.includes(sIndex)) {
+            list.push(sIndex)
+            setSelectedSPremiums(list)
+        }
+
         sIndex++;
         availablePremiumsList.push(option)
     }
