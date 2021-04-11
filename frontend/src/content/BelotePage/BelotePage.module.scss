@@ -17,3 +17,8 @@
     display:grid;
     grid-template-columns: 1fr;
 }
+
+.gameBoardAndIndicatorsContainer {
+    display: grid;
+    grid-template-columns: 7fr 3fr; 
+}

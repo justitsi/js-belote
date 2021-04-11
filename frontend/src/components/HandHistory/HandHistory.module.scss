@@ -1,0 +1,33 @@
+.tableContainer {
+    height: 100%;
+}
+
+.historyTable{
+    width: 100%;
+    height: 100%;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */   
+}
+
+.tablePlayerName{
+    text-align: center;
+    height: 25%;
+    max-height: 25%;
+    border-bottom: 1px solid black;
+}
+
+.strongestCardTD{
+    text-align: center;
+    background-color: lightgreen;
+    width: 25%;
+    height: 25%;
+}
+
+.cardTD{
+    text-align: center;
+    width: 25%;
+    height: 25%;
+    background-color: lightyellow;
+}

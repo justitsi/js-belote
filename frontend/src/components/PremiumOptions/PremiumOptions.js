@@ -116,7 +116,6 @@ function PremiumOptions(props) {
             availablePremiumsList.push(option)
         }
 
-
         return (
             <div>
                 {availablePremiumsList.length > 0 && props.roundStatus.pTurnName === props.displayName &&

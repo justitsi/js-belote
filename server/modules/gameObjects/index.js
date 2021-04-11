@@ -254,6 +254,9 @@ class Round {
         this.teamCardScores = [0, 0]
         this.teamPremiumScores = [0, 0]
         this.teamNumberOfHands = [0, 0]
+
+        //game progress vars
+        this.playedCardHistory = []
     }
 
     splitDeck(playername, splitPos) {
@@ -452,6 +455,12 @@ class Round {
 
         if (this.cardsOnTable.cards.length == 4) {
             const strongest = this.getStrongestCard(this.cardsOnTable.cards)
+            //add cards to history
+            this.playedCardHistory.push({
+                cards: [...this.cardsOnTable.cards],
+                strongest: strongest
+            })
+
             this.playerTurn = this.players.indexOf(strongest.placedBy)
             this.teamPiles[this.getPlayerTeam(strongest.placedBy)].addCardsToTop(this.cardsOnTable.grabCardsFromTop(4))
             // count number of hands that each team collects to their piles
@@ -946,6 +955,7 @@ class Round {
             pTurnName: this.players[this.playerTurn],
             players: this.players,
             cardsOnTable: this.cardsOnTable.cards,
+            handHistory: this.playedCardHistory,
             premiums: premiumInfo,
             suitInfo: {
                 suit: this.suit,
