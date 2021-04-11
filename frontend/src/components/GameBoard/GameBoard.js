@@ -28,7 +28,9 @@ function GameBoard(props) {
     let eNumOfCards = 0
     let nNumOfCards = 0
     let wNumOfCards = 0
-
+    let localDealerPosition = [false, false, false, false]
+    let localStartingPlayerPosition = [false, false, false, false]
+    let localPlayerLabels = [null, null, null, null]
 
     if (props.roundStatus) {
         localPlayerPositions = reArrangeArrToLocalOrder([...props.roundStatus.players])
@@ -194,7 +196,19 @@ function GameBoard(props) {
     const wSecondColumnCardCount = Math.floor(wNumOfCards / 2)
     const wFirstColumnCardCount = wNumOfCards - wSecondColumnCardCount
 
+    //create player nametag labels
+    if (props.gameStatus && props.roundStatus) {
+        localDealerPosition[props.gameStatus.roundNum % 4] = true
+        localStartingPlayerPosition[(props.gameStatus.roundNum + 2) % 4] = true
 
+        localDealerPosition = reArrangeArrToLocalOrder([...localDealerPosition])
+        localStartingPlayerPosition = reArrangeArrToLocalOrder([...localStartingPlayerPosition])
+
+        for (let i = 0; i < localPlayerLabels.length; i++) {
+            if (localDealerPosition[i]) localPlayerLabels[i] = t("gameBoard.dealerPlayerLabel")
+            if (localStartingPlayerPosition[i]) localPlayerLabels[i] = t("gameBoard.startingPlayerLabel")
+        }
+    }
 
     return (
         <div className={styles.overAllContainer}>
@@ -223,11 +237,19 @@ function GameBoard(props) {
             </div>
             <div className={styles.northPTagAndGameBoardContainer}>
                 <div className={styles.horizontalPlayerTag}>
-                    <h5>{localPlayerPositions[2]}</h5>
+                    <div>
+                        <h5 className={styles.playerLabelText}>
+                            {localPlayerPositions[2]}{localPlayerLabels[2]}
+                        </h5>
+                    </div>
                 </div>
                 <div className={styles.displayElementsInOneLine}>
-                    <div className={styles.verticalPlayerTagLeft}>
-                        <h5>{localPlayerPositions[3]}</h5>
+                    <div className={styles.verticalPlayerTagContainer}>
+                        <div className={styles.verticalPlayerTagLeft}>
+                            <h5 className={styles.playerLabelText}>
+                                {localPlayerPositions[3]}{localPlayerLabels[3]}
+                            </h5>
+                        </div>
                     </div>
                     <div className={styles.gameBoardContainer}>
                         <div className={styles.tableContainer}>
@@ -236,12 +258,20 @@ function GameBoard(props) {
                             <div /><div /><div />
                         </div>
                     </div >
-                    <div className={styles.verticalPlayerTagRight}>
-                        <h5>{localPlayerPositions[1]}</h5>
+                    <div className={styles.verticalPlayerTagContainer}>
+                        <div className={styles.verticalPlayerTagRight}>
+                            <h5 className={styles.playerLabelText}>
+                                {localPlayerPositions[1]}{localPlayerLabels[1]}
+                            </h5>
+                        </div>
                     </div>
                 </div>
                 <div className={styles.horizontalPlayerTag}>
-                    <h5>{localPlayerPositions[0]}</h5>
+                    <div>
+                        <h5 className={styles.playerLabelText}>
+                            {localPlayerPositions[0]}{localPlayerLabels[0]}
+                        </h5>
+                    </div>
                 </div>
             </div>
             <div className={styles.handsSideBySide}>

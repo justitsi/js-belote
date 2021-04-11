@@ -54,6 +54,7 @@ function HandHistory(props) {
         history.reverse()
         // if game is in progress cut history so only last three cards are visible
         if (history.length > 3 && props.roundStatus.status === 'in_progress') history.length = 3
+        // make the table always have 3 data rows so that it doesn't change size in the begining of the game
         while (history.length < 3) history.push(<tr />)
 
         let containerHeader

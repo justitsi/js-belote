@@ -16,7 +16,9 @@
         "deckSplitPromptText": "Enter the card on which to split the deck",
         "deckSplitPromptSubmitButtonText": "Split",
         "suitSelectPromptText": "Please select a suit to call",
-        "roundOverPromptText": "Round Over"
+        "roundOverPromptText": "Round Over",
+        "dealerPlayerLabel": " (Dealer) ",
+        "startingPlayerLabel": " (Starts) "
     },
     "playerHand": {
         "playButtonLable": "Play"
