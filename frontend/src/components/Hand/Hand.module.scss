@@ -1,9 +1,10 @@
 .handContainer {
     display: grid;
-    width: 100%
+    width: 100%;
 }
 
 .playCardButton {
+    float: left;
     width: 10.5rem;
     margin-top: 0.25rem;
     margin-left: 0.75rem;

@@ -37,6 +37,7 @@ function RoomChat(props) {
     return (
         <IndicatorBox
             header={t('roomChat.containerLabel')}
+            scroll={true}
             content={
                 <div className={styles.roomChatListContainer}>
                     <ul className={styles.roomChatList}>

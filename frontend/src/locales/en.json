@@ -58,13 +58,14 @@
         "containerLabel": "Lobby Activity"
     },
     "gameStatusIndicator": {
-        "containerLabel": "Game Score",
+        "teamLabel": "Team",
+        "containerLabel": "Game Status",
         "scoreLabel": "Score",
         "roundNumberLabel": "Round Number",
         "consecutivePassedGamesLabel": "Consecutive Passed Games",
-        "roundSuitLabel": "Round Suit",
-        "roundSuitCallerLabel": "Round Suit Caller",
-        "winningTeamLabel": "WINNING TEAM",
+        "roundSuitLabel": "Round suit is",
+        "roundSuitCallerLabel": " called by ",
+        "winningTeamLabel": "Winning team is: ",
         "waitingForLabelsToConnectLabel": "Waiting for 4 players to connect",
         "waitingToConnectToServerLabel": "Please connect to a server..."
     }

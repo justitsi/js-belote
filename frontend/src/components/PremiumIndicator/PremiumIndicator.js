@@ -28,18 +28,19 @@ function PremiumIndicator(props) {
 
         return (
             <IndicatorBox
-            header={"Premiums"}
-            content={
-                <ul className={styles.premiumsList}>
-                    {premiums}
-                </ul>
-            }
-        />
+                header={"Premiums"}
+                scroll={true}
+                content={
+                    <ul className={styles.premiumsList}>
+                        {premiums}
+                    </ul>
+                }
+            />
         );
     }
     else {
         return (
-            <div/>
+            <div />
         );
     }
 }

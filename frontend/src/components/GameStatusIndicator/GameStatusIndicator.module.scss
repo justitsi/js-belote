@@ -1,5 +1,5 @@
 .container {
-
+    margin-bottom: 1rem;
 }
 
 .statusTableContainer {
@@ -9,9 +9,29 @@
     border-radius: 1%;
 }
 
-// .gameInfoTable{
-//     border: 1px solid black;
-// }
+.gameInfoTable{
+    width: 100%;
+    margin-bottom: 0.375rem;
+}
+
+.tableHeader {
+    width: 100%;
+}
+
+.tableHeaderRow {
+    width: 100%;
+}
+
+.tableHeaderData {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */ 
+}
+
+.tableBodyData {}
 
 
 .gameInfoTableRow {

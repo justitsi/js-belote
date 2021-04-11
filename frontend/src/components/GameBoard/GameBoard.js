@@ -32,6 +32,7 @@ function GameBoard(props) {
     let localStartingPlayerPosition = [false, false, false, false]
     let localPlayerLabels = [null, null, null, null]
 
+    //render gameboard contents here
     if (props.roundStatus) {
         localPlayerPositions = reArrangeArrToLocalOrder([...props.roundStatus.players])
         const playerIndicator = (

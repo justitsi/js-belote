@@ -1,6 +1,7 @@
 import styles from './HandHistory.module.scss'
 import IndicatorBox from './../IndicatorBox'
 import { useTranslation } from 'react-i18next';
+import { Table } from 'react-bootstrap'
 
 function HandHistory(props) {
     const { t } = useTranslation('translations');
@@ -63,12 +64,14 @@ function HandHistory(props) {
         else containerHeader = t('handHistory.containerLabel')
 
         return (
-            <div>
+            <div className={styles.container}>
                 <IndicatorBox
                     header={containerHeader}
+                    scroll={false}
+                    height={13.5}
                     content={
                         <div className={styles.tableContainer} >
-                            <table className={styles.historyTable}>
+                            <Table className={styles.historyTable} striped hover>
                                 <thead>
                                     <tr>
                                         {playerNames}
@@ -79,7 +82,7 @@ function HandHistory(props) {
                                         {history}
                                     </tbody>
                                 }
-                            </table>
+                            </Table>
                         </div>
                     }
                 />
