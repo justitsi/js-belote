@@ -139,8 +139,8 @@ function BelotePage(props) {
                 </Col>
             </Row>
             <Row fluid='md'>
-                <Col sm={0} md={0} lg={0} xl={1} />
-                <Col sm={12} md={12} lg={12} xl={10}>
+                <Col sm={0} md={0} lg={1} xl={1} />
+                <Col lg={10} xl={10}>
                     <div className={styles.gameBoardAndIndicatorsContainer}>
                         <div className={styles.gameBoardAndHandContainer}>
                             <GameBoard
@@ -177,23 +177,29 @@ function BelotePage(props) {
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <GameStatusIndicator
-                                gameStatus={gameStatus}
-                                roundStatus={roundStatus}
-                            />
-                            <PremiumIndicator
-                                premiums={roundStatus.premiums}
-                            />
-                            {lobbyEvents.length > 0 &&
-                                <RoomChat events={lobbyEvents} />
-                            }
-                            <HandHistory
-                                roundStatus={roundStatus}
-                            />
-                        </div>
+                        {windowWidth > 1200 &&
+                            <div className={styles.indicatorsContainer}>
+                                <PremiumIndicator
+                                    premiums={roundStatus.premiums}
+                                />
+                                {lobbyEvents.length > 0 &&
+                                    <RoomChat events={lobbyEvents} />
+                                }
+
+                                <GameStatusIndicator
+                                    gameStatus={gameStatus}
+                                    roundStatus={roundStatus}
+                                />
+                                <HandHistory
+                                    roundStatus={roundStatus}
+                                />
+
+
+                            </div>
+                        }
                     </div>
                 </Col>
+                <Col sm={0} md={0} lg={1} xl={1} />
             </Row>
             <Row>
                 {/* <Col>

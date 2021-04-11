@@ -19,6 +19,39 @@
 }
 
 .gameBoardAndIndicatorsContainer {
+    margin: auto;
     display: grid;
-    grid-template-columns: 7fr 3fr; 
+    grid-template-columns: 8fr 2fr; 
 }
+
+@media only screen and (min-width: 1500px) {
+    .gameBoardAndIndicatorsContainer {
+        margin: auto;
+        display: grid;
+        grid-template-columns: 8fr 3fr; 
+    }
+}
+
+@media only screen and (min-width: 1800px) {
+    .gameBoardAndIndicatorsContainer {
+        margin: auto;
+        display: grid;
+        grid-template-columns: 8fr 3fr; 
+    }
+}
+
+@media only screen and (min-width: 1950px) {
+    .gameBoardAndIndicatorsContainer {
+        margin: auto;
+        display: grid;
+        grid-template-columns: 8fr 5fr; 
+        width: 80%;
+        margin: auto;
+    }
+    .indicatorsContainer{
+        margin: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+    }
+}
+

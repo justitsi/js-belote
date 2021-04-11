@@ -51,7 +51,7 @@
     },
     "handHistory": {
         "containerLabel": "Hand History",
-        "containerLabel3Hands": "Hand History (last 3 hands)",
+        "containerLabel3Hands": "Hand History (last 3)",
         "containerLabelFull": "Hand History (full)"
     },
     "roomChat": {
