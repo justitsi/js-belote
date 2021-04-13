@@ -1,6 +1,6 @@
 import styles from './Hand.module.scss'
 import { useState } from 'react'
-import Card from './../Card'
+import Card from '../Card'
 import { useTranslation } from 'react-i18next';
 
 function Hand(props) {

@@ -1,5 +1,12 @@
 {
     "test": "hello world",
+    "navbar": {
+        "brand": "Belote With Friends",
+        "home": "Home",
+        "test_room": "Test Room",
+        "gameIDLabel": "Enter game ID to join",
+        "joinGameBtnLabel": "Join"
+    },
     "cardSuits": {
         "C": "C",
         "D": "D",

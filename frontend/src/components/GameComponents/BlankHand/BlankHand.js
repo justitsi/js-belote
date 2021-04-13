@@ -1,5 +1,5 @@
 import styles from './BlankHand.module.scss'
-import Card from './../Card'
+import Card from '../Card'
 import { useTranslation } from 'react-i18next';
 
 function BlankHand(props) {

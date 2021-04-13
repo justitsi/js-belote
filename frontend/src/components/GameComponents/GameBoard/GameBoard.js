@@ -1,10 +1,10 @@
 import styles from './GameBoard.module.scss'
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react'
-import Card from './../Card';
-import BlankHand from './../BlankHand';
-import SuitSelector from './../SuitSelector';
-import RoundScoreTable from './../RoundScoreTable';
+import Card from '../Card';
+import BlankHand from '../BlankHand';
+import SuitSelector from '../SuitSelector';
+import RoundScoreTable from '../RoundScoreTable';
 
 function GameBoard(props) {
     const { t } = useTranslation('translations');

@@ -4,13 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { useState, useEffect } from 'react'
 import CONSTANTS from './../../modules/CONSTANTS.json'
 import { connectToSocket, disconnectFromSocket } from '../../modules/socketActions'
-import GameStatusIndicator from './../../components/GameStatusIndicator'
-import PremiumIndicator from './../../components/PremiumIndicator'
-import Hand from './../../components/Hand'
-import GameBoard from './../../components/GameBoard'
-import RoomChat from './../../components/RoomChat'
-import HandHistory from './../../components/HandHistory'
-import PremiumOptions from './../../components/PremiumOptions'
+import GameStatusIndicator from './../../components/GameComponents//GameStatusIndicator'
+import PremiumIndicator from './../../components/GameComponents//PremiumIndicator'
+import Hand from './../../components/GameComponents//Hand'
+import GameBoard from '../../components/GameComponents/GameBoard'
+import RoomChat from '../../components/GameComponents/RoomChat'
+import HandHistory from './../../components/GameComponents/HandHistory'
+import PremiumOptions from './../../components/GameComponents/PremiumOptions'
 import { sortCards } from './../../modules/GameFunctions'
 import { Row, Col, Container } from 'react-bootstrap'
 
@@ -140,7 +140,7 @@ function BelotePage(props) {
             </Row>
             <Row fluid='md'>
                 <Col sm={0} md={0} lg={1} xl={1} />
-                <Col lg={10} xl={10}>
+                <Col lg={9} xl={10}>
                     <div className={styles.gameBoardAndIndicatorsContainer}>
                         <div className={styles.gameBoardAndHandContainer}>
                             <GameBoard
@@ -177,7 +177,7 @@ function BelotePage(props) {
                                 </div>
                             </div>
                         </div>
-                        {windowWidth > 1200 &&
+                        {windowWidth > 1280 &&
                             <div className={styles.indicatorsContainer}>
                                 <PremiumIndicator
                                     premiums={roundStatus.premiums}
