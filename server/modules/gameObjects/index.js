@@ -836,15 +836,16 @@ class Round {
                 }
             // check if player is holding a stronger card from the same suit
             let player_has_stronger_card_from_suit = false;
-            for (const cardFromHand of playerHand.cards) {
-                if (cardFromHand.suit == initialCard.suit) {
-                    if (this.compareCardStrength(strongestCard.suit, strongestCard.rank, cardFromHand.suit, cardFromHand.rank) == 1) {
-                        player_has_stronger_card_from_suit = true;
-                        break;
-                    }
+            if (player_has_requested_suit)
+                for (const cardFromHand of playerHand.cards) {
+                    if (cardFromHand.suit == initialCard.suit) {
+                        if (this.compareCardStrength(strongestCard.suit, strongestCard.rank, cardFromHand.suit, cardFromHand.rank) == 1) {
+                            player_has_stronger_card_from_suit = true;
+                            break;
+                        }
 
+                    }
                 }
-            }
 
             // check if player is holding a stronger card from any suit
             let player_has_stronger_card_from_any_suit = false;
@@ -857,6 +858,16 @@ class Round {
 
             //check if player team is holding this round
             if (holdingTeam == this.getPlayerTeam(playerName)) {
+                //if card is trump or suit is A you must give higher if you can
+                if (initialCard.suit === this.suit || this.suit === 'A') {
+                    if (player_has_stronger_card_from_suit) {
+                        if (initialCard.suit == cardSuit &&
+                            this.compareCardStrength(strongestCard.suit, strongestCard.rank, cardSuit, cardRank) == 1)
+                            return true;
+                        else return false;
+                    }
+                }
+
                 // if player has the same suit he must respond
                 if (player_has_requested_suit) {
                     if (initialCard.suit == cardSuit) return true;
