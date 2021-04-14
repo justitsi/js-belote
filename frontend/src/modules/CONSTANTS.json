@@ -1,5 +1,5 @@
 {
-    "game_server_addr": "http://localhost:8000",
+    "game_server_addr": "https://belotewithfriends.tk:443",
     "call_rank_order": [
         "P",
         "C",

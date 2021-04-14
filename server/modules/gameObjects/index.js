@@ -20,7 +20,7 @@ class Deck {
         for (const suit of this.validSuits)
             for (const rank of this.validRanks)
                 this.cards.push(new Card(suit, rank))
-        // this.shuffle()
+        this.shuffle()
     }
     // ^^ enable card shuffle ^^
 
