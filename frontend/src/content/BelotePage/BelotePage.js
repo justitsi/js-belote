@@ -98,6 +98,7 @@ function BelotePage(props) {
 
         return () => {
             if (socket) disconnectFromSocket(socket);
+            if (usernameSet) setUsernameSet(false)
         }
     }, [roomID, clientID, displayName, usernameSet]);
 
