@@ -95,11 +95,21 @@ function BelotePage(props) {
 
             setSocket(socket_connection)
         }
+
+        return () => {
+            if (socket) disconnectFromSocket(socket);
+        }
     }, [roomID, clientID, displayName, usernameSet]);
 
     useEffect(() => {
+        if (socket) disconnectFromSocket(socket);
+        setSocket(null)
+        setUsernameSet(false)
+        setDisplayName(null)
         setRoomID(props.match.params.roomID)
     }, [props.match.params.roomID])
+
+
 
     const handleDeckSplit = (index) => {
         socket.emit("splitDeck", index);
