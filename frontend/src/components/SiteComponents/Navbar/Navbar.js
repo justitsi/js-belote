@@ -26,7 +26,7 @@ const Our_Navbar = () => {
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link href="#/">{t('navbar.home')}</Nav.Link>
-                    <Nav.Link href="#/search">{t('navbar.test_room')}</Nav.Link>
+                    <Nav.Link href="#/belote/test">{t('navbar.test_room')}</Nav.Link>
                 </Nav>
                 <Form inline>
                     <FormControl
@@ -36,7 +36,8 @@ const Our_Navbar = () => {
                         onChange={e => setRoomID(e.target.value)}
                         value={roomID}
                     />
-                    <Button onClick={handleSubmit} type="submit" variant="outline-success">{t('navbar.joinGameBtnLabel')}</Button>
+                    <br />
+                    <Button onClick={handleSubmit} type="submit" variant="primary">{t('navbar.joinGameBtnLabel')}</Button>
                 </Form>
             </Navbar.Collapse>
         </Navbar>

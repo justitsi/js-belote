@@ -1,11 +1,20 @@
 import { io } from 'socket.io-client';
+import CONSTANTS from './CONSTANTS.json';
 
-export const connectToSocket = (server, room, client, displayName) => {
-    const socket = io(server, { query: { "room": room, "client": client, "displayName": displayName } });
+export const connectToGameSocket = (room, client, displayName) => {
+    const socket = io(CONSTANTS.game_server_addr, { query: { "action": "connectToGame", "room": room, "client": client, "displayName": displayName } });
     socket.connect();
 
     return socket;
 }
+
+export const connectToServerSocket = (clientID) => {
+    const socket = io(CONSTANTS.game_server_addr, { query: { "action": "connectToServer", "client": clientID } })
+    socket.connect();
+
+    return socket;
+}
+
 
 export const disconnectFromSocket = (socket) => {
     socket.disconnect();

@@ -1,3 +1,18 @@
-// .page {
-//     color:green
-// }
+.introCTAButtonContainer{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.CTASpacer {
+    height: 0.5rem;
+}
+
+.introCTAButton {
+    margin-left: auto;
+}
+
+.introFormCTAButton {
+    margin-right: 0.5rem;
+    margin-left: auto;
+}

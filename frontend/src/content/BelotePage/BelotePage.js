@@ -2,8 +2,7 @@ import styles from './BelotePage.module.scss'
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import { useState, useEffect } from 'react'
-import CONSTANTS from './../../modules/CONSTANTS.json'
-import { connectToSocket, disconnectFromSocket } from '../../modules/socketActions'
+import { connectToGameSocket, disconnectFromSocket } from '../../modules/socketActions'
 import GameStatusIndicator from './../../components/GameComponents//GameStatusIndicator'
 import PremiumIndicator from './../../components/GameComponents//PremiumIndicator'
 import Hand from './../../components/GameComponents//Hand'
@@ -19,7 +18,6 @@ function BelotePage(props) {
     // window rendering vars
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     // server conn vars
-    const [server, setServer] = useState(CONSTANTS.game_server_addr)
     const [roomID, setRoomID] = useState(props.match.params.roomID)
     const [clientID, setClientID] = useState(uuidv4())
     const [displayName, setDisplayName] = useState(null)
@@ -39,7 +37,8 @@ function BelotePage(props) {
     // manage socket communication
     useEffect(() => {
         if (displayName && usernameSet) {
-            let socket_connection = connectToSocket(server, roomID, clientID, displayName);
+            if (socket) disconnectFromSocket(socket);
+            let socket_connection = connectToGameSocket(roomID, clientID, displayName);
 
             socket_connection.on("gameStatusUpdate", (args) => {
                 console.log(`Received game status update ${JSON.stringify(args)}`)

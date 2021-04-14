@@ -3,9 +3,12 @@
     "navbar": {
         "brand": "Belote With Friends",
         "home": "Home",
-        "test_room": "Test Room",
+        "test_room": "Join the test room",
         "gameIDLabel": "Enter game ID to join",
         "joinGameBtnLabel": "Join"
+    },
+    "gameIndicator": {
+        "joinBtnLabel": "Join Game"
     },
     "cardSuits": {
         "C": "C",
@@ -75,5 +78,16 @@
         "winningTeamLabel": "Winning team is: ",
         "waitingForLabelsToConnectLabel": "Waiting for 4 players to connect",
         "waitingToConnectToServerLabel": "Please connect to a server..."
+    },
+    "mainPage": {
+        "introSectionHeader": "Want to just play Belote?",
+        "introSectionCTAText": "Want to play a game of belote without having to sign up, hack your browser to use flash or play 5 games before you can play with friends? Well, this is the place for you. Join a free game room of belote and play - no registration required!",
+        "joinGameByIDCTAPlaceholder": "Room ID",
+        "joinActiveRoomHeading": "Join an existing room",
+        "joinActiveRoomParagraph": "Join one of the pre-existing rooms! Rooms with more players are towards the top, so that their game can start sooner."
+    },
+    "activeRoomCard": {
+        "label": "Lobby",
+        "teamLabel": "Team"
     }
 }
