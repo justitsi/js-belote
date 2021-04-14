@@ -10,7 +10,7 @@ function RoomIndicatorContainer(props) {
 
         for (const room of rooms) {
             const roomElement = (
-                <Col sm={12} md={6} lg={4} xl={3}>
+                <Col sm={12} md={6} lg={4} xl={3} key={room.room_id}>
                     <br />
                     <RoomIndicator
                         players={room.current_players}

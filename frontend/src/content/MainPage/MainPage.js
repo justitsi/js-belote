@@ -5,9 +5,7 @@ import { connectToServerSocket, disconnectFromSocket } from '../../modules/socke
 import styles from './MainPage.module.scss'
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Jumbotron, Row, Form, FormControl } from 'react-bootstrap';
-import RoomIndicator from './../../components/SiteComponents/RoomIndicator'
 import RoomIndicatorContainer from './../../components/SiteComponents/RoomIndicatorContainer'
-
 
 
 function MainPage(props) {
@@ -31,6 +29,10 @@ function MainPage(props) {
         });
 
         setSocket(socket_connection)
+
+        return () => {
+            socket_connection.disconnect()
+        }
     }, [clientID]);
 
 

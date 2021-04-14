@@ -94,19 +94,21 @@ function BelotePage(props) {
             })
 
             setSocket(socket_connection)
-        }
 
-        return () => {
-            if (socket) disconnectFromSocket(socket);
-            if (usernameSet) setUsernameSet(false)
+            // disconnect from socket on component unmount
+            return () => {
+                disconnectFromSocket(socket_connection)
+            }
         }
-    }, [roomID, clientID, displayName, usernameSet]);
+    }, [roomID, clientID, usernameSet]);
 
+    // check if player is switching belote lobbies to reset socket and vars
     useEffect(() => {
         if (socket) disconnectFromSocket(socket);
         setSocket(null)
         setUsernameSet(false)
         setDisplayName(null)
+        setLobbyEvents([])
         setRoomID(props.match.params.roomID)
     }, [props.match.params.roomID])
 

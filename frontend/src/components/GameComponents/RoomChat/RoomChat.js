@@ -12,7 +12,7 @@ function RoomChat(props) {
         let line;
         if (event.action === "joined") {
             line = (
-                <li className={styles.roomChatListItem}>
+                <li className={styles.roomChatListItem} key={uuidv4()}>
                     <p className={styles.playerJoinText}>
                         Player {event.client.displayName} joined the room
                     </p>
