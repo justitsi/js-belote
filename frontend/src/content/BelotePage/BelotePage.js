@@ -10,6 +10,7 @@ import GameBoard from '../../components/GameComponents/GameBoard'
 import RoomChat from '../../components/GameComponents/RoomChat'
 import HandHistory from './../../components/GameComponents/HandHistory'
 import PremiumOptions from './../../components/GameComponents/PremiumOptions'
+import GameUsernamePrompt from './../../components/SiteComponents/GameUsernamePrompt'
 import { sortCards } from './../../modules/GameFunctions'
 import { Row, Col, Container } from 'react-bootstrap'
 
@@ -96,6 +97,10 @@ function BelotePage(props) {
         }
     }, [roomID, clientID, displayName, usernameSet]);
 
+    useEffect(() => {
+        setRoomID(props.match.params.roomID)
+    }, [props.match.params.roomID])
+
     const handleDeckSplit = (index) => {
         socket.emit("splitDeck", index);
     }
@@ -120,88 +125,79 @@ function BelotePage(props) {
     window.addEventListener("resize", () => { setWindowWidth(window.innerWidth) });
 
     return (
-        <div className={styles.page} >
-            <Row>
-                <Col>
-                    Belote Room ID: {roomID}
-                    {usernameSet === false &&
-                        <div>
-                            <form>
-                                <input onChange={event => setDisplayName(event.target.value)} />
-                                <button onClick={handleReadyToConnect}>Connect</button>
-                            </form>
-                        </div>
-                    }
-                </Col>
-                <Col>
-                    Window Width: {windowWidth}
-                </Col>
-            </Row>
-            <Row fluid='md'>
-                <Col sm={0} md={0} lg={1} xl={1} />
-                <Col lg={9} xl={10}>
-                    <div className={styles.gameBoardAndIndicatorsContainer}>
-                        <div className={styles.gameBoardAndHandContainer}>
-                            <GameBoard
-                                gameStatus={gameStatus}
-                                roundStatus={roundStatus}
-                                localUsername={displayName}
-                                validSuitOptions={validSuitOptions}
-                                suitSelectionHistory={suitSelectionHistory}
-                                roundScore={roundScore}
-                                handleDeckSplit={handleDeckSplit}
-                                handleSuitSelect={handleSuitSelect}
-                            />
-                            <div>
-                                <div className={styles.gameBoardWidthMatcherForHand}>
-                                    <div />
-                                    <div className={styles.handContainer}>
-                                        <PremiumOptions
-                                            roundStatus={roundStatus}
-                                            displayName={displayName}
-                                            availablePremiums={premiumOptions}
-                                            handleAnouncePremiums={handleAnouncePremiums}
-                                        />
-                                        <Hand
-                                            showCards={true}
-                                            vertical={false}
-                                            cardCount={playerHand.length}
-                                            cards={sortCards(playerHand, roundStatus)}
-                                            validOptions={playerHandValidOptions}
-                                            roundStatus={roundStatus.status}
-                                            playSelectedCard={handleCardPlay}
-                                        />
+        < div className={styles.page} >
+            {socket &&
+                <div>
+                    <Row>
+                        <Col>
+                            Window Width: {windowWidth}
+                        </Col>
+                    </Row>
+                    <Row fluid='md'>
+                        <Col sm={0} md={0} lg={1} xl={1} />
+                        <Col lg={9} xl={10}>
+                            <div className={styles.gameBoardAndIndicatorsContainer}>
+                                <div className={styles.gameBoardAndHandContainer}>
+                                    <GameBoard
+                                        gameStatus={gameStatus}
+                                        roundStatus={roundStatus}
+                                        localUsername={displayName}
+                                        validSuitOptions={validSuitOptions}
+                                        suitSelectionHistory={suitSelectionHistory}
+                                        roundScore={roundScore}
+                                        handleDeckSplit={handleDeckSplit}
+                                        handleSuitSelect={handleSuitSelect}
+                                    />
+                                    <div>
+                                        <div className={styles.gameBoardWidthMatcherForHand}>
+                                            <div />
+                                            <div className={styles.handContainer}>
+                                                <PremiumOptions
+                                                    roundStatus={roundStatus}
+                                                    displayName={displayName}
+                                                    availablePremiums={premiumOptions}
+                                                    handleAnouncePremiums={handleAnouncePremiums}
+                                                />
+                                                <Hand
+                                                    showCards={true}
+                                                    vertical={false}
+                                                    cardCount={playerHand.length}
+                                                    cards={sortCards(playerHand, roundStatus)}
+                                                    validOptions={playerHandValidOptions}
+                                                    roundStatus={roundStatus.status}
+                                                    playSelectedCard={handleCardPlay}
+                                                />
+                                            </div>
+                                            <div />
+                                        </div>
                                     </div>
-                                    <div />
                                 </div>
-                            </div>
-                        </div>
-                        {windowWidth > 1280 &&
-                            <div className={styles.indicatorsContainer}>
-                                <PremiumIndicator
-                                    premiums={roundStatus.premiums}
-                                />
-                                {lobbyEvents.length > 0 &&
-                                    <RoomChat events={lobbyEvents} />
+                                {windowWidth > 1280 &&
+                                    <div className={styles.indicatorsContainer}>
+                                        <PremiumIndicator
+                                            premiums={roundStatus.premiums}
+                                        />
+                                        {lobbyEvents.length > 0 &&
+                                            <RoomChat events={lobbyEvents} />
+                                        }
+
+                                        <GameStatusIndicator
+                                            gameStatus={gameStatus}
+                                            roundStatus={roundStatus}
+                                        />
+                                        <HandHistory
+                                            roundStatus={roundStatus}
+                                        />
+
+
+                                    </div>
                                 }
-
-                                <GameStatusIndicator
-                                    gameStatus={gameStatus}
-                                    roundStatus={roundStatus}
-                                />
-                                <HandHistory
-                                    roundStatus={roundStatus}
-                                />
-
-
                             </div>
-                        }
-                    </div>
-                </Col>
-                <Col sm={0} md={0} lg={1} xl={1} />
-            </Row>
-            <Row>
-                {/* <Col>
+                        </Col>
+                        <Col sm={0} md={0} lg={1} xl={1} />
+                    </Row>
+                    <Row>
+                        {/* <Col>
                     <div>
                         <GameStatusIndicator
                             gameStatus={gameStatus}
@@ -215,8 +211,18 @@ function BelotePage(props) {
                         }
                     </div>
                 </Col> */}
-            </Row>
-
+                    </Row>
+                </div>
+            }
+            {usernameSet === false && !socket &&
+                <div className={styles.nameEntryFormContainer}>
+                    <GameUsernamePrompt
+                        roomID={roomID}
+                        setDisplayName={setDisplayName}
+                        handleReadyToConnect={handleReadyToConnect}
+                    />
+                </div>
+            }
         </div >
     );
 }

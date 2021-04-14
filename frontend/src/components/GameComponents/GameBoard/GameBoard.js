@@ -200,7 +200,7 @@ function GameBoard(props) {
     //create player nametag labels
     if (props.gameStatus && props.roundStatus) {
         localDealerPosition[props.gameStatus.roundNum % 4] = true
-        localStartingPlayerPosition[(props.gameStatus.roundNum + 2) % 4] = true
+        localStartingPlayerPosition[(props.gameStatus.roundNum + 1) % 4] = true
 
         localDealerPosition = reArrangeArrToLocalOrder([...localDealerPosition])
         localStartingPlayerPosition = reArrangeArrToLocalOrder([...localStartingPlayerPosition])

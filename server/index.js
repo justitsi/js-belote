@@ -22,6 +22,22 @@ io.on("connection", async (socket) => {
             socket.on('getRoomList', () => {
                 sendAvailableRoomsToServerClient(clientID);
             });
+
+            socket.on('canJoinRoom', (args) => {
+                console.log(`Getting query to join room: ${args} from ${clientID}`);
+
+                const roomID = args;
+                let canJoin = true;
+
+                for (const room of rooms) {
+                    if (room.id === roomID)
+                        if (room.clients.length >= room_limit)
+                            canJoin = false;
+                }
+
+                io.to(clientID).emit('canJoinRoom', canJoin)
+
+            });
         });
     }
 

@@ -61,6 +61,9 @@ function MainPage(props) {
                                 <p>
                                     {t('mainPage.introSectionCTAText')}
                                 </p>
+                                <p>
+                                    {t('mainPage.introSectionCTAText2')}
+                                </p>
                             </Col>
                             <Col sm={12} md={12} lg={4}>
                                 <div className={styles.introCTAButtonContainer}>
@@ -76,14 +79,26 @@ function MainPage(props) {
                                         </Form.Group>
 
                                         <Form.Group style={{ "marginTop": "0.5rem" }}>
-                                            <Button
-                                                variant="primary"
-                                                type={'sumbit'}
-                                                onClick={handleCTASubmit}
-                                                className={styles.introFormCTAButton}
-                                            >
-                                                {t('navbar.joinGameBtnLabel')}
-                                            </Button>
+                                            {!roomID &&
+                                                <Button
+                                                    variant="primary"
+                                                    type={'sumbit'}
+                                                    onClick={handleCTASubmit}
+                                                    className={styles.introFormCTAButton}
+                                                >
+                                                    {t('mainPage.createNewGameRoomBtnLabel')}
+                                                </Button>
+                                            }
+                                            {roomID &&
+                                                <Button
+                                                    variant="primary"
+                                                    type={'sumbit'}
+                                                    onClick={handleCTASubmit}
+                                                    className={styles.introFormCTAButton}
+                                                >
+                                                    {t('navbar.joinGameBtnLabel')}
+                                                </Button>
+                                            }
                                         </Form.Group>
                                     </Form>
                                 </div>

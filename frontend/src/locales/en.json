@@ -80,14 +80,21 @@
         "waitingToConnectToServerLabel": "Please connect to a server..."
     },
     "mainPage": {
-        "introSectionHeader": "Want to just play Belote?",
+        "introSectionHeader": "Just play Belote.",
         "introSectionCTAText": "Want to play a game of belote without having to sign up, hack your browser to use flash or play 5 games before you can play with friends? Well, this is the place for you. Join a free game room of belote and play - no registration required!",
-        "joinGameByIDCTAPlaceholder": "Room ID",
+        "introSectionCTAText2": "Come and play.",
+        "joinGameByIDCTAPlaceholder": "Enter code to join game",
         "joinActiveRoomHeading": "Join an existing room",
+        "createNewGameRoomBtnLabel": "Create Room",
         "joinActiveRoomParagraph": "Join one of the pre-existing rooms! Rooms with more players are towards the top, so that their game can start sooner."
     },
     "activeRoomCard": {
         "label": "Lobby",
         "teamLabel": "Team"
+    },
+    "gameUsernamePrompt": {
+        "roomIDLabel": "Room ID:",
+        "usernameInputPlaceholder": "Enter username",
+        "joinGameBtnLabel": "Join Game"
     }
 }

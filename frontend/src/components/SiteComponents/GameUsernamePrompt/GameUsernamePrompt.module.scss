@@ -1,0 +1,35 @@
+.loginContainer{
+    position: absolute;
+    top: 5rem; /* Header Height */
+    bottom: 2rem; /* Footer Height */
+    width: 100%;
+    overflow: hidden;
+}
+
+.firstRow{
+    height: 35%;
+}
+
+.loginFormContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginForm {
+    display: block;
+}
+
+.joinBtnContainer{
+    display: flex;
+    width: 100%;
+}
+
+.joinBtn {
+    margin-left: auto;
+}
+
+.errorText {
+    color: red;
+}
