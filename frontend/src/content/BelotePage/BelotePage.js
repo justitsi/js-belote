@@ -10,7 +10,6 @@ import RoomChat from '../../components/GameComponents/RoomChat'
 import HandHistory from './../../components/GameComponents/HandHistory'
 import PremiumOptions from './../../components/GameComponents/PremiumOptions'
 import GameUsernamePrompt from './../../components/SiteComponents/GameUsernamePrompt'
-import { sortCards } from './../../modules/GameFunctions'
 import { Row, Col } from 'react-bootstrap'
 
 function BelotePage(props) {
@@ -173,7 +172,7 @@ function BelotePage(props) {
                                                     showCards={true}
                                                     vertical={false}
                                                     cardCount={playerHand.length}
-                                                    cards={sortCards(playerHand, roundStatus)}
+                                                    cards={playerHand}
                                                     validOptions={playerHandValidOptions}
                                                     roundStatus={roundStatus.status}
                                                     playSelectedCard={handleCardPlay}

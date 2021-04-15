@@ -2,10 +2,14 @@ import styles from './Hand.module.scss'
 import { useState } from 'react'
 import Card from '../Card'
 import { useTranslation } from 'react-i18next';
+import { sortCards } from './../../../modules/GameFunctions';
+import { ReactComponent as ArrowIcon } from './../../../assets/icons/ArrowCardOrder.svg';
+import { Button } from 'react-bootstrap'
 
 function Hand(props) {
     const { t } = useTranslation('translations');
-    const [selected, setSelected] = useState(-1)
+    const [selected, setSelected] = useState(-1);
+    const [reverseCardOrder, setReverseCardOrder] = useState(false);
 
     const playSelectedCard = () => {
         if (selected !== -1) {
@@ -20,7 +24,9 @@ function Hand(props) {
 
 
     let cardsToShow = []
-    if (props.roundStatus === 'in_progress' || props.roundStatus === 'started_selecting_suit' || props.roundStatus === 'suit_selected')
+    if (props.roundStatus === 'in_progress' || props.roundStatus === 'started_selecting_suit' || props.roundStatus === 'suit_selected') {
+        const cardsInHand = sortCards([...props.cards], props.roundStatus, reverseCardOrder)
+
         for (let i = 0; i < props.cardCount; i++) {
             let cardElement = null;
             if (props.showCards === true) {
@@ -31,15 +37,15 @@ function Hand(props) {
 
                 let cardShouldBeActive = false
                 for (const activeCard of props.validOptions) {
-                    if (activeCard.suit === props.cards[i].suit && activeCard.rank === props.cards[i].rank)
+                    if (activeCard.suit === cardsInHand[i].suit && activeCard.rank === cardsInHand[i].rank)
                         cardShouldBeActive = true
                 }
 
                 cardElement =
                     <div className={props.vertical ? styles.verticalListItem : styles.horizontalListItem} key={i}>
                         <Card
-                            rank={props.cards[i].rank}
-                            suit={props.cards[i].suit}
+                            rank={cardsInHand[i].rank}
+                            suit={cardsInHand[i].suit}
                             index={i}
                             handleOnCLick={selectHandler}
                             selected={(i === selected)}
@@ -55,20 +61,38 @@ function Hand(props) {
             }
             cardsToShow.push(cardElement)
         }
+    }
 
     return (
         <div className={styles.handContainer}>
             <div className={props.vertical ? styles.verticalList : styles.horizontalList}>
                 {cardsToShow}
             </div>
-            {props.showCards && selected !== -1 &&
-                <button
-                    className={styles.playCardButton}
-                    onClick={playSelectedCard}
+            <div className={styles.btnContainer}>
+                <Button
+                    className={styles.switchCardDirectionButton}
+                    variant="outline-secondary"
+                    onClick={() => { setSelected(-1); setReverseCardOrder(!reverseCardOrder); }}
                 >
-                    {t("playerHand.playButtonLable")} {props.cards[selected].rank}{t(`cardSuits.${props.cards[selected].suit}`)}
-                </button>
-            }
+                    {reverseCardOrder &&
+                        <ArrowIcon className={styles.arrowRotated} />
+                    }
+                    {!reverseCardOrder &&
+                        <ArrowIcon />
+                    }
+                </Button>
+                {props.showCards && selected !== -1 &&
+                    <Button
+                        className={styles.playCardButton}
+                        onClick={playSelectedCard}
+                        variant="outline-primary"
+                    >
+                        <b>
+                            {t("playerHand.playButtonLable")} {props.cards[selected].rank}{t(`cardSuits.${props.cards[selected].suit}`)}
+                        </b>
+                    </Button>
+                }
+            </div>
         </div>
     );
 }

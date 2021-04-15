@@ -2,6 +2,7 @@ import PremiumOption from './../PremiumOption'
 import styles from './PremiumOptions.module.scss'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next';
+import { Button } from 'react-bootstrap'
 
 function PremiumOptions(props) {
     const { t } = useTranslation('translations');
@@ -123,12 +124,15 @@ function PremiumOptions(props) {
                         <b className={styles.premiumsListLabel}> {t('premuimOptions.listLabel')} </b>
                         <div className={styles.premiumsList}>
                             {availablePremiumsList}
-                            <button
+                            <Button
                                 className={styles.premiumOptionsAnounceBtn}
                                 onClick={handleAnouncePremiumsClick}
+                                variant="outline-primary"
                             >
-                                {t('premuimOptions.anounceBtnLabel')}
-                            </button>
+                                <b>
+                                    {t('premuimOptions.anounceBtnLabel')}
+                                </b>
+                            </Button>
                         </div>
                     </div>
                 }

@@ -1,8 +1,8 @@
 export const sort_rank_order_normal = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A']
 export const sort_rank_order_trump = ['7', '8', 'Q', 'K', '10', 'A', '9', 'J']
-export const sort_suit_order = ['C', 'D', 'H', 'S']
+export const sort_suit_order = ['D', 'C', 'H', 'S']
 
-export function sortCards(cards, roundStatus) {
+export function sortCards(cards, roundStatus, reverse) {
     const cardsBySuit = []
     const sortedCards = []
 
@@ -23,6 +23,18 @@ export function sortCards(cards, roundStatus) {
         cardsBySuit.push(cardsInThisSuit)
     }
 
+    // swap D and H if no H
+    if (cardsBySuit[2].length === 0) {
+        cardsBySuit[2] = cardsBySuit[0]
+        cardsBySuit[0] = []
+    }
+
+    // swap C and S if no Cs
+    if (cardsBySuit[1].length === 0) {
+        cardsBySuit[1] = cardsBySuit[3]
+        cardsBySuit[3] = []
+    }
+
     // sort cards by suit and correct order
     for (const cards of cardsBySuit) {
         let sortedCardsFromSuit = []
@@ -36,6 +48,7 @@ export function sortCards(cards, roundStatus) {
         }
     }
 
+    if (reverse) sortedCards.reverse()
     return sortedCards;
 }
 

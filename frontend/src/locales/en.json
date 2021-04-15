@@ -31,7 +31,8 @@
         "startingPlayerLabel": " (Starts) "
     },
     "playerHand": {
-        "playButtonLable": "Play"
+        "playButtonLable": "Play",
+        "reverseCardOrderBtnLabel": "Reverse Card Order"
     },
     "premuimOptions": {
         "listLabel": "Premium option list",
