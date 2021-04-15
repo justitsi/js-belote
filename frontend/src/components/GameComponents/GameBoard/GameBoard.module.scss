@@ -1,5 +1,5 @@
 .overAllContainer {
-    min-width: 50rem;
+    min-width: 65rem;
     width: 100%;
     height: 100%;
     display: grid;
@@ -12,7 +12,7 @@
 
 .verticalCardContainer {
     width: 100%;
-    margin-right:0.25rem;
+    margin-right:0.5rem;
 }
 
 .northPTagAndGameBoardContainer {
@@ -79,8 +79,8 @@
     // padding-left: 30%;
     // width: 60%;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 1fr 6fr 1fr;
+    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-rows: 1fr 10fr 1fr;
     height: 100%;
 }
 
@@ -118,4 +118,10 @@
 .roundOverTable{
     margin:auto;
     width: 90%;
+}
+
+@media only screen and (max-width: 1600px) {
+    .overAllContainer {
+        min-width: 50rem;
+    }
 }

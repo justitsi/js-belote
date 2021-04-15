@@ -1,6 +1,6 @@
 .cardContainer {
-    height: 6rem;
-    width: 4rem;
+    height: 7rem;
+    width: 5rem;
     border: 1px solid black;
     border-radius: 4%;
     margin: auto;
@@ -15,8 +15,8 @@
 }
 
 .selectedCardContainer {
-    height: 6rem;
-    width: 4rem;
+    height: 7rem;
+    width: 5rem;
     border: 1px solid green;
     border-radius: 4%;
     margin: auto;
@@ -48,4 +48,16 @@
 
 .redSuit {
     color: red
+}
+
+.cardSVG {
+    height: 100%;
+    width: 100%;
+}
+
+@media only screen and (max-width: 1600px) {
+    .cardContainer {
+        height: 6rem;
+        width: 4rem;
+    }
 }

@@ -8,14 +8,14 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     // display: flex;
-    height: 6rem;
+    height: 7rem;
 }
 
 .verticalList{
     display: grid;
     grid-template-columns: 1fr;
-    width: 4rem;
-    height: 28.25rem;
+    width: 5rem;
+    height: 31.25rem;
     grid-template-rows: 1fr 1fr 1fr 1fr;
 } 
 
@@ -26,5 +26,14 @@
 .horizontalListItem {
     padding-left: -0.125rem;
     padding-right: -0.125rem;
+}
 
+@media only screen and (max-width: 1600px) {
+    .verticalList{
+        width: 4rem;
+        height: 26.25rem;
+    } 
+    .horizontalList {
+        height: 6rem;
+    }
 }

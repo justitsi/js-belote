@@ -1,6 +1,7 @@
 .handContainer {
     display: grid;
     width: 100%;
+    padding-bottom: 0.25rem;
 }
 
 .btnContainer {
@@ -23,7 +24,7 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     // display: flex;
-    height: 6rem;
+    height: 7rem;
 }
 
 .horizontalListItem {

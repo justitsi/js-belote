@@ -1,5 +1,6 @@
 import styles from './Card.module.scss'
 import { useTranslation } from 'react-i18next';
+import { ReactComponent as QC } from './../../../assets/cards/QC.svg';
 
 function Card(props) {
     const { t } = useTranslation('translations');
