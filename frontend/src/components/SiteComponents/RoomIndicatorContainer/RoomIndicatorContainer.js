@@ -1,4 +1,3 @@
-import styles from './RoomIndicatorContainer.module.scss';
 import RoomIndicator from './../RoomIndicator';
 import { Row, Col } from "react-bootstrap"
 

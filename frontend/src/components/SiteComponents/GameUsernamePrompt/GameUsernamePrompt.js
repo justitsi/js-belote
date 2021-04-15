@@ -8,7 +8,7 @@ import { connectToServerSocket, disconnectFromSocket } from './../../../modules/
 function GameUsernamePrompt(props) {
     const { t } = useTranslation('translations');
     const [socket, setSocket] = useState(null)
-    const [clientID, setClientID] = useState(uuidv4())
+    const [clientID] = useState(uuidv4())
 
     const [canJoin, setCanJoin] = useState(false)
     const [error, setError] = useState(null);

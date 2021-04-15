@@ -6,20 +6,18 @@ function RoundScoreTable(props) {
 
     useEffect(() => {
         setTimeout(() => {
-            if (secondsLeft != 0) setSecondsLeft(secondsLeft - 1);
+            if (secondsLeft !== 0) setSecondsLeft(secondsLeft - 1);
         }, 1000);
     });
 
     // add last 10 points to the team that got the last 4 cards
     const lastHandPoints = [0, 0]
     const totalRoundPoints = [0, 0]
-    let shouldDisplayGamePoints = false;
 
     if (props.roundScore.card_scores) {
         lastHandPoints[props.roundScore.lastHandTeam] += 10;
         totalRoundPoints[0] = props.roundScore.card_scores[0] + props.roundScore.premium_scores[0] + lastHandPoints[0];
         totalRoundPoints[1] = props.roundScore.card_scores[1] + props.roundScore.premium_scores[1] + lastHandPoints[1];
-        shouldDisplayGamePoints = true;
     }
 
     return (

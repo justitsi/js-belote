@@ -1,5 +1,4 @@
 import styles from './BelotePage.module.scss'
-import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import { useState, useEffect } from 'react'
 import { connectToGameSocket, disconnectFromSocket } from '../../modules/socketActions'
@@ -12,15 +11,14 @@ import HandHistory from './../../components/GameComponents/HandHistory'
 import PremiumOptions from './../../components/GameComponents/PremiumOptions'
 import GameUsernamePrompt from './../../components/SiteComponents/GameUsernamePrompt'
 import { sortCards } from './../../modules/GameFunctions'
-import { Row, Col, Container } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
 
 function BelotePage(props) {
-    const { t } = useTranslation('translations');
     // window rendering vars
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     // server conn vars
     const [roomID, setRoomID] = useState(props.match.params.roomID)
-    const [clientID, setClientID] = useState(uuidv4())
+    const [clientID] = useState(uuidv4())
     const [displayName, setDisplayName] = useState(null)
     const [socket, setSocket] = useState(null)
     const [usernameSet, setUsernameSet] = useState(false)

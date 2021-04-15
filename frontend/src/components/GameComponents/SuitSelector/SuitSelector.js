@@ -1,8 +1,6 @@
 import styles from './SuitSelector.module.scss'
-
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react'
-import CONSTANTS from './../../../modules/CONSTANTS.json'
 
 function SuitSelector(props) {
     const { t } = useTranslation('translations');

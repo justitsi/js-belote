@@ -7,7 +7,7 @@ function RoomIndicator(props) {
     const players = [...props.players]
 
     for (let i = 0; i < players.length; i++) {
-        if (i % 2 == 0) players[i].team = 0;
+        if (i % 2 === 0) players[i].team = 0;
         else players[i].team = 1;
     }
 

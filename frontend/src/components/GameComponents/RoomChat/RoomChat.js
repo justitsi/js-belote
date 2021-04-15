@@ -1,5 +1,4 @@
 import styles from './RoomChat.module.scss';
-import { Card } from 'react-bootstrap';
 import IndicatorBox from '../IndicatorBox'
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
