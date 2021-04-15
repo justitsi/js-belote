@@ -1,6 +1,6 @@
 import styles from './BelotePage.module.scss'
 import { v4 as uuidv4 } from 'uuid';
-import { useState, useEffect } from 'react'
+import { useState, useEffect, cloneElement } from 'react'
 import { connectToGameSocket, disconnectFromSocket } from '../../modules/socketActions'
 import GameStatusIndicator from './../../components/GameComponents//GameStatusIndicator'
 import PremiumIndicator from './../../components/GameComponents//PremiumIndicator'
@@ -10,7 +10,7 @@ import RoomChat from '../../components/GameComponents/RoomChat'
 import HandHistory from './../../components/GameComponents/HandHistory'
 import PremiumOptions from './../../components/GameComponents/PremiumOptions'
 import GameUsernamePrompt from './../../components/SiteComponents/GameUsernamePrompt'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Tabs, Tab } from 'react-bootstrap'
 
 function BelotePage(props) {
     // window rendering vars
@@ -198,30 +198,42 @@ function BelotePage(props) {
                                         <HandHistory
                                             roundStatus={roundStatus}
                                         />
-
-
                                     </div>
                                 }
                             </div>
                         </Col>
                         <Col sm={0} md={0} lg={1} xl={1} />
                     </Row>
-                    <Row>
-                        {/* <Col>
-                    <div>
-                        <GameStatusIndicator
-                            gameStatus={gameStatus}
-                            roundStatus={roundStatus}
-                        />
-                        <PremiumIndicator
-                            premiums={roundStatus.premiums}
-                        />
-                        {lobbyEvents.length > 0 &&
-                            <RoomChat events={lobbyEvents} />
-                        }
-                    </div>
-                </Col> */}
-                    </Row>
+                    {windowWidth <= 1280 &&
+                        <Row>
+                            <Col md={1} />
+                            <Col md={10}>
+                                <Tabs defaultActiveKey="premiums">
+                                    <Tab eventKey="premiums" title="Premiums">
+                                        <PremiumIndicator
+                                            premiums={roundStatus.premiums}
+                                        />
+                                    </Tab>
+                                    <Tab eventKey="gameStatus" title="Game Status">
+                                        <GameStatusIndicator
+                                            gameStatus={gameStatus}
+                                            roundStatus={roundStatus}
+                                        />
+                                    </Tab>
+                                    <Tab eventKey="handHistory" title="Hand History">
+                                        <HandHistory
+                                            roundStatus={roundStatus}
+                                        />
+                                    </Tab>
+                                    {lobbyEvents.length > 0 &&
+                                        <Tab eventKey="lobbyActivity" title="Lobby Activity">
+                                            <RoomChat events={lobbyEvents} />
+                                        </Tab>
+                                    }
+                                </Tabs>
+                            </Col>
+                        </Row>
+                    }
                 </div>
             }
             {usernameSet === false && !socket &&
