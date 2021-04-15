@@ -11,9 +11,13 @@ function Hand(props) {
     const [selected, setSelected] = useState(-1);
     const [reverseCardOrder, setReverseCardOrder] = useState(false);
 
+    let cardsInHand = [];
+    if (props.roundStatus === 'in_progress' || props.roundStatus === 'started_selecting_suit' || props.roundStatus === 'suit_selected')
+        cardsInHand = sortCards([...props.cards], props.roundStatus, reverseCardOrder)
+
     const playSelectedCard = () => {
         if (selected !== -1) {
-            props.playSelectedCard(props.cards[selected]);
+            props.playSelectedCard(cardsInHand[selected]);
             setSelected(-1)
         }
     }
@@ -25,7 +29,6 @@ function Hand(props) {
 
     let cardsToShow = []
     if (props.roundStatus === 'in_progress' || props.roundStatus === 'started_selecting_suit' || props.roundStatus === 'suit_selected') {
-        const cardsInHand = sortCards([...props.cards], props.roundStatus, reverseCardOrder)
 
         for (let i = 0; i < props.cardCount; i++) {
             let cardElement = null;
@@ -33,6 +36,7 @@ function Hand(props) {
                 const selectHandler = (index) => {
                     if (index !== selected) setSelected(index)
                     else setSelected(-1)
+                    console.log(index, selected,)
                 }
 
                 let cardShouldBeActive = false
@@ -90,7 +94,7 @@ function Hand(props) {
                         variant="outline-primary"
                     >
                         <b>
-                            {t("playerHand.playButtonLable")} {props.cards[selected].rank}{t(`cardSuits.${props.cards[selected].suit}`)}
+                            {t("playerHand.playButtonLable")} {cardsInHand[selected].rank}{t(`cardSuits.${cardsInHand[selected].suit}`)}
                         </b>
                     </Button>
                 }
