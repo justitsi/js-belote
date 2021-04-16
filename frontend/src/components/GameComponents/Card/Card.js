@@ -1,6 +1,7 @@
 import styles from './Card.module.scss'
 import { useTranslation } from 'react-i18next';
-import { ReactComponent as QC } from './../../../assets/cards/QC.svg';
+import ManagerComponent from './../../../assets/cards/ManagerComponent'
+
 
 function Card(props) {
     const { t } = useTranslation('translations');
@@ -19,13 +20,10 @@ function Card(props) {
                 onClick={handleOnCLick}
             >
                 <div className={props.active ? null : styles.inactiveOverlay}>
-                    <div className={styles.textContainer}>
-                        <div className={textClass} >
-                            <h5>
-                                {props.rank}{t(`cardSuits.${props.suit}`)}
-                            </h5>
-                        </div >
-                    </div>
+                    <ManagerComponent
+                        suit={props.suit}
+                        rank={props.rank}
+                    />
                 </div>
             </div >
         );
@@ -45,7 +43,10 @@ function Card(props) {
         else {
             return (
                 <div className={styles.cardContainer} >
-                    <div className={styles.emptyCard} />
+                    <div className={styles.emptyCard}>
+                        <div className={styles.svgContainer}>
+                        </div>
+                    </div>
                 </div >
             );
         }

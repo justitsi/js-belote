@@ -24,7 +24,7 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     // display: flex;
-    height: 7rem;
+    height: 8rem;
 }
 
 .horizontalListItem {
@@ -39,4 +39,10 @@
 
 .verticalListItem{
     margin-bottom: 0.125rem;
+}
+
+@media only screen and (max-width: 1600px) {
+    .horizontalList {
+        height: 6rem;
+    }
 }

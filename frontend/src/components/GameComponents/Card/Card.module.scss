@@ -1,21 +1,18 @@
 .cardContainer {
     height: 7rem;
     width: 5rem;
-    border: 1px solid black;
-    border-radius: 4%;
     margin: auto;
-    background-color: white;
+    // background-color: white;
 }
 
 .inactiveOverlay {
     opacity: 0.65;
     height: 100%;
-    margin-top: -0.25rem;
     background-color: gray;
 }
 
 .selectedCardContainer {
-    height: 7rem;
+    height: 7.65rem;
     width: 5rem;
     border: 1px solid green;
     border-radius: 4%;
@@ -34,8 +31,8 @@
 }
 
 .textContainer {
-    margin-top: 0.25rem;
-    margin-left: 0.25rem;
+    // margin-top: 0.25rem;
+    // margin-left: 0.25rem;
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
@@ -50,14 +47,19 @@
     color: red
 }
 
-.cardSVG {
+.svgContainer {
     height: 100%;
     width: 100%;
 }
 
+
 @media only screen and (max-width: 1600px) {
     .cardContainer {
         height: 6rem;
+        width: 4rem;
+    }
+    .selectedCardContainer {
+        height: 6.065rem;
         width: 4rem;
     }
 }
