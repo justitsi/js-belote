@@ -16,6 +16,12 @@
         "H": "H",
         "S": "S"
     },
+    "cardSuitsSymbols": {
+        "C": "♣",
+        "D": "♦",
+        "H": "♥",
+        "S": "♠"
+    },
     "premiumTypes": {
         "B": "Belote ",
         "C": "Card Series ",
@@ -50,10 +56,11 @@
         "previousBidsLabel": "Previous bids:",
         "anounced": "anounced",
         "suits": {
-            "C": "Clubs",
-            "D": "Diamonds",
-            "H": "Hearts",
-            "S": "Spades",
+            "P": "Pass",
+            "C": "♣ Clubs",
+            "D": "♦ Diamonds",
+            "H": "♥ Hearts",
+            "S": "♠ Spades",
             "A": "All Trumps",
             "N": "No Trump",
             "x2": "Counter",

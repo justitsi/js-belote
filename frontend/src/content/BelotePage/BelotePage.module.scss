@@ -18,7 +18,7 @@
 
 .gameBoardAndIndicatorsContainer {
     margin: auto;
-    display: grid;
+    display: flex;
     grid-template-columns: 8fr 2fr; 
 }
 

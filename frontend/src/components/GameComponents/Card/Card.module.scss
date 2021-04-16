@@ -6,8 +6,8 @@
 }
 
 .blankCardContainer {
-    height: 7rem;
-    width: 5rem;
+    height: 6rem;
+    width: 4rem;
     margin: auto;
     // background-color: white;
     border: 1px solid black;
@@ -15,7 +15,7 @@
 }
 
 .inactiveOverlay {
-    opacity: 0.65;
+    opacity: 0.45;
     height: 100%;
     background-color: gray;
 }
@@ -73,7 +73,7 @@
     }
 
     .blankCardContainer {
-        height: 6rem;
-        width: 4rem;
+        height: 5rem;
+        width: 3.75rem;
     }
 }

@@ -25,7 +25,7 @@ function PremiumOption(props) {
     for (const card of props.premiumCards) {
         const premiumCardListItem = (
             <li className={styles.premiumCardListItem}>
-                <b>{card.rank}{card.suit}</b>
+                <b>{card.rank}{t(`cardSuitsSymbols.${card.suit}`)}</b>
             </li>
         );
         cardsInPremiumListItems.push(premiumCardListItem)

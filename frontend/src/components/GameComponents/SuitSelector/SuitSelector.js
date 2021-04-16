@@ -1,6 +1,7 @@
 import styles from './SuitSelector.module.scss'
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react'
+import { Button, Form } from 'react-bootstrap'
 
 function SuitSelector(props) {
     const { t } = useTranslation('translations');
@@ -18,7 +19,7 @@ function SuitSelector(props) {
                 value={call}
                 key={call}
             >
-                {call}
+                {t(`suitSelector.suits.${call}`)}
             </option>
         )
     }
@@ -40,22 +41,23 @@ function SuitSelector(props) {
         <div className={styles.suitSelectionGridContainer}>
             <div />
             <div className={styles.suitSelectionGrid}>
-                <form className={styles.suitSelectionForm}>
-                    <select
+                <Form className={styles.suitSelectionForm}>
+                    <Form.Control
+                        as="select"
                         name="suits"
                         className={styles.suitSelectionFormSelect}
                         onChange={event => setSelectedSuit(event.target.value)}
                     >
                         {listOfSuits}
-                    </select>
+                    </Form.Control>
                     <div className={styles.suitSelectionFormSpacer} />
-                    <button
+                    <Button
                         onClick={handleOptionSelect}
                         className={styles.suitSelectionFormBtn}
                     >
                         {t('suitSelector.selectBtnLabel')}
-                    </button>
-                </form>
+                    </Button>
+                </Form>
                 <div>
                     {t('suitSelector.currentSuitLabel')} {props.suit}
                 </div>
