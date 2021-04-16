@@ -23,7 +23,7 @@ function GameStatusIndicator(props) {
                                         <tr class={styles.tableHeaderRow}>
                                             <th />
                                             <th className={styles.tableHeaderData}>{t('gameStatusIndicator.teamLabel')} 1 ({props.gameStatus.teams[0][0]} {props.gameStatus.teams[0][1]})</th>
-                                            <th className={styles.tableHeaderData}>{t('gameStatusIndicator.teamLabel')} 1 ({props.gameStatus.teams[1][0]} {props.gameStatus.teams[1][1]})</th>
+                                            <th className={styles.tableHeaderData}>{t('gameStatusIndicator.teamLabel')} 2 ({props.gameStatus.teams[1][0]} {props.gameStatus.teams[1][1]})</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -58,8 +58,42 @@ function GameStatusIndicator(props) {
             );
         }
         else return (
-            <div>
-                {t('gameStatusIndicator.waitingForLabelsToConnectLabel')}
+            <div className={styles.container}>
+                <IndicatorBox
+                    header={t('gameStatusIndicator.containerLabel')}
+                    scroll={false}
+                    height={14.5}
+                    content={
+                        <div>
+                            <Table>
+                                <thead class={styles.tableHeader}>
+                                    <tr class={styles.tableHeaderRow}>
+                                        <th >{t('gameStatusIndicator.teamLabel')} 1</th>
+                                        <th >{t('gameStatusIndicator.teamLabel')} 2</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {props.gameStatus.teams[0][0] &&
+                                            <td>{props.gameStatus.teams[0][0]}</td>
+                                        }
+                                        {props.gameStatus.teams[0][1] &&
+                                            <td>{props.gameStatus.teams[0][1]}</td>
+                                        }
+                                        {props.gameStatus.teams[1][0] &&
+                                            <td>{props.gameStatus.teams[1][0]}</td>
+                                        }
+                                        {props.gameStatus.teams[1][1] &&
+                                            <td>{props.gameStatus.teams[1][1]}</td>
+                                        }
+                                    </tr>
+                                </tbody>
+                            </Table>
+                            <label>{t('gameStatusIndicator.waitingForLabelsToConnectLabel')}</label>
+                        </div>
+                    }
+                />
+
             </div>
         )
     }

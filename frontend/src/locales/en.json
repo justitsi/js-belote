@@ -77,7 +77,7 @@
         "roundSuitLabel": "Round suit is",
         "roundSuitCallerLabel": " called by ",
         "winningTeamLabel": "Winning team is: ",
-        "waitingForLabelsToConnectLabel": "Waiting for 4 players to connect",
+        "waitingForLabelsToConnectLabel": "Waiting for four players to connect...",
         "waitingToConnectToServerLabel": "Please connect to a server..."
     },
     "mainPage": {
