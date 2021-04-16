@@ -102,7 +102,7 @@ io.on("connection", async (socket) => {
                 }
             });
 
-            socket.on('suitSelect', (args) => {
+            socket.on('suitSelect', async (args) => {
                 console.log(`Getting command to select suit: ${args} from ${displayName} (${client_id})`);
 
                 if (room_entry.gameInstance) {
@@ -126,6 +126,18 @@ io.on("connection", async (socket) => {
                         sendToAllPlayersInRoom(room_entry, 'suitSelectionUpdate', { suitSelection: args, madeBy: displayName })
                         sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', roundStatus)
                         sendMoveOptionsToPlayers(room_entry)
+
+                        if (room_entry.gameInstance.currentRound.getRoundStatus().status === 'over') {
+                            await sendToAllPlayersInRoom(room_entry, 'roundScoreUpdate', room_entry.gameInstance.currentRound.getRoundResults())
+                            await room_entry.gameInstance.endCurrentRound()
+                            sendToAllPlayersInRoom(room_entry, 'gameStatusUpdate', room_entry.gameInstance.getGameInfo())
+
+                            //sleep for 15 secs before starting new round
+                            await new Promise(resolve => setTimeout(resolve, 15000));
+
+                            sendMoveOptionsToPlayers(room_entry)
+                            sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+                        }
                     }
                 }
             });

@@ -87,6 +87,17 @@
         "waitingForLabelsToConnectLabel": "Waiting for four players to connect...",
         "waitingToConnectToServerLabel": "Please connect to a server..."
     },
+    "roundScoreTable": {
+        "team1PointsLabel": "Team 1 points",
+        "team2PointsLabel": "Team 2 points",
+        "pointsFromCardsLabel": "Points from cards",
+        "pointsFromPremiumsLabel": "Points from premiums",
+        "pointsFromLastHandLabel": "Points from last hand",
+        "roundPointsSumLabel": "Total round points",
+        "gamePointsLabel": "Game Points Scores",
+        "nextRoundTimerLabelPt1": "Next round will start in",
+        "nextRoundTimerLabelPt2": "seconds"
+    },
     "mainPage": {
         "introSectionHeader": "Just play Belote.",
         "introSectionCTAText": "Want to play a game of belote without having to sign up, hack your browser to use flash or play 5 games before you can play with friends? Well, this is the place for you. Join a free game room of belote and play - no registration required!",

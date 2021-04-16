@@ -4,7 +4,7 @@ import Card from '../Card'
 import { useTranslation } from 'react-i18next';
 import { sortCards } from './../../../modules/GameFunctions';
 import { ReactComponent as ArrowIcon } from './../../../assets/icons/ArrowCardOrder.svg';
-import { Button } from 'react-bootstrap'
+import { Button, Container } from 'react-bootstrap'
 
 function Hand(props) {
     const { t } = useTranslation('translations');

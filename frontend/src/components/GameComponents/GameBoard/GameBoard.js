@@ -5,6 +5,7 @@ import Card from '../Card';
 import BlankHand from '../BlankHand';
 import SuitSelector from '../SuitSelector';
 import RoundScoreTable from '../RoundScoreTable';
+import { Button, Form } from 'react-bootstrap';
 
 function GameBoard(props) {
     const { t } = useTranslation('translations');
@@ -65,20 +66,21 @@ function GameBoard(props) {
                             </p>
                         </div>
                         <div>
-                            <form>
+                            <Form>
                                 <input
                                     type="number"
                                     onChange={event => setSplitOnCardIndex(event.target.value)}
                                     value={splitOnCardIndex}
                                 />
                                 <br />
-                                <button
+                                <Button
                                     className={styles.splitPromptFromSubmitButton}
                                     onClick={handleSplitIndexSelect}
+                                    type={"submit"}
                                 >
                                     {t('gameBoard.deckSplitPromptSubmitButtonText')}
-                                </button>
-                            </form>
+                                </Button>
+                            </Form>
                         </div>
                     </div >
                 );
@@ -199,8 +201,8 @@ function GameBoard(props) {
 
     //create player nametag labels
     if (props.gameStatus && props.roundStatus) {
-        localDealerPosition[props.gameStatus.roundNum % 4] = true
-        localStartingPlayerPosition[(props.gameStatus.roundNum + 1) % 4] = true
+        localDealerPosition[props.gameStatus.roundNum % 4 + 1] = true
+        localStartingPlayerPosition[(props.gameStatus.roundNum + 2) % 4] = true
 
         localDealerPosition = reArrangeArrToLocalOrder([...localDealerPosition])
         localStartingPlayerPosition = reArrangeArrToLocalOrder([...localStartingPlayerPosition])

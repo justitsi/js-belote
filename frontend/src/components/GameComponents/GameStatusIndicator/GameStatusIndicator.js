@@ -73,20 +73,16 @@ function GameStatusIndicator(props) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        {props.gameStatus.teams[0][0] &&
-                                            <td>{props.gameStatus.teams[0][0]}</td>
-                                        }
-                                        {props.gameStatus.teams[0][1] &&
-                                            <td>{props.gameStatus.teams[0][1]}</td>
-                                        }
-                                        {props.gameStatus.teams[1][0] &&
-                                            <td>{props.gameStatus.teams[1][0]}</td>
-                                        }
-                                        {props.gameStatus.teams[1][1] &&
-                                            <td>{props.gameStatus.teams[1][1]}</td>
-                                        }
-                                    </tr>
+                                    {props.gameStatus.teams &&
+                                        <tr>
+                                            <td>
+                                                {props.gameStatus.teams[0][0]} {props.gameStatus.teams[0][1]}
+                                            </td>
+                                            <td>
+                                                {props.gameStatus.teams[1][0]} {props.gameStatus.teams[1][1]}
+                                            </td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </Table>
                             <label>{t('gameStatusIndicator.waitingForLabelsToConnectLabel')}</label>
