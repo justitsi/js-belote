@@ -42,10 +42,9 @@ function Card(props) {
         }
         else {
             return (
-                <div className={styles.cardContainer} >
+                <div className={styles.blankCardContainer} >
                     <div className={styles.emptyCard}>
-                        <div className={styles.svgContainer}>
-                        </div>
+                        <div className={styles.svgContainer} />
                     </div>
                 </div >
             );
