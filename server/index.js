@@ -34,9 +34,7 @@ io.on("connection", async (socket) => {
                         if (room.clients.length >= room_limit)
                             canJoin = false;
                 }
-
-                io.to(clientID).emit('canJoinRoom', canJoin)
-
+                io.to(clientID).emit('canJoinRoom', canJoin);
             });
 
             socket.on('isUsernameAvailable', (args) => {

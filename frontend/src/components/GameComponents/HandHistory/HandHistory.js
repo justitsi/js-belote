@@ -56,7 +56,7 @@ function HandHistory(props) {
         // if game is in progress cut history so only last three cards are visible
         if (history.length > 3 && props.roundStatus.status === 'in_progress') history.length = 3
         // make the table always have 3 data rows so that it doesn't change size in the begining of the game
-        while (history.length < 3) history.push(<tr />)
+        while (history.length < 3) history.push(<tr key={history.length} />)
 
         let containerHeader
         if (props.roundStatus.status === 'in_progress') containerHeader = t('handHistory.containerLabel3Hands')
@@ -67,7 +67,7 @@ function HandHistory(props) {
             <div className={styles.container}>
                 <IndicatorBox
                     header={containerHeader}
-                    scroll={false}
+                    scroll={!(props.roundStatus.status === 'in_progress')}
                     height={13.5}
                     content={
                         <div className={styles.tableContainer} >

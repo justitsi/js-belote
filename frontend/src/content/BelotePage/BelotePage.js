@@ -46,7 +46,9 @@ function BelotePage(props) {
             socket_connection.on("roundStatusUpdate", (args) => {
                 console.log(`Received round status update ${JSON.stringify(args)}`)
                 // reset suit selections if new selection has sterted - suit would be undefined
-                if (args.status === 'started_selecting_suit' && args.suitInfo.suit === null) setSuitSelectionHistory([])
+                if (args.status === 'waiting_for_split') {
+                    setSuitSelectionHistory([])
+                }
                 setRoundStatus(args)
             });
 
@@ -137,11 +139,11 @@ function BelotePage(props) {
         < div className={styles.page} >
             {socket &&
                 <div>
-                    <Row>
+                    {/* <Row>
                         <Col>
                             Window Width: {windowWidth}
                         </Col>
-                    </Row>
+                    </Row> */}
                     <Row fluid='md'>
                         <Col sm={0} md={0} lg={1} xl={1} />
                         <Col lg={9} xl={10}>
@@ -194,6 +196,7 @@ function BelotePage(props) {
                                             <GameStatusIndicator
                                                 gameStatus={gameStatus}
                                                 roundStatus={roundStatus}
+                                                roomID={roomID}
                                             />
                                             {roundStatus &&
                                                 <HandHistory

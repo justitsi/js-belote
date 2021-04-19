@@ -1,7 +1,7 @@
 import styles from './GameStatusIndicator.module.scss';
 import { useTranslation } from 'react-i18next';
 import IndicatorBox from './../IndicatorBox';
-import { Table, ListGroup } from 'react-bootstrap'
+import { Table, ListGroup, InputGroup } from 'react-bootstrap'
 
 function GameStatusIndicator(props) {
     const { t } = useTranslation('translations');
@@ -83,11 +83,13 @@ function GameStatusIndicator(props) {
                                     }
                                 </tbody>
                             </Table>
-                            <label>{t('gameStatusIndicator.waitingForLabelsToConnectLabel')}</label>
+                            <label className={styles.waitingLabel}>{t('gameStatusIndicator.waitingForLabelsToConnectLabel')}</label>
+                            <InputGroup.Text disabled>
+                                {`https://belotewithfriends.tk/#/belote/${props.roomID}`}
+                            </InputGroup.Text>
                         </div>
                     }
                 />
-
             </div>
         )
     }
