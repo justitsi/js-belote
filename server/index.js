@@ -24,7 +24,7 @@ io.on("connection", async (socket) => {
             });
 
             socket.on('canJoinRoom', (args) => {
-                console.log(`Getting query to join room: ${args} from ${clientID}`);
+                // console.log(`Getting query to join room: ${args} from ${clientID}`);
 
                 const roomID = args;
                 let canJoin = true;
@@ -40,7 +40,7 @@ io.on("connection", async (socket) => {
             });
 
             socket.on('isUsernameAvailable', (args) => {
-                console.log(`Getting query to join room: ${args.roomID} with username: ${args.displayName} from ${clientID}`);
+                // console.log(`Getting query to join room: ${args.roomID} with username: ${args.displayName} from ${clientID}`);
 
                 const roomID = args.roomID;
                 const displayName = args.displayName;
@@ -322,10 +322,10 @@ const shouldCreateNewGame = (currentInstance, clients) => {
         else {
             let playersInGame = true
             for (const client of clients) {
-                if (currentInstance.currentRound.getRoundStatus().players.includes(client.displayName))
+                if (!currentInstance.currentRound.getRoundStatus().players.includes(client.displayName))
                     playersInGame = false;
             }
-            return playersInGame;
+            return !playersInGame;
         }
     }
 }
