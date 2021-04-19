@@ -182,28 +182,33 @@ function BelotePage(props) {
                                     </div>
                                 </div>
                                 {windowWidth > 1280 &&
-                                    <div className={styles.indicatorsContainer}>
-                                        <PremiumIndicator
-                                            premiums={roundStatus.premiums}
-                                        />
-                                        {lobbyEvents.length > 0 &&
+                                    <div>
+                                        <div className={styles.indicatorsContainer}>
+                                            {roundStatus &&
+                                                <PremiumIndicator
+                                                    premiums={roundStatus.premiums}
+                                                />
+                                            }
                                             <RoomChat events={lobbyEvents} />
-                                        }
 
-                                        <GameStatusIndicator
-                                            gameStatus={gameStatus}
-                                            roundStatus={roundStatus}
-                                        />
-                                        <HandHistory
-                                            roundStatus={roundStatus}
-                                        />
+                                            <GameStatusIndicator
+                                                gameStatus={gameStatus}
+                                                roundStatus={roundStatus}
+                                            />
+                                            {roundStatus &&
+                                                <HandHistory
+                                                    roundStatus={roundStatus}
+                                                />
+                                            }
+                                        </div>
                                     </div>
                                 }
                             </div>
                         </Col>
                         <Col sm={0} md={0} lg={1} xl={1} />
                     </Row>
-                    {windowWidth <= 1280 &&
+                    {
+                        windowWidth <= 1280 &&
                         <Row>
                             <Col md={1} />
                             <Col md={10}>
@@ -233,9 +238,10 @@ function BelotePage(props) {
                             </Col>
                         </Row>
                     }
-                </div>
+                </div >
             }
-            {usernameSet === false && !socket &&
+            {
+                usernameSet === false && !socket &&
                 <div className={styles.nameEntryFormContainer}>
                     <GameUsernamePrompt
                         roomID={roomID}

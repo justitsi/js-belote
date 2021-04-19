@@ -6,8 +6,6 @@ import { Table, ListGroup } from 'react-bootstrap'
 function GameStatusIndicator(props) {
     const { t } = useTranslation('translations');
 
-    // if ()
-
     if (props.gameStatus) {
         if (props.gameStatus.teamsValid === true) {
             return (
@@ -19,8 +17,8 @@ function GameStatusIndicator(props) {
                         content={
                             <div>
                                 <Table className={styles.gameInfoTable}>
-                                    <thead class={styles.tableHeader}>
-                                        <tr class={styles.tableHeaderRow}>
+                                    <thead className={styles.tableHeader}>
+                                        <tr className={styles.tableHeaderRow}>
                                             <th />
                                             <th className={styles.tableHeaderData}>{t('gameStatusIndicator.teamLabel')} 1 ({props.gameStatus.teams[0][0]} {props.gameStatus.teams[0][1]})</th>
                                             <th className={styles.tableHeaderData}>{t('gameStatusIndicator.teamLabel')} 2 ({props.gameStatus.teams[1][0]} {props.gameStatus.teams[1][1]})</th>
@@ -66,8 +64,8 @@ function GameStatusIndicator(props) {
                     content={
                         <div>
                             <Table>
-                                <thead class={styles.tableHeader}>
-                                    <tr class={styles.tableHeaderRow}>
+                                <thead className={styles.tableHeader}>
+                                    <tr className={styles.tableHeaderRow}>
                                         <th >{t('gameStatusIndicator.teamLabel')} 1</th>
                                         <th >{t('gameStatusIndicator.teamLabel')} 2</th>
                                     </tr>
