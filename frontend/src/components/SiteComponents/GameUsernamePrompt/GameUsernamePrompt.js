@@ -9,8 +9,8 @@ function GameUsernamePrompt(props) {
     const { t } = useTranslation('translations');
     const [socket, setSocket] = useState(null)
     const [clientID] = useState(uuidv4())
-
-    const [canJoin, setCanJoin] = useState(false)
+    const [usernameAvailable, setUsernameAvailable] = useState(false)
+    const [spaceInGameRoom, setSpaceInGameRoom] = useState(false)
     const [error, setError] = useState(null);
     const [username, setUsername] = useState('');
 
@@ -20,23 +20,32 @@ function GameUsernamePrompt(props) {
         let socket_connection = connectToServerSocket(clientID);
         socket_connection.emit('canJoinRoom', props.roomID)
 
-
         socket_connection.on("canJoinRoom", (args) => {
-            setCanJoin(args)
+            setSpaceInGameRoom(args)
             if (args === false) setError('Room is full')
             else setError(null)
         });
+        socket_connection.on("isUsernameAvailable", (args) => {
+            setUsernameAvailable(args)
+            if (args === false) {
+                setError('Username taken');
+            }
+            else setError(null)
+        });
 
-        setSocket(socket_connection)
+        setSocket(socket_connection);
+        return () => {
+            disconnectFromSocket(socket_connection);
+        }
     }, [clientID, props.roomID]);
 
     const handleUsernameEnter = (event) => {
-        props.setDisplayName(event.target.value)
-        setUsername(event.target.value)
+        props.setDisplayName(event.target.value);
+        setUsername(event.target.value);
+        socket.emit('isUsernameAvailable', { roomID: props.roomID, displayName: event.target.value })
     }
 
-    const btnActive = !(username && canJoin)
-
+    const btnActive = !(username && spaceInGameRoom && usernameAvailable);
     return (
         <div className={styles.loginContainer}>
             <Row className={styles.firstRow} />

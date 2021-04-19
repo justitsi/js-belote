@@ -38,6 +38,24 @@ io.on("connection", async (socket) => {
                 io.to(clientID).emit('canJoinRoom', canJoin)
 
             });
+
+            socket.on('isUsernameAvailable', (args) => {
+                console.log(`Getting query to join room: ${args.roomID} with username: ${args.displayName} from ${clientID}`);
+
+                const roomID = args.roomID;
+                const displayName = args.displayName;
+                let isInRoom = false;
+
+                for (const room of rooms)
+                    if (room.id === roomID)
+                        if (room.clients.length < room_limit)
+                            for (const client_entry of room.clients)
+                                if (client_entry.displayName == displayName)
+                                    isInRoom = true
+
+
+                io.to(clientID).emit('isUsernameAvailable', !isInRoom)
+            });
         });
     }
 
@@ -238,7 +256,9 @@ const getRoomEntryAndJoin = async (socket) => {
     for (const client_entry of room_entry.clients) {
         if (client_entry.id == client_id) {
             isInRoom = true
-            // console.log(`${client} already in room ${room_id}`)
+        }
+        if (client_entry.displayName == displayName) {
+            isInRoom = true
         }
     }
 
