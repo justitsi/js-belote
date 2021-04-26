@@ -7,6 +7,15 @@
         "gameIDLabel": "Enter game ID to join",
         "joinGameBtnLabel": "Join"
     },
+    "footer": {
+        "moreInfoLabel": "More info below",
+        "cookieStatement1": "This site does not use cookies.",
+        "cookieStatement2": "No need to worry about that.",
+        "copyright": "The website frontend and server are Open Source Software (OSS) licensed under the MIT license.",
+        "copyrightLinkLabel": "View licensing information here.",
+        "githubLinkExplanation": "Got ideas or suggestions? Create an issue on ",
+        "githubLinkLabel": "GitHub"
+    },
     "gameIndicator": {
         "joinBtnLabel": "Join Game"
     },
