@@ -144,6 +144,7 @@ function BelotePage(props) {
                             Window Width: {windowWidth}
                         </Col>
                     </Row> */}
+                    <br />
                     <Row fluid='md'>
                         <Col sm={0} md={0} lg={1} xl={1} />
                         <Col lg={9} xl={10}>

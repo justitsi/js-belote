@@ -32,6 +32,7 @@ function GameBoard(props) {
     let localDealerPosition = [false, false, false, false]
     let localStartingPlayerPosition = [false, false, false, false]
     let localPlayerLabels = [null, null, null, null]
+    let localPlayerCallIndicators = [<div />, <div />, <div />, <div />]
 
     //render gameboard contents here
     if (props.roundStatus) {
@@ -127,6 +128,27 @@ function GameBoard(props) {
 
                 }
                 else {
+                    // show previous bid if there is anything in the bid history
+                    if (props.suitSelectionHistory.length > 0) {
+                        let lastCallArr = [null, null, null, null];
+                        const lastCall = props.suitSelectionHistory[props.suitSelectionHistory.length - 1]
+                        lastCallArr[props.roundStatus.players.indexOf(lastCall.madeBy)] = lastCall;
+                        lastCallArr = reArrangeArrToLocalOrder(lastCallArr);
+                        console.log(lastCallArr)
+
+                        const lastCallElements = [...localPlayerCallIndicators];
+                        for (let i = 0; i < lastCallArr.length; i++) {
+                            const call = lastCallArr[i];
+                            if (call) {
+                                lastCallElements[i] = (
+                                    <div className={styles.currentPlayerLabel}>
+                                        {t(`suitSelector.suits.${call.suitSelection}`)}
+                                    </div>
+                                );
+                            }
+                        }
+                        localPlayerCallIndicators = lastCallElements;
+                    }
                     tableCenter = (
                         < div className={styles.tableGrid} >
                             {/* this is a 3x3 grid */}
@@ -256,9 +278,9 @@ function GameBoard(props) {
                     </div>
                     <div className={styles.gameBoardContainer}>
                         <div className={styles.tableContainer}>
-                            <div /><div /><div />
-                            <div />{tableCenter}<div />
-                            <div /><div /><div />
+                            <div />{localPlayerCallIndicators[2]}<div />
+                            {localPlayerCallIndicators[3]}{tableCenter}{localPlayerCallIndicators[1]}
+                            <div />{localPlayerCallIndicators[0]}<div />
                         </div>
                     </div >
                     <div className={styles.verticalPlayerTagContainer}>
