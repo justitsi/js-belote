@@ -21,31 +21,29 @@ function Footer(props) {
                 <Col sm={0} md={1} lg={2} />
                 <Col sm={12} md={10} lg={8}>
                     <Row>
-                        <Col md={3}>
+                        <Col sm={12} md={6} lg={3}>
                             <p>
                                 {t('footer.cookieStatement1')}
                                 <br />
                                 {t('footer.cookieStatement2')}
                             </p>
                         </Col>
-                        <Col md={6}>
+                        <Col sm={12} md={6} lg={6}>
                             <p>
                                 {t('footer.copyright')}
                                 <a href={"https://github.com/justitsi/js-belote/blob/master/LICENSE"}>
                                     {t('footer.copyrightLinkLabel')}
-                                </a>
+                                </a>.
                             </p>
 
                             <p>
                                 {t('footer.githubLinkExplanation')}
-                            </p>
-                            <a href={"https://github.com/justitsi/js-belote/issues/new/choose"}>
-                                <Button>
+                                <a href={"https://github.com/justitsi/js-belote/issues/new/choose"}>
                                     {t('footer.githubLinkLabel')}
-                                </Button>
-                            </a>
+                                </a>.
+                            </p>
                         </Col>
-                        <Col md={3}>
+                        <Col sm={12} md={12} lg={3}>
                             <a href={"https://justitsi.tk"}>
                                 <img
                                     className={styles.signature}
