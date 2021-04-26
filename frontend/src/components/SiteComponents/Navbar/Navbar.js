@@ -13,7 +13,7 @@ const Our_Navbar = () => {
     const [roomID, setRoomID] = useState("");
 
     const handleSubmit = (evt) => {
-        window.location.href = (`#/belote/${roomID}`);
+        if (roomID) window.location.href = (`#/belote/${roomID}`);
         evt.stopPropagation();
         setRoomID("");
     }
@@ -32,11 +32,18 @@ const Our_Navbar = () => {
                         type="text"
                         placeholder={t('navbar.gameIDLabel')}
                         className="mr-sm-2"
-                        onChange={e => setRoomID(e.target.value)}
+                        onChange={(evt) => { setRoomID(evt.target.value) }}
                         value={roomID}
                     />
                     <br />
-                    <Button onClick={handleSubmit} type="submit" variant="primary">{t('navbar.joinGameBtnLabel')}</Button>
+                    <Button
+                        onClick={handleSubmit}
+                        type="submit"
+                        variant="primary"
+                        disabled={(!roomID)}
+                    >
+                        {t('navbar.joinGameBtnLabel')}
+                    </Button>
                 </Form>
             </Navbar.Collapse>
         </Navbar>

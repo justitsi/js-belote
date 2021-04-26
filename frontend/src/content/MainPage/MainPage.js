@@ -39,11 +39,20 @@ function MainPage(props) {
 
     const handleCTASubmit = (evt) => {
         let destRoom = roomID;
-        if (!destRoom) destRoom = "test"
+        if (!destRoom) destRoom = generateRandomString(6)
 
         window.location.href = (`#/belote/${destRoom}`);
         evt.stopPropagation();
         setRoomID("");
+    }
+
+    const generateRandomString = (length) => {
+        const result = [];
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (var i = 0; i < length; i++) {
+            result.push(characters.charAt(Math.floor(Math.random() * characters.length)));
+        }
+        return result.join('');
     }
 
     return (
