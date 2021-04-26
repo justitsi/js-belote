@@ -10,7 +10,7 @@ var io = require('socket.io')(server, {
     }
 });
 
-server.listen(process.env.PORT || 8000);
+server.listen(8000);
 
 const rooms = [];
 const room_limit = 4;

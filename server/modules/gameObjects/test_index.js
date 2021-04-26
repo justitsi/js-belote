@@ -1185,3 +1185,140 @@ class Game {
 }
 
 module.exports = Game;
+
+const game = new Game(['s', 'e', 'n', 'w'])
+
+// game.currentRound.consecutivePasses = 0;
+// game.currentRound.teamNumberOfHands = [8, 0]
+// game.currentRound.teamCardScores = [152, 0]
+// game.currentRound.teamPremiumScores = [0, 0]
+// game.currentRound.suit = 'H'
+// game.currentRound.callerTeam = 1
+// game.currentRound.playerTurn = 3
+// game.currentRound.modifier = 1
+// game.currentRound.valid_premiums = []
+
+
+// game.endCurrentRound()
+// console.log(game)
+
+
+// game.currentRound.splitDeck('s', 4)
+// game.currentRound.callSuit('n', 'H', 1)
+// // // // console.log(game.currentRound.getValidPlayerSuitCalls('w'))
+
+// game.currentRound.callSuit('w', 'P', 1)
+// game.currentRound.callSuit('s', 'P', 1)
+// game.currentRound.callSuit('e', 'P', 1)
+// game.currentRound.initPlayStage()
+// // // for (const hand of game.currentRound.hands) console.log(hand)
+
+// // // game.currentRound.placeCard('n', 'C', '8')
+
+// // // console.log(game.currentRound.hands[0])
+// game.currentRound.anouncePlayerPremium('n', [{ suit: 'C', rank: '8' }, { suit: 'C', rank: '9' }, { suit: 'C', rank: '10' }], 'C')
+// game.currentRound.anouncePlayerPremium('n', [{ suit: 'D', rank: 'Q' }, { suit: 'D', rank: 'K' }, { suit: 'D', rank: 'A' }], 'C')
+// game.currentRound.placeCard('n', 'D', 'Q')
+
+// game.currentRound.anouncePlayerPremium('w', [{ suit: 'D', rank: '9' }, { suit: 'D', rank: '10' }, { suit: 'D', rank: 'J' }], 'C')
+// game.currentRound.placeCard('w', 'D', '10')
+
+// game.currentRound.anouncePlayerPremium('s', [{ suit: 'S', rank: 'Q' }, { suit: 'S', rank: 'J' }, { suit: 'S', rank: '10' }], 'C')
+// game.currentRound.placeCard('s', 'D', '7')
+
+// game.currentRound.anouncePlayerPremium('e', [{ suit: 'S', rank: '7' }, { suit: 'S', rank: '8' }, { suit: 'S', rank: '9' }], 'C')
+// game.currentRound.anouncePlayerPremium('e', [{ suit: 'C', rank: 'J' }, { suit: 'C', rank: 'Q' }, { suit: 'C', rank: 'K' }], 'C')
+// game.currentRound.placeCard('e', 'S', '7')
+
+// // start 2 врътка
+// game.currentRound.placeCard('w', 'H', 'J')
+// game.currentRound.placeCard('s', 'H', '10')
+// game.currentRound.placeCard('e', 'H', '7')
+// console.log(game.currentRound.getRoundStatus())
+// game.currentRound.placeCard('n', 'H', 'K')
+
+// // start 3 врътка
+// game.currentRound.placeCard('w', 'D', 'J')
+// game.currentRound.placeCard('s', 'D', '8')
+// game.currentRound.placeCard('e', 'H', '8')
+// game.currentRound.placeCard('n', 'D', 'K')
+
+// // start 4 врътка
+// game.currentRound.placeCard('w', 'D', '9')
+// game.currentRound.placeCard('s', 'S', 'Q')
+// game.currentRound.placeCard('e', 'S', '8')
+// game.currentRound.placeCard('n', 'D', 'A')
+
+// // start 5 врътка
+// game.currentRound.placeCard('w', 'H', 'Q')
+// game.currentRound.placeCard('s', 'H', '9')
+// game.currentRound.placeCard('e', 'C', 'Q')
+// game.currentRound.placeCard('n', 'H', 'A')
+
+// // start 6 врътка
+// game.currentRound.placeCard('s', 'S', 'J')
+// game.currentRound.placeCard('e', 'S', '9')
+// game.currentRound.placeCard('n', 'C', '10')
+// game.currentRound.placeCard('w', 'S', 'K')
+
+// // start 7 врътка
+// game.currentRound.placeCard('s', 'C', 'A')
+// game.currentRound.placeCard('e', 'C', 'J')
+// game.currentRound.placeCard('n', 'C', '8')
+// game.currentRound.placeCard('w', 'C', '7')
+
+// // console.log(game.currentRound.getRoundStatus())
+
+
+// // start 8 врътка
+// game.currentRound.placeCard('e', 'C', 'K')
+// game.currentRound.placeCard('n', 'C', '9')
+// game.currentRound.placeCard('w', 'S', 'A')
+// game.currentRound.placeCard('s', 'S', '10')
+
+
+// console.log(game.currentRound.getPlayerOptions('s'))
+// console.log(game.currentRound.getPlayerPremiumOptions('e'))
+
+
+// console.log(game.currentRound.getRoundStatus())
+// console.log(game.currentRound.getRoundResults())
+// game.endCurrentRound()
+// game.currentRound.splitDeck('e', 4)
+
+// game.currentRound.callSuit('w', 'P', 1)
+// game.currentRound.callSuit('s', 'P', 1)
+// game.currentRound.callSuit('e', 'P', 1)
+// game.currentRound.callSuit('n', 'P', 1)
+
+// game.endCurrentRound()
+// game.currentRound.splitDeck('n', 4)
+
+// game.currentRound.callSuit('s', 'P', 1)
+// game.currentRound.callSuit('e', 'P', 1)
+// game.currentRound.callSuit('n', 'P', 1)
+// game.currentRound.callSuit('w', 'P', 1)
+
+// game.endCurrentRound()
+// game.currentRound.splitDeck('w', 4)
+
+// game.currentRound.callSuit('e', 'P', 1)
+// game.currentRound.callSuit('n', 'P', 1)
+// game.currentRound.callSuit('w', 'P', 1)
+// game.currentRound.callSuit('s', 'P', 1)
+
+
+// game.endCurrentRound()
+// game.currentRound.splitDeck('s', 4)
+
+
+// game.currentRound.callSuit('n', 'P', 1)
+// game.currentRound.callSuit('w', 'P', 1)
+// game.currentRound.callSuit('s', 'P', 1)
+// game.currentRound.callSuit('e', 'P', 1)
+
+// // console.log(game.currentRound.getRoundStatus())
+// // console.log(game.currentRound.mainDeck)
+
+// game.endCurrentRound()
+// // console.log(game.currentRound.mainDeck)
