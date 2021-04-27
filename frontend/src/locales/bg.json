@@ -1,0 +1,127 @@
+{
+    "navbar": {
+        "brand": "Belote With Friends",
+        "home": "Начало",
+        "test_room": "Влезте в тестовата стая",
+        "gameIDLabel": "Въведете ID за да влезете",
+        "joinGameBtnLabel": "Влез"
+    },
+    "footer": {
+        "moreInfoLabel": "Повече информажия",
+        "cookieStatement1": "Този уебсайт не използва бисквитки. ",
+        "cookieStatement2": "Няма нужда да се притеснявате за това.",
+        "copyright": "Създадено от Христо Белчев (justitsi). Уебсайтът и прилежащият сървър за Open Source Software (OSS) лицензирани под MIT лиценза. ",
+        "copyrightLinkLabel": "Вижте информация за лиценза тук",
+        "githubLinkExplanation": "Имате идеи или препоръки? Създайте задача в ",
+        "githubLinkLabel": "GitHub"
+    },
+    "gameIndicator": {
+        "joinBtnLabel": "Влезте в игра"
+    },
+    "cardSuits": {
+        "C": "С",
+        "D": "D",
+        "H": "H",
+        "S": "S"
+    },
+    "cardSuitsSymbols": {
+        "C": "♣",
+        "D": "♦",
+        "H": "♥",
+        "S": "♠"
+    },
+    "premiumTypes": {
+        "B": "Белот ",
+        "C": "Поредни карти ",
+        "S": "Каре "
+    },
+    "gameBoard": {
+        "playerTurnIndicator": "На ред е:",
+        "deckSplitPromptText": "Въведете номера на картата на която искате да цепите",
+        "deckSplitPromptSubmitButtonText": "Цепи",
+        "suitSelectPromptText": "Моля изберете боя за анонс",
+        "roundOverPromptText": "Раздаването приключи",
+        "dealerPlayerLabel": " (Раздава) ",
+        "startingPlayerLabel": " (Започва) "
+    },
+    "playerHand": {
+        "playButtonLable": "Играй",
+        "reverseCardOrderBtnLabel": "Обърни реда на картите"
+    },
+    "premuimOptions": {
+        "listLabel": "Списък с налични премии",
+        "anounceBtnLabel": "Обяви премия(и)"
+    },
+    "premiumOption": {
+        "cardSeriesLabel": "Поредни карти",
+        "sameCardsLabel": "Каре",
+        "cards": "карти"
+    },
+    "suitSelector": {
+        "selectBtnLabel": "Обяви анонс",
+        "currentSuitLabel": "В момента играта е на:",
+        "anouncedByLabel": "Анонсирано от:",
+        "previousBidsLabel": "Предишни анонси:",
+        "anounced": "обяви",
+        "suits": {
+            "P": "Пас",
+            "C": "♣ Спатия",
+            "D": "♦ Каро",
+            "H": "♥ Купа",
+            "S": "♠ Пика",
+            "A": "Всичко Коз",
+            "N": "Без Коз",
+            "x2": "Контра",
+            "x4": "Ре-контра"
+        }
+    },
+    "handHistory": {
+        "containerLabel": "История на ръцете",
+        "containerLabel3Hands": "История на ръцете (последни 3)",
+        "containerLabelFull": "История на ръцете (пълна)"
+    },
+    "roomChat": {
+        "containerLabel": "Активност в стаята"
+    },
+    "gameStatusIndicator": {
+        "teamLabel": "Отбор",
+        "containerLabel": "Статус на играта",
+        "scoreLabel": "Резултат",
+        "roundNumberLabel": "Номер на раздаването",
+        "consecutivePassedGamesLabel": "Поредни паса",
+        "roundSuitLabel": "Играта се играе на",
+        "roundSuitCallerLabel": " обявена от ",
+        "winningTeamLabel": "Спечелил отбор: ",
+        "waitingForLabelsToConnectLabel": "Изчакване на четирима играчи...",
+        "waitingToConnectToServerLabel": "Моля свържете се със сървър..."
+    },
+    "roundScoreTable": {
+        "team1PointsLabel": "Резултат отбор 1",
+        "team2PointsLabel": "Резултат отбор 2",
+        "pointsFromCardsLabel": "Точки от карти",
+        "pointsFromPremiumsLabel": "Точки от премии",
+        "pointsFromLastHandLabel": "Точки от последна ръка",
+        "roundPointsSumLabel": "Общи точки за раздаването",
+        "gamePointsLabel": "Точки в играта",
+        "nextRoundTimerLabelPt1": "Следващото раздаване започва след",
+        "nextRoundTimerLabelPt2": "секунди"
+    },
+    "mainPage": {
+        "introSectionHeader": "Просто играи белот.",
+        "introSectionCTAText": "Искаш ли да играеш белот с приятели без да се налага да се регистрираш, да играеш 5 игри с ботове или да плащаш за това? Е, на правилното място си. Влез и играи в една от безплатните игри на белот - без никаква регистрация!",
+        "introSectionCTAText2": "Какво чакаш, включи се сега!",
+        "joinGameByIDCTAPlaceholder": "Въведете код на стая",
+        "joinActiveRoomHeading": "Влезте в съществуваща стая",
+        "createNewGameRoomBtnLabel": "Създайте",
+        "joinActiveRoomParagraph": "Влезте в една от съществуващите стаи! Стаите с повече хора са по-нагоре в списъка, така че играта да може да започне по-скоро!"
+    },
+    "activeRoomCard": {
+        "label": "Стая",
+        "teamLabel": "Отбор"
+    },
+    "gameUsernamePrompt": {
+        "roomIDLabel": "ID на стаята:",
+        "usernameInputPlaceholder": "Въведете име",
+        "joinGameBtnLabel": "Влезте в игра"
+    }
+}
