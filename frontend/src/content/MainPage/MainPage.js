@@ -24,7 +24,7 @@ function MainPage(props) {
 
 
         socket_connection.on("roomListUpdate", (args) => {
-            console.log(`Received server room list update ${JSON.stringify(args)}`)
+            // console.log(`Received server room list update ${JSON.stringify(args)}`)
             setAvailableRooms(args)
         });
 

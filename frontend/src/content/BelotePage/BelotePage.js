@@ -40,44 +40,44 @@ function BelotePage(props) {
             let socket_connection = connectToGameSocket(roomID, clientID, displayName);
 
             socket_connection.on("gameStatusUpdate", (args) => {
-                console.log(`Received game status update ${JSON.stringify(args)}`)
+                // console.log(`Received game status update ${JSON.stringify(args)}`)
                 setGameStatus(args)
             });
 
             socket_connection.on("roundStatusUpdate", (args) => {
-                console.log(`Received round status update ${JSON.stringify(args)}`)
+                // console.log(`Received round status update ${JSON.stringify(args)}`)
                 setRoundStatus(args)
             });
 
             socket_connection.on('playerHandUpdate', (args) => {
-                console.log(`Received player hand update ${JSON.stringify(args.cards)}`)
+                // console.log(`Received player hand update ${JSON.stringify(args.cards)}`)
                 setPlayerHand(args.cards)
             })
 
             socket_connection.on('playerValidSuitOptionsUpdate', (args) => {
-                console.log(`Received player valid suit options update ${JSON.stringify(args)}`)
+                // console.log(`Received player valid suit options update ${JSON.stringify(args)}`)
                 setValidSuitOptions(args)
             })
 
             socket_connection.on('playerHandValidOptionsUpdate', (args) => {
-                console.log(`Received player valid hand options update ${JSON.stringify(args)}`)
+                // console.log(`Received player valid hand options update ${JSON.stringify(args)}`)
                 setPlayerHandValidOptions(args)
             })
 
             socket_connection.on('roundScoreUpdate', (args) => {
-                console.log(`Received round score update ${JSON.stringify(args)}`)
+                // console.log(`Received round score update ${JSON.stringify(args)}`)
                 setRoundScore(args)
             })
 
             socket_connection.on('lobbyUpdate', (args) => {
-                console.log(`Receivedlobby update ${JSON.stringify(args)}`)
+                // console.log(`Receivedlobby update ${JSON.stringify(args)}`)
                 const events = lobbyEvents
                 events.push(args)
                 setLobbyEvents(events)
             })
 
             socket_connection.on('playerPremiumValidOptions', (args) => {
-                console.log(`Received player valid premium options update ${JSON.stringify(args)}`)
+                // console.log(`Received player valid premium options update ${JSON.stringify(args)}`)
                 setPremiumOptions(args)
                 // args need to be reformated in order to create a *valid* list of all premiums
                 if (args) {
@@ -103,7 +103,7 @@ function BelotePage(props) {
 
 
             socket_connection.on('suitSelectionUpdate', (args) => {
-                console.log(`Received suit selection update ${JSON.stringify(args)}`)
+                // console.log(`Received suit selection update ${JSON.stringify(args)}`)
                 const selections = suitSelectionHistory;
                 selections.push(args)
                 setSuitSelectionHistory(selections)
