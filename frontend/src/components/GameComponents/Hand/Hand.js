@@ -13,7 +13,7 @@ function Hand(props) {
 
     let cardsInHand = [];
     if (props.roundStatus === 'in_progress' || props.roundStatus === 'started_selecting_suit' || props.roundStatus === 'suit_selected')
-        cardsInHand = sortCards([...props.cards], props.roundStatus, reverseCardOrder)
+        cardsInHand = sortCards([...props.cards], props.suitInfo, reverseCardOrder)
 
     const playSelectedCard = () => {
         if (selected !== -1) {

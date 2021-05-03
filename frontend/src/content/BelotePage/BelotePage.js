@@ -177,6 +177,7 @@ function BelotePage(props) {
                                                     cards={playerHand}
                                                     validOptions={playerHandValidOptions}
                                                     roundStatus={roundStatus.status}
+                                                    suitInfo={roundStatus.suitInfo}
                                                     playSelectedCard={handleCardPlay}
                                                 />
                                             </div>
