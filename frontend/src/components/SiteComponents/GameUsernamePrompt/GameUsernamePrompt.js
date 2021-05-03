@@ -40,9 +40,9 @@ function GameUsernamePrompt(props) {
     }, [clientID, props.roomID]);
 
     const handleUsernameEnter = (event) => {
-        props.setDisplayName(event.target.value);
-        setUsername(event.target.value);
-        socket.emit('isUsernameAvailable', { roomID: props.roomID, displayName: event.target.value })
+        props.setDisplayName(event.target.value.trim());
+        setUsername(event.target.value.trim());
+        socket.emit('isUsernameAvailable', { roomID: props.roomID, displayName: event.target.value.trim() })
     }
 
     const btnActive = !(username && spaceInGameRoom && usernameAvailable);
