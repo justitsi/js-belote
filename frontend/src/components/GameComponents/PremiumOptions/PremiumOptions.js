@@ -49,6 +49,15 @@ function PremiumOptions(props) {
         }
 
         const handleAnouncePremiumsClick = () => {
+            const premiumsToAnounce = getPremiumsToAnounce();
+
+            setSelectedCPremiums([])
+            setSelectedSPremiums([])
+            // console.log(`anouncing premiums ${premiumsToAnounce}`)
+            props.handleAnouncePremiums(premiumsToAnounce)
+        }
+
+        const getPremiumsToAnounce = () => {
             const premiumsToAnounce = []
 
             for (const index of selectedCPremiums) {
@@ -66,10 +75,8 @@ function PremiumOptions(props) {
                 }
                 premiumsToAnounce.push(premium)
             }
-            setSelectedCPremiums([])
-            setSelectedSPremiums([])
-            // console.log(`anouncing premiums ${premiumsToAnounce}`)
-            props.handleAnouncePremiums(premiumsToAnounce)
+
+            return premiumsToAnounce;
         }
 
         for (const cardSeriesOption of props.availablePremiums.C) {
@@ -116,6 +123,11 @@ function PremiumOptions(props) {
             sIndex++;
             availablePremiumsList.push(option)
         }
+
+
+        // this is a bad solution, but it's 1 am, what are you gonna do about it
+        if (props.selectedPremiums.length !== getPremiumsToAnounce().length)
+            props.setSelectedPremiums(getPremiumsToAnounce());
 
         return (
             <div>

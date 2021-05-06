@@ -26,6 +26,8 @@ function PremiumIndicator(props) {
             premiums.push(listItem)
         }
 
+        premiums.reverse();
+
         return (
             <IndicatorBox
                 header={"Premiums"}

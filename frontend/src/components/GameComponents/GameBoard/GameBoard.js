@@ -134,7 +134,6 @@ function GameBoard(props) {
                         const lastCall = props.suitSelectionHistory[props.suitSelectionHistory.length - 1]
                         lastCallArr[props.roundStatus.players.indexOf(lastCall.madeBy)] = lastCall;
                         lastCallArr = reArrangeArrToLocalOrder(lastCallArr);
-                        console.log(lastCallArr)
 
                         const lastCallElements = [...localPlayerCallIndicators];
                         for (let i = 0; i < lastCallArr.length; i++) {

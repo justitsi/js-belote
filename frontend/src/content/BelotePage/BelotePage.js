@@ -31,6 +31,7 @@ function BelotePage(props) {
     const [lobbyEvents, setLobbyEvents] = useState([])
     const [premiumOptions, setPremiumOptions] = useState({ 'C': [], 'S': [] })
     const [suitSelectionHistory, setSuitSelectionHistory] = useState([])
+    const [selectedPremiums, setSelectedPremiums] = useState([])
 
     // manage socket communication
     useEffect(() => {
@@ -46,7 +47,7 @@ function BelotePage(props) {
             socket_connection.on("roundStatusUpdate", (args) => {
                 console.log(`Received round status update ${JSON.stringify(args)}`)
                 // reset suit selections if new selection has sterted - suit would be undefined
-                if (args.status === 'waiting_for_split') {
+                if (args.status === "waiting_for_split") {
                     setSuitSelectionHistory([])
                 }
                 setRoundStatus(args)
@@ -82,7 +83,28 @@ function BelotePage(props) {
             socket_connection.on('playerPremiumValidOptions', (args) => {
                 console.log(`Received player valid premium options update ${JSON.stringify(args)}`)
                 setPremiumOptions(args)
+                // args need to be reformated in order to create a *valid* list of all premiums
+                if (args) {
+                    const validPremiums = []
+                    for (const premiumCards of args.C) {
+                        const validPremium = {
+                            cards: premiumCards,
+                            type: 'C'
+                        }
+                        validPremiums.push(validPremium)
+                    }
+                    for (const premiumCards of args.S) {
+                        const validPremium = {
+                            cards: premiumCards,
+                            type: 'S'
+                        }
+                        validPremiums.push(validPremium)
+                    }
+                    setSelectedPremiums(validPremiums)
+                }
+                else setSelectedPremiums([])
             })
+
 
             socket_connection.on('suitSelectionUpdate', (args) => {
                 console.log(`Received suit selection update ${JSON.stringify(args)}`)
@@ -121,6 +143,8 @@ function BelotePage(props) {
     }
 
     const handleCardPlay = (card) => {
+        // auto-anounce selected premiums
+        if (selectedPremiums) handleAnouncePremiums(selectedPremiums);
         socket.emit("cardPlay", card);
     }
 
@@ -135,6 +159,7 @@ function BelotePage(props) {
     // refresh window width on resize
     window.addEventListener("resize", () => { setWindowWidth(window.innerWidth) });
 
+    console.log(selectedPremiums)
     return (
         < div className={styles.page} >
             {socket &&
@@ -168,6 +193,8 @@ function BelotePage(props) {
                                                     roundStatus={roundStatus}
                                                     displayName={displayName}
                                                     availablePremiums={premiumOptions}
+                                                    selectedPremiums={selectedPremiums}
+                                                    setSelectedPremiums={setSelectedPremiums}
                                                     handleAnouncePremiums={handleAnouncePremiums}
                                                 />
                                                 <Hand

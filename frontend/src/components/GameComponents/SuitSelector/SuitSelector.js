@@ -26,14 +26,12 @@ function SuitSelector(props) {
 
     const previuosSuitsList = []
     for (const selectedSuit of props.suitSelectionHistory) {
-        if (selectedSuit.suitSelection !== 'P') {
-            const previousSuitListItem = (
-                <div className={styles.previousBidsListItem}>
-                    {selectedSuit.madeBy} {t('suitSelector.anounced')} {t(`suitSelector.suits.${selectedSuit.suitSelection}`)}
-                </div>
-            );
-            previuosSuitsList.push(previousSuitListItem)
-        }
+        const previousSuitListItem = (
+            <div className={styles.previousBidsListItem}>
+                {selectedSuit.madeBy} {t('suitSelector.anounced')} {t(`suitSelector.suits.${selectedSuit.suitSelection}`)}
+            </div>
+        );
+        previuosSuitsList.push(previousSuitListItem)
     }
     previuosSuitsList.reverse()
 
