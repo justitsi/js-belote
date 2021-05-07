@@ -61,19 +61,23 @@ function PremiumOptions(props) {
             const premiumsToAnounce = []
 
             for (const index of selectedCPremiums) {
-                const premium = {
-                    cards: props.availablePremiums.C[index],
-                    type: 'C'
+                if (props.availablePremiums.C[index]) {
+                    const premium = {
+                        cards: props.availablePremiums.C[index],
+                        type: 'C'
+                    }
+                    premiumsToAnounce.push(premium)
                 }
-                premiumsToAnounce.push(premium)
             }
 
             for (const index of selectedSPremiums) {
-                const premium = {
-                    cards: props.availablePremiums.S[index],
-                    type: 'S'
+                if (props.availablePremiums.S[index]) {
+                    const premium = {
+                        cards: props.availablePremiums.S[index],
+                        type: 'S'
+                    }
+                    premiumsToAnounce.push(premium)
                 }
-                premiumsToAnounce.push(premium)
             }
 
             return premiumsToAnounce;
