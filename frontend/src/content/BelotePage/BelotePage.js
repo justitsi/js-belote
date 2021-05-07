@@ -144,7 +144,7 @@ function BelotePage(props) {
 
     const handleCardPlay = (card) => {
         // auto-anounce selected premiums
-        if (selectedPremiums) {
+        if (selectedPremiums.length > 0) {
             handleAnouncePremiums(selectedPremiums);
             setSelectedPremiums = ([])
         }
