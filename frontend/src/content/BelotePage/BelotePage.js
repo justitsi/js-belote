@@ -144,7 +144,10 @@ function BelotePage(props) {
 
     const handleCardPlay = (card) => {
         // auto-anounce selected premiums
-        if (selectedPremiums) handleAnouncePremiums(selectedPremiums);
+        if (selectedPremiums) {
+            handleAnouncePremiums(selectedPremiums);
+            setSelectedPremiums = ([])
+        }
         socket.emit("cardPlay", card);
     }
 
