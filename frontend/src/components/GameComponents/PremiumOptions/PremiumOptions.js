@@ -4,6 +4,13 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap'
 
+/*
+This should be re-written to store the selected premiums in the parent component.
+Right now it updates the selections in the parent when the selections are updated,
+but it does not use the selections from the parent for its state. This is not optimal,
+as the selections have to be synced, which requires an extra state update on the component
+re-render, triggering an extra re-render on each state(selection) update. 
+*/
 function PremiumOptions(props) {
     const { t } = useTranslation('translations');
     const [selectedCPremiums, setSelectedCPremiums] = useState([])

@@ -20,39 +20,47 @@ io.on("connection", async (socket) => {
     if (socket.handshake.query.action === "connectToServer") {
         connectToServer(socket).then((clientID) => {
             socket.on('getRoomList', () => {
-                sendAvailableRoomsToServerClient(clientID);
+                try {
+                    sendAvailableRoomsToServerClient(clientID);
+                } catch (err) {
+                    console.log(`Error handling request: ${err}`)
+                }
             });
 
             socket.on('canJoinRoom', (args) => {
-                // console.log(`Getting query to join room: ${args} from ${clientID}`);
+                try {
+                    const roomID = args;
+                    let canJoin = true;
 
-                const roomID = args;
-                let canJoin = true;
-
-                for (const room of rooms) {
-                    if (room.id === roomID)
-                        if (room.clients.length >= room_limit)
-                            canJoin = false;
+                    for (const room of rooms) {
+                        if (room.id === roomID)
+                            if (room.clients.length >= room_limit)
+                                canJoin = false;
+                    }
+                    io.to(clientID).emit('canJoinRoom', canJoin);
+                } catch (err) {
+                    console.log(`Error handling request: ${err}`)
                 }
-                io.to(clientID).emit('canJoinRoom', canJoin);
             });
 
             socket.on('isUsernameAvailable', (args) => {
-                // console.log(`Getting query to join room: ${args.roomID} with username: ${args.displayName} from ${clientID}`);
+                try {
+                    const roomID = args.roomID;
+                    const displayName = args.displayName;
+                    let isInRoom = false;
 
-                const roomID = args.roomID;
-                const displayName = args.displayName;
-                let isInRoom = false;
-
-                for (const room of rooms)
-                    if (room.id === roomID)
-                        if (room.clients.length < room_limit)
-                            for (const client_entry of room.clients)
-                                if (client_entry.displayName == displayName)
-                                    isInRoom = true
+                    for (const room of rooms)
+                        if (room.id === roomID)
+                            if (room.clients.length < room_limit)
+                                for (const client_entry of room.clients)
+                                    if (client_entry.displayName == displayName)
+                                        isInRoom = true
 
 
-                io.to(clientID).emit('isUsernameAvailable', !isInRoom)
+                    io.to(clientID).emit('isUsernameAvailable', !isInRoom)
+                } catch (err) {
+                    console.log(`Error handling request: ${err}`)
+                }
             });
         });
     }
@@ -66,124 +74,143 @@ io.on("connection", async (socket) => {
 
 
             // Leave the room if the user closes the socket
-            // todo this has to be refradctored to reflect the new individual connection for players approach
             socket.on("disconnect", () => {
-                socket.leave(client_id);
-                console.log(`${client_id} left ${room_id}`)
-                for (const client_entry of room_entry.clients) {
-                    if (client_entry.id == client_id) {
-                        const index = room_entry.clients.indexOf(client_entry);
-                        if (index > -1) {
-                            room_entry.clients.splice(index, 1);
-                        }
-                    }
-                }
-                sendToAllPlayersInRoom(room_entry, 'lobbyUpdate', { client: { id: client_id, displayName: displayName }, action: "left" })
-
-                // delete the room if all users have left
-                if (room_entry.clients.length == 0) {
-                    for (const entry of rooms) {
-                        if (entry.id == room_id) {
-                            const index = rooms.indexOf(entry);
+                try {
+                    socket.leave(client_id);
+                    console.log(`${client_id} left ${room_id}`)
+                    for (const client_entry of room_entry.clients) {
+                        if (client_entry.id == client_id) {
+                            const index = room_entry.clients.indexOf(client_entry);
                             if (index > -1) {
-                                rooms.splice(index, 1);
-                                console.log(`Deleted room ${room_id}`)
+                                room_entry.clients.splice(index, 1);
                             }
                         }
                     }
-                }
+                    sendToAllPlayersInRoom(room_entry, 'lobbyUpdate', { client: { id: client_id, displayName: displayName }, action: "left" })
 
-                sendRoomsUpdateToServerClients();
+                    // delete the room if all users have left
+                    if (room_entry.clients.length == 0) {
+                        for (const entry of rooms) {
+                            if (entry.id == room_id) {
+                                const index = rooms.indexOf(entry);
+                                if (index > -1) {
+                                    rooms.splice(index, 1);
+                                    console.log(`Deleted room ${room_id}`)
+                                }
+                            }
+                        }
+                    }
+
+                    sendRoomsUpdateToServerClients();
+                } catch (err) {
+                    console.log(`Error handling request: ${err}`)
+                }
             });
 
             socket.on('splitDeck', (args) => {
-                console.log(`Getting command to split deck: ${args} from ${displayName} (${client_id})`);
-                if (room_entry.gameInstance) {
-                    if (room_entry.gameInstance.currentRound.splitDeck(displayName, args)) {
-                        sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
-                        sendMoveOptionsToPlayers(room_entry)
+                try {
+                    console.log(`Getting command to split deck: ${args} from ${displayName} (${client_id})`);
+                    if (room_entry.gameInstance) {
+                        if (room_entry.gameInstance.currentRound.splitDeck(displayName, args)) {
+                            sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+                            sendMoveOptionsToPlayers(room_entry)
+                        }
                     }
+                } catch (err) {
+                    console.log(`Error handling request: ${err}`)
                 }
             });
 
             socket.on('anouncePremium', (args) => {
-                console.log(`Getting command to anounce premiums: ${JSON.stringify(args)} from ${displayName} (${client_id})`);
+                try {
+                    console.log(`Getting command to anounce premiums: ${JSON.stringify(args)} from ${displayName} (${client_id})`);
 
-                for (const premium of args) {
-                    if (room_entry.gameInstance)
-                        if (room_entry.gameInstance.currentRound.anouncePlayerPremium(displayName, premium.cards, premium.type)) {
-                            sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
-                            sendMoveOptionsToPlayers(room_entry)
-                        }
+                    for (const premium of args) {
+                        if (room_entry.gameInstance)
+                            if (room_entry.gameInstance.currentRound.anouncePlayerPremium(displayName, premium.cards, premium.type)) {
+                                sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+                                sendMoveOptionsToPlayers(room_entry)
+                            }
+                    }
+                } catch (err) {
+                    console.log(`Error handling request: ${err}`)
                 }
             });
 
             socket.on('suitSelect', async (args) => {
-                console.log(`Getting command to select suit: ${args} from ${displayName} (${client_id})`);
+                try {
+                    console.log(`Getting command to select suit: ${args} from ${displayName} (${client_id})`);
 
-                if (room_entry.gameInstance) {
-                    let suitRes = false;
-                    if (args === 'x2' || args === 'x4') {
-                        currentSuit = room_entry.gameInstance.currentRound.suit;
-                        suitRes = room_entry.gameInstance.currentRound.callSuit(displayName, currentSuit, args.charAt(1))
-                    }
-                    else {
-                        suitRes = room_entry.gameInstance.currentRound.callSuit(displayName, args, 1)
-                    }
-
-                    if (suitRes) {
-                        let roundStatus = room_entry.gameInstance.currentRound.getRoundStatus()
-
-                        if (room_entry.gameInstance.currentRound.getRoundStatus().status == 'suit_selected') {
-                            room_entry.gameInstance.currentRound.initPlayStage()
-                            roundStatus = room_entry.gameInstance.currentRound.getRoundStatus()
+                    if (room_entry.gameInstance) {
+                        let suitRes = false;
+                        if (args === 'x2' || args === 'x4') {
+                            currentSuit = room_entry.gameInstance.currentRound.suit;
+                            suitRes = room_entry.gameInstance.currentRound.callSuit(displayName, currentSuit, args.charAt(1))
+                        }
+                        else {
+                            suitRes = room_entry.gameInstance.currentRound.callSuit(displayName, args, 1)
                         }
 
-                        sendToAllPlayersInRoom(room_entry, 'suitSelectionUpdate', { suitSelection: args, madeBy: displayName })
-                        sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', roundStatus)
-                        sendMoveOptionsToPlayers(room_entry)
+                        if (suitRes) {
+                            let roundStatus = room_entry.gameInstance.currentRound.getRoundStatus()
 
-                        if (room_entry.gameInstance.currentRound.getRoundStatus().status === 'over') {
-                            await sendToAllPlayersInRoom(room_entry, 'roundScoreUpdate', room_entry.gameInstance.currentRound.getRoundResults())
-                            await room_entry.gameInstance.endCurrentRound()
-                            sendToAllPlayersInRoom(room_entry, 'gameStatusUpdate', room_entry.gameInstance.getGameInfo())
+                            if (room_entry.gameInstance.currentRound.getRoundStatus().status == 'suit_selected') {
+                                room_entry.gameInstance.currentRound.initPlayStage()
+                                roundStatus = room_entry.gameInstance.currentRound.getRoundStatus()
+                            }
 
-                            //sleep for 15 secs before starting new round
-                            await new Promise(resolve => setTimeout(resolve, 15000));
-
+                            sendToAllPlayersInRoom(room_entry, 'suitSelectionUpdate', { suitSelection: args, madeBy: displayName })
+                            sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', roundStatus)
                             sendMoveOptionsToPlayers(room_entry)
-                            sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+
+                            if (room_entry.gameInstance.currentRound.getRoundStatus().status === 'over') {
+                                await sendToAllPlayersInRoom(room_entry, 'roundScoreUpdate', room_entry.gameInstance.currentRound.getRoundResults())
+                                await room_entry.gameInstance.endCurrentRound()
+                                sendToAllPlayersInRoom(room_entry, 'gameStatusUpdate', room_entry.gameInstance.getGameInfo())
+
+                                //sleep for 15 secs before starting new round
+                                await new Promise(resolve => setTimeout(resolve, 15000));
+
+                                sendMoveOptionsToPlayers(room_entry)
+                                sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+                            }
                         }
                     }
+                } catch (err) {
+                    console.log(`Error handling request: ${err}`)
                 }
             });
 
             socket.on('cardPlay', async (args) => {
-                console.log(`Getting command to play card: ${JSON.stringify(args)} from ${displayName} (${client_id})`);
-                if (room_entry.gameInstance) {
-                    //create a copy of the round state in case 4 cards are placed and game needs to pause
-                    const startingRoundState = JSON.parse(JSON.stringify(await room_entry.gameInstance.currentRound.getRoundStatus()));
+                try {
+                    console.log(`Getting command to play card: ${JSON.stringify(args)} from ${displayName} (${client_id})`);
+                    if (room_entry.gameInstance) {
+                        //create a copy of the round state in case 4 cards are placed and game needs to pause
+                        const startingRoundState = JSON.parse(JSON.stringify(await room_entry.gameInstance.currentRound.getRoundStatus()));
 
-                    if (room_entry.gameInstance.currentRound.placeCard(displayName, args.suit, args.rank)) {
-                        // pause for 2 secs if there's 4 cards on the table so players can see them
-                        sendMoveOptionsToPlayers(room_entry)
-                        if (startingRoundState.cardsOnTable.length === 3) {
-                            await delayCollectingCards(startingRoundState, args, displayName, room_entry)
-                        }
-                        sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
-
-                        if (room_entry.gameInstance.currentRound.getRoundStatus().status === 'over') {
-                            await sendToAllPlayersInRoom(room_entry, 'roundScoreUpdate', room_entry.gameInstance.currentRound.getRoundResults())
-                            await room_entry.gameInstance.endCurrentRound()
-                            sendToAllPlayersInRoom(room_entry, 'gameStatusUpdate', room_entry.gameInstance.getGameInfo())
-
-                            //sleep for 15 secs before starting new round
-                            await new Promise(resolve => setTimeout(resolve, 15000));
-
+                        if (room_entry.gameInstance.currentRound.placeCard(displayName, args.suit, args.rank)) {
+                            // pause for 2 secs if there's 4 cards on the table so players can see them
                             sendMoveOptionsToPlayers(room_entry)
+                            if (startingRoundState.cardsOnTable.length === 3) {
+                                await delayCollectingCards(startingRoundState, args, displayName, room_entry)
+                            }
                             sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+
+                            if (room_entry.gameInstance.currentRound.getRoundStatus().status === 'over') {
+                                await sendToAllPlayersInRoom(room_entry, 'roundScoreUpdate', room_entry.gameInstance.currentRound.getRoundResults())
+                                await room_entry.gameInstance.endCurrentRound()
+                                sendToAllPlayersInRoom(room_entry, 'gameStatusUpdate', room_entry.gameInstance.getGameInfo())
+
+                                //sleep for 15 secs before starting new round
+                                await new Promise(resolve => setTimeout(resolve, 15000));
+
+                                sendMoveOptionsToPlayers(room_entry)
+                                sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
+                            }
                         }
                     }
+                } catch (err) {
+                    console.log(`Error handling request: ${err}`)
                 }
             });
         });
