@@ -159,14 +159,20 @@ io.on("connection", async (socket) => {
                                 roundStatus = room_entry.gameInstance.currentRound.getRoundStatus()
                             }
 
-                            sendToAllPlayersInRoom(room_entry, 'suitSelectionUpdate', { suitSelection: args, madeBy: displayName })
+                            const suitSelection = {
+                                roundNum: room_entry.gameInstance.getGameInfo().roundNum,
+                                suitSelection: args,
+                                madeBy: displayName
+                            }
+
+                            sendToAllPlayersInRoom(room_entry, 'suitSelectionUpdate', suitSelection)
                             sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', roundStatus)
                             sendMoveOptionsToPlayers(room_entry)
 
                             if (room_entry.gameInstance.currentRound.getRoundStatus().status === 'over') {
                                 await sendToAllPlayersInRoom(room_entry, 'roundScoreUpdate', room_entry.gameInstance.currentRound.getRoundResults())
                                 await room_entry.gameInstance.endCurrentRound()
-                                sendToAllPlayersInRoom(room_entry, 'gameStatusUpdate', room_entry.gameInstance.getGameInfo())
+                                await sendToAllPlayersInRoom(room_entry, 'gameStatusUpdate', room_entry.gameInstance.getGameInfo())
 
                                 //sleep for 15 secs before starting new round
                                 await new Promise(resolve => setTimeout(resolve, 15000));

@@ -314,11 +314,8 @@ class Round {
                 //end round if four passes - also return cards to main deck
                 if (this.consecutivePasses == 4) {
                     this.status = this.status_options[4];
-                    for (const hand of this.hands) {
-                        for (const card of hand.cards) {
-                            this.mainDeck.addCardsToTop(hand.grabCardsFromTop(hand.cards.length));
-                        }
-                    }
+                    for (const hand of this.hands)
+                        this.mainDeck.addCardsToTop(hand.grabCardsFromTop(hand.cards.length));
                 }
 
             }
@@ -1061,10 +1058,9 @@ class Game {
         else {
             // archive current round and start new one
             this.pastRounds.push(this.currentRound);
+            this.roundNum++;
             this.currentRound = new Round(this.deck, this.t1, this.t2, this.roundNum);
         }
-
-        this.roundNum++;
     }
 
     calculateGamePoints() {
@@ -1185,3 +1181,15 @@ class Game {
 }
 
 module.exports = Game;
+
+// const game = new Game(['s', 'e', 'n', 'w'])
+// game.currentRound.splitDeck('s', 4)
+// game.currentRound.callSuit('n', 'P', 1)
+// game.currentRound.callSuit('w', 'P', 1)
+// game.currentRound.callSuit('s', 'P', 1)
+// game.currentRound.callSuit('e', 'P', 1)
+
+// console.log(game.currentRound)
+// console.log(game.endCurrentRound())
+// console.log(game.currentRound)
+// console.log()

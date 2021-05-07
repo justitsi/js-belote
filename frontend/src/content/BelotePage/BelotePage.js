@@ -46,10 +46,6 @@ function BelotePage(props) {
 
             socket_connection.on("roundStatusUpdate", (args) => {
                 console.log(`Received round status update ${JSON.stringify(args)}`)
-                // reset suit selections if new selection has sterted - suit would be undefined
-                if (args.status === "waiting_for_split") {
-                    setSuitSelectionHistory([])
-                }
                 setRoundStatus(args)
             });
 
@@ -108,7 +104,7 @@ function BelotePage(props) {
 
             socket_connection.on('suitSelectionUpdate', (args) => {
                 console.log(`Received suit selection update ${JSON.stringify(args)}`)
-                const selections = suitSelectionHistory
+                const selections = suitSelectionHistory;
                 selections.push(args)
                 setSuitSelectionHistory(selections)
             })

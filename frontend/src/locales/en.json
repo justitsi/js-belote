@@ -64,6 +64,7 @@
         "anouncedByLabel": "Anounced by:",
         "previousBidsLabel": "Previous bids:",
         "anounced": "anounced",
+        "passed": "passed",
         "suits": {
             "P": "Pass",
             "C": "♣ Clubs",

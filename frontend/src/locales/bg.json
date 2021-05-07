@@ -63,6 +63,7 @@
         "anouncedByLabel": "Анонсирано от:",
         "previousBidsLabel": "Предишни анонси:",
         "anounced": "обяви",
+        "passed": "пасува",
         "suits": {
             "P": "Пас",
             "C": "♣ Спатия",

@@ -121,6 +121,7 @@ function GameBoard(props) {
                                 suit={props.roundStatus.suitInfo.suit}
                                 calledBy={props.roundStatus.suitInfo.caller}
                                 suitSelectionHistory={props.suitSelectionHistory}
+                                currentRoundNum={props.gameStatus.roundNum}
                                 handleSuitSelect={props.handleSuitSelect}
                             />
                         </div >
