@@ -50,7 +50,8 @@
     },
     "premuimOptions": {
         "listLabel": "Списък с налични премии",
-        "anounceBtnLabel": "Обяви премия(и)"
+        "anounceLabel1": "Избраните премии ще бъдат",
+        "anounceLabel2": "обявени когато играете карта"
     },
     "premiumOption": {
         "cardSeriesLabel": "Поредни карти",

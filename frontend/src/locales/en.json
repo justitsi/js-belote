@@ -51,7 +51,8 @@
     },
     "premuimOptions": {
         "listLabel": "Premium option list",
-        "anounceBtnLabel": "Anounce Premium(s)"
+        "anounceLabel1": "Selected premiums will be",
+        "anounceLabel2": "anounced when you play a card"
     },
     "premiumOption": {
         "cardSeriesLabel": "Card Series",

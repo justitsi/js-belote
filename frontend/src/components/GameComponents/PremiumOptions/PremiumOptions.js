@@ -135,7 +135,6 @@ function PremiumOptions(props) {
             availablePremiumsList.push(option)
         }
 
-
         // this is a bad solution, but it's 1 am, what are you gonna do about it
         if (props.selectedPremiums.length !== getPremiumsToAnounce().length)
             props.setSelectedPremiums(getPremiumsToAnounce());
@@ -147,19 +146,15 @@ function PremiumOptions(props) {
                         <b className={styles.premiumsListLabel}> {t('premuimOptions.listLabel')} </b>
                         <div className={styles.premiumsList}>
                             {availablePremiumsList}
-                            <Button
-                                className={styles.premiumOptionsAnounceBtn}
-                                onClick={handleAnouncePremiumsClick}
-                                variant="outline-primary"
-                            >
-                                <b>
-                                    {t('premuimOptions.anounceBtnLabel')}
-                                </b>
-                            </Button>
+                            <small>
+                                Selected premiums will be
+                                <br />
+                                anounced when you play a card
+                            </small>
                         </div>
                     </div>
                 }
-            </div >
+            </div>
         )
     }
     else {
