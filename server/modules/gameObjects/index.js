@@ -831,6 +831,13 @@ class Round {
                     player_has_requested_suit = true;
                     break;
                 }
+
+            // handle NoTrumps logic for placing cards - players can always put cards from the initial suit on NoTrumps, no matter their strenght
+            if (this.suit === 'N')
+                if (player_has_requested_suit)
+                    if (cardSuit === initialCard['suit'])
+                        return true
+
             // check if player is holding a stronger card from the same suit
             let player_has_stronger_card_from_suit = false;
             if (player_has_requested_suit)

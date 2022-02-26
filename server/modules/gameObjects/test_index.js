@@ -834,6 +834,13 @@ class Round {
                     player_has_requested_suit = true;
                     break;
                 }
+
+            // handle NoTrumps logic for placing cards - players can always put cards from the same suit on NoTrumps
+            if (this.suit === 'N')
+                if (player_has_requested_suit)
+                    if (cardSuit === initialCard['suit'])
+                        return true
+
             // check if player is holding a stronger card from the same suit
             let player_has_stronger_card_from_suit = false;
             if (player_has_requested_suit)
@@ -1203,17 +1210,26 @@ const game = new Game(['s', 'e', 'n', 'w'])
 // console.log(game)
 
 
-// game.currentRound.splitDeck('s', 4)
-// game.currentRound.callSuit('n', 'H', 1)
-// // // // console.log(game.currentRound.getValidPlayerSuitCalls('w'))
+game.currentRound.splitDeck('s', 17)
+game.currentRound.callSuit('n', 'N', 1)
+// console.log(game.currentRound.getValidPlayerSuitCalls('w'))
 
-// game.currentRound.callSuit('w', 'P', 1)
-// game.currentRound.callSuit('s', 'P', 1)
-// game.currentRound.callSuit('e', 'P', 1)
-// game.currentRound.initPlayStage()
-// // // for (const hand of game.currentRound.hands) console.log(hand)
+game.currentRound.callSuit('w', 'P', 1)
+game.currentRound.callSuit('s', 'P', 1)
+game.currentRound.callSuit('e', 'P', 1)
+game.currentRound.initPlayStage()
+// for (const hand of game.currentRound.hands) console.log(hand)
 
-// // // game.currentRound.placeCard('n', 'C', '8')
+
+game.currentRound.placeCard('n', 'C', 'J')
+game.currentRound.placeCard('w', 'C', '8')
+game.currentRound.placeCard('s', 'C', '7')
+
+// console.log(game.currentRound.hands[1]['cards'][0]['rank'])
+game.currentRound.hands[1]['cards'][0]['rank'] = '9'
+console.log(game.currentRound.hands[1])
+console.log(game.currentRound.getPlayerOptions('e'))
+
 
 // // // console.log(game.currentRound.hands[0])
 // game.currentRound.anouncePlayerPremium('n', [{ suit: 'C', rank: '8' }, { suit: 'C', rank: '9' }, { suit: 'C', rank: '10' }], 'C')
