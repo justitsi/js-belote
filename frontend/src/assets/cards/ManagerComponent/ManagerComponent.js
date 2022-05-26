@@ -32,8 +32,6 @@ import { ReactComponent as SD } from './../7D.svg';
 import { ReactComponent as SH } from './../7H.svg';
 import { ReactComponent as SS } from './../7S.svg';
 
-import styles from './ManagerComponent.module.scss';
-
 function ManagerComponent(props) {
     const cardRanks = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
