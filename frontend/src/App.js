@@ -20,7 +20,7 @@ function App() {
               component={MainPage}
             />
             <Route exact
-              path='/belote/:roomID'
+              path='/belote/room/:roomID'
               component={BelotePage}
             />
           </HashRouter>

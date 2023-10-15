@@ -2,7 +2,7 @@ export const sort_rank_order_normal = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A']
 export const sort_rank_order_trump = ['7', '8', 'Q', 'K', '10', 'A', '9', 'J']
 export const sort_suit_order = ['D', 'C', 'H', 'S']
 
-export function sortCards(cards, roundSuit, reverse) {
+export const sortCards = (cards, roundSuit, reverse) => {
     const cardsBySuit = []
     const sortedCards = []
 

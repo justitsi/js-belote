@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { connectToServerSocket, disconnectFromSocket } from '../../modules/socketActions'
-
-import styles from './MainPage.module.scss'
+import { connectToServerSocket, disconnectFromSocket } from '../../modules/socketActions';
+import { generateRandomString } from './../../modules/util';
+import styles from './MainPage.module.scss';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Jumbotron, Row, Form, FormControl } from 'react-bootstrap';
-import RoomIndicatorContainer from './../../components/SiteComponents/RoomIndicatorContainer'
+import RoomIndicatorContainer from './../../components/SiteComponents/RoomIndicatorContainer';
 
 
-function MainPage(props) {
+const MainPage = (props) => {
     const [roomID, setRoomID] = useState("");
     const [availableRooms, setAvailableRooms] = useState([]);
 
@@ -22,9 +22,7 @@ function MainPage(props) {
         let socket_connection = connectToServerSocket(clientID);
         socket_connection.emit('getRoomList')
 
-
         socket_connection.on("roomListUpdate", (args) => {
-            console.log(`Received server room list update ${JSON.stringify(args)}`)
             setAvailableRooms(args)
         });
 
@@ -41,18 +39,9 @@ function MainPage(props) {
         let destRoom = roomID;
         if (!destRoom) destRoom = generateRandomString(6)
 
-        window.location.href = (`#/belote/${destRoom}`);
+        window.location.href = (`#/belote/room/${destRoom}`);
         evt.stopPropagation();
         setRoomID("");
-    }
-
-    const generateRandomString = (length) => {
-        const result = [];
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (var i = 0; i < length; i++) {
-            result.push(characters.charAt(Math.floor(Math.random() * characters.length)));
-        }
-        return result.join('');
     }
 
     return (

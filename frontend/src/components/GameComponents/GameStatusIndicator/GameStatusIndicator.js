@@ -85,7 +85,7 @@ function GameStatusIndicator(props) {
                             </Table>
                             <label className={styles.waitingLabel}>{t('gameStatusIndicator.waitingForLabelsToConnectLabel')}</label>
                             <InputGroup.Text disabled>
-                                {`https://belotewithfriends.tk/#/belote/${props.roomID}`}
+                                {`https://belotewithfriends.tk/#/belote/room/${props.roomID}`}
                             </InputGroup.Text>
                         </div>
                     }

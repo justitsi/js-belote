@@ -1,18 +1,19 @@
-import styles from './BelotePage.module.scss'
+import styles from './BelotePage.module.scss';
 import { v4 as uuidv4 } from 'uuid';
-import { useState, useEffect, cloneElement } from 'react'
-import { connectToGameSocket, disconnectFromSocket } from '../../modules/socketActions'
-import GameStatusIndicator from './../../components/GameComponents//GameStatusIndicator'
-import PremiumIndicator from './../../components/GameComponents//PremiumIndicator'
-import Hand from './../../components/GameComponents//Hand'
-import GameBoard from '../../components/GameComponents/GameBoard'
-import RoomChat from '../../components/GameComponents/RoomChat'
-import HandHistory from './../../components/GameComponents/HandHistory'
-import PremiumOptions from './../../components/GameComponents/PremiumOptions'
-import GameUsernamePrompt from './../../components/SiteComponents/GameUsernamePrompt'
-import { Row, Col, Tabs, Tab } from 'react-bootstrap'
+import { useState, useEffect, cloneElement } from 'react';
+import { log } from "../../modules/util";
+import { connectToGameSocket, disconnectFromSocket } from '../../modules/socketActions';
+import GameStatusIndicator from './../../components/GameComponents//GameStatusIndicator';
+import PremiumIndicator from './../../components/GameComponents//PremiumIndicator';
+import Hand from './../../components/GameComponents//Hand';
+import GameBoard from '../../components/GameComponents/GameBoard';
+import RoomChat from '../../components/GameComponents/RoomChat';
+import HandHistory from './../../components/GameComponents/HandHistory';
+import PremiumOptions from './../../components/GameComponents/PremiumOptions';
+import GameUsernamePrompt from './../../components/SiteComponents/GameUsernamePrompt';
+import { Row, Col, Tabs, Tab } from 'react-bootstrap';
 
-function BelotePage(props) {
+const BelotePage = (props) => {
     // window rendering vars
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     // server conn vars
@@ -40,44 +41,44 @@ function BelotePage(props) {
             let socket_connection = connectToGameSocket(roomID, clientID, displayName);
 
             socket_connection.on("gameStatusUpdate", (args) => {
-                console.log(`Received game status update ${JSON.stringify(args)}`)
+                log("debug", `Received game status update ${JSON.stringify(args)}`)
                 setGameStatus(args)
             });
 
             socket_connection.on("roundStatusUpdate", (args) => {
-                console.log(`Received round status update ${JSON.stringify(args)}`)
+                log("debug", `Received round status update ${JSON.stringify(args)}`)
                 setRoundStatus(args)
             });
 
             socket_connection.on('playerHandUpdate', (args) => {
-                console.log(`Received player hand update ${JSON.stringify(args.cards)}`)
+                log("debug", `Received player hand update ${JSON.stringify(args.cards)}`)
                 setPlayerHand(args.cards)
             })
 
             socket_connection.on('playerValidSuitOptionsUpdate', (args) => {
-                console.log(`Received player valid suit options update ${JSON.stringify(args)}`)
+                log("debug", `Received player valid suit options update ${JSON.stringify(args)}`)
                 setValidSuitOptions(args)
             })
 
             socket_connection.on('playerHandValidOptionsUpdate', (args) => {
-                console.log(`Received player valid hand options update ${JSON.stringify(args)}`)
+                log("debug", `Received player valid hand options update ${JSON.stringify(args)}`)
                 setPlayerHandValidOptions(args)
             })
 
             socket_connection.on('roundScoreUpdate', (args) => {
-                console.log(`Received round score update ${JSON.stringify(args)}`)
+                log("debug", `Received round score update ${JSON.stringify(args)}`)
                 setRoundScore(args)
             })
 
             socket_connection.on('lobbyUpdate', (args) => {
-                console.log(`Receivedlobby update ${JSON.stringify(args)}`)
+                log("debug", `Receivedlobby update ${JSON.stringify(args)}`)
                 const events = lobbyEvents
                 events.push(args)
                 setLobbyEvents(events)
             })
 
             socket_connection.on('playerPremiumValidOptions', (args) => {
-                console.log(`Received player valid premium options update ${JSON.stringify(args)}`)
+                log("debug", `Received player valid premium options update ${JSON.stringify(args)}`)
                 setPremiumOptions(args)
                 // args need to be reformated in order to create a *valid* list of all premiums
                 if (args) {
@@ -103,7 +104,7 @@ function BelotePage(props) {
 
 
             socket_connection.on('suitSelectionUpdate', (args) => {
-                console.log(`Received suit selection update ${JSON.stringify(args)}`)
+                log("debug", `Received suit selection update ${JSON.stringify(args)}`)
                 const selections = suitSelectionHistory;
                 selections.push(args)
                 setSuitSelectionHistory(selections)
@@ -158,17 +159,10 @@ function BelotePage(props) {
     // refresh window width on resize
     window.addEventListener("resize", () => { setWindowWidth(window.innerWidth) });
 
-    console.log(selectedPremiums)
     return (
         < div className={styles.page} >
             {socket &&
                 <div>
-                    {/* <Row>
-                        <Col>
-                            Window Width: {windowWidth}
-                        </Col>
-                    </Row> */}
-                    <br />
                     <Row fluid='md'>
                         <Col sm={0} md={0} lg={1} xl={1} />
                         <Col lg={9} xl={10}>
@@ -243,16 +237,17 @@ function BelotePage(props) {
                         <Row>
                             <Col md={1} />
                             <Col md={10}>
-                                <Tabs defaultActiveKey="premiums">
-                                    <Tab eventKey="premiums" title="Premiums">
-                                        <PremiumIndicator
-                                            premiums={roundStatus.premiums}
-                                        />
-                                    </Tab>
+                                <Tabs defaultActiveKey="gameStatus">
                                     <Tab eventKey="gameStatus" title="Game Status">
                                         <GameStatusIndicator
                                             gameStatus={gameStatus}
                                             roundStatus={roundStatus}
+                                            roomID={roomID}
+                                        />
+                                    </Tab>
+                                    <Tab eventKey="premiums" title="Premiums">
+                                        <PremiumIndicator
+                                            premiums={roundStatus.premiums}
                                         />
                                     </Tab>
                                     <Tab eventKey="handHistory" title="Hand History">
