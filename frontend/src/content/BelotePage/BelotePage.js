@@ -1,6 +1,5 @@
 import styles from './BelotePage.module.scss';
-import { v4 as uuidv4 } from 'uuid';
-import { useState, useEffect, cloneElement } from 'react';
+import { useState, useEffect } from 'react';
 import { log } from "../../modules/util";
 import { connectToGameSocket, disconnectFromSocket } from '../../modules/socketActions';
 import GameStatusIndicator from './../../components/GameComponents//GameStatusIndicator';
@@ -20,7 +19,6 @@ const BelotePage = (props) => {
     // server conn vars
     const { roomID } = useParams();
     // const [roomID, setRoomID] = useState(props.match.params.roomID)
-    const [clientID] = useState(uuidv4())
     const [displayName, setDisplayName] = useState(null)
     const [socket, setSocket] = useState(null)
     const [usernameSet, setUsernameSet] = useState(false)
@@ -40,7 +38,7 @@ const BelotePage = (props) => {
     useEffect(() => {
         if (displayName && usernameSet) {
             if (socket) disconnectFromSocket(socket);
-            let socket_connection = connectToGameSocket(roomID, clientID, displayName);
+            let socket_connection = connectToGameSocket(roomID, props.game_clientID, displayName);
 
             socket_connection.on("gameStatusUpdate", (args) => {
                 log("debug", `Received game status update ${JSON.stringify(args)}`)
@@ -119,7 +117,7 @@ const BelotePage = (props) => {
                 disconnectFromSocket(socket_connection)
             }
         }
-    }, [roomID, clientID, usernameSet]);
+    }, [roomID, props.game_clientID, usernameSet]);
 
     // check if player is switching belote lobbies to reset socket and vars
     useEffect(() => {
@@ -128,7 +126,6 @@ const BelotePage = (props) => {
         setUsernameSet(false)
         setDisplayName(null)
         setLobbyEvents([])
-        // setRoomID(props.match.params.roomID)
     }, [])
 
 

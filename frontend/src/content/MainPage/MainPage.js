@@ -1,39 +1,26 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
-import { connectToServerSocket, disconnectFromSocket } from '../../modules/socketActions';
-import { generateRandomString } from './../../modules/util';
 import styles from './MainPage.module.scss';
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { generateRandomString } from './../../modules/util';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Jumbotron, Row, Form, FormControl } from 'react-bootstrap';
 import RoomIndicatorContainer from './../../components/SiteComponents/RoomIndicatorContainer';
-
+import { SocketContext } from '../../modules/serverSocketContext';
 
 const MainPage = (props) => {
     const navigate = useNavigate();
+    const [serverClientID, serverSocket] = useContext(SocketContext);
     const [roomID, setRoomID] = useState("");
     const [availableRooms, setAvailableRooms] = useState([]);
-
-    //socket connection
     const { t } = useTranslation('translations');
-    const [socket, setSocket] = useState(null)
-    const [clientID] = useState(uuidv4())
 
     useEffect(() => {
-        if (socket) disconnectFromSocket(socket);
-        let socket_connection = connectToServerSocket(clientID);
-        socket_connection.emit('getRoomList')
-
-        socket_connection.on("roomListUpdate", (args) => {
+        // get data from socket
+        serverSocket.emit('getRoomList')
+        serverSocket.on("roomListUpdate", (args) => {
             setAvailableRooms(args)
         });
-
-        setSocket(socket_connection)
-
-        return () => {
-            socket_connection.disconnect()
-        }
-    }, [clientID]);
+    }, [serverClientID, serverSocket]);
 
 
 

@@ -26,7 +26,11 @@ const Our_Navbar = () => {
 
     return (
         <Navbar bg="light" expand="lg">
-            <Navbar.Brand href="/">{t('navbar.brand')}</Navbar.Brand>
+            <LinkContainer to={'/'}>
+                <Navbar.Brand>
+                    {t('navbar.brand')}
+                </Navbar.Brand>
+            </LinkContainer>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
