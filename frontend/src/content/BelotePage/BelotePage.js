@@ -12,12 +12,14 @@ import HandHistory from './../../components/GameComponents/HandHistory';
 import PremiumOptions from './../../components/GameComponents/PremiumOptions';
 import GameUsernamePrompt from './../../components/SiteComponents/GameUsernamePrompt';
 import { Row, Col, Tabs, Tab } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
 const BelotePage = (props) => {
     // window rendering vars
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     // server conn vars
-    const [roomID, setRoomID] = useState(props.match.params.roomID)
+    const { roomID } = useParams();
+    // const [roomID, setRoomID] = useState(props.match.params.roomID)
     const [clientID] = useState(uuidv4())
     const [displayName, setDisplayName] = useState(null)
     const [socket, setSocket] = useState(null)
@@ -126,8 +128,8 @@ const BelotePage = (props) => {
         setUsernameSet(false)
         setDisplayName(null)
         setLobbyEvents([])
-        setRoomID(props.match.params.roomID)
-    }, [props.match.params.roomID])
+        // setRoomID(props.match.params.roomID)
+    }, [])
 
 
 

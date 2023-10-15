@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { connectToServerSocket, disconnectFromSocket } from '../../modules/socketActions';
 import { generateRandomString } from './../../modules/util';
@@ -9,6 +10,7 @@ import RoomIndicatorContainer from './../../components/SiteComponents/RoomIndica
 
 
 const MainPage = (props) => {
+    const navigate = useNavigate();
     const [roomID, setRoomID] = useState("");
     const [availableRooms, setAvailableRooms] = useState([]);
 
@@ -39,7 +41,7 @@ const MainPage = (props) => {
         let destRoom = roomID;
         if (!destRoom) destRoom = generateRandomString(6)
 
-        window.location.href = (`#/belote/room/${destRoom}`);
+        navigate(`/belote/room/${destRoom}`);
         evt.stopPropagation();
         setRoomID("");
     }
