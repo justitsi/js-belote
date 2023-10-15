@@ -5,7 +5,7 @@ import { generateRandomString } from './../../modules/util';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Jumbotron, Row, Form, FormControl } from 'react-bootstrap';
 import RoomIndicatorContainer from './../../components/SiteComponents/RoomIndicatorContainer';
-import { SocketContext } from '../../modules/serverSocketContext';
+import { SocketContext } from '../../modules/socketContexts';
 
 const MainPage = (props) => {
     const navigate = useNavigate();

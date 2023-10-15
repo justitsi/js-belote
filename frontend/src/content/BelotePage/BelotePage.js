@@ -1,5 +1,5 @@
 import styles from './BelotePage.module.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { log } from "../../modules/util";
 import { connectToGameSocket, disconnectFromSocket } from '../../modules/socketActions';
 import GameStatusIndicator from './../../components/GameComponents//GameStatusIndicator';
@@ -12,15 +12,16 @@ import PremiumOptions from './../../components/GameComponents/PremiumOptions';
 import GameUsernamePrompt from './../../components/SiteComponents/GameUsernamePrompt';
 import { Row, Col, Tabs, Tab } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import { GameContext } from '../../modules/socketContexts';
 
 const BelotePage = (props) => {
     // window rendering vars
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     // server conn vars
     const { roomID } = useParams();
-    // const [roomID, setRoomID] = useState(props.match.params.roomID)
     const [displayName, setDisplayName] = useState(null)
     const [socket, setSocket] = useState(null)
+    const [gameSocketID] = useContext(GameContext);
     const [usernameSet, setUsernameSet] = useState(false)
     // game state vars
     const [gameStatus, setGameStatus] = useState(null)
@@ -38,7 +39,7 @@ const BelotePage = (props) => {
     useEffect(() => {
         if (displayName && usernameSet) {
             if (socket) disconnectFromSocket(socket);
-            let socket_connection = connectToGameSocket(roomID, props.game_clientID, displayName);
+            let socket_connection = connectToGameSocket(roomID, gameSocketID, displayName);
 
             socket_connection.on("gameStatusUpdate", (args) => {
                 log("debug", `Received game status update ${JSON.stringify(args)}`)

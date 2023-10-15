@@ -6,7 +6,7 @@ import MainPage from './content/MainPage';
 import BelotePage from './content/BelotePage';
 import Navbar from './components/SiteComponents/Navbar';
 import Footer from './components/SiteComponents/Footer';
-import { SocketContext } from './modules/serverSocketContext';
+import { SocketContext, GameContext } from './modules/socketContexts';
 import styles from './App.module.scss'
 import './App.scss';
 
@@ -42,9 +42,9 @@ const App = () => {
               <Route exact
                 path='/belote/room/:roomID'
                 element={
-                  <SocketContext.Provider value={[serverClientID, serverSocket]}>
+                  <GameContext.Provider value={[gameClientID]}>
                     <BelotePage />
-                  </SocketContext.Provider>
+                  </GameContext.Provider>
                 }
               />
 
