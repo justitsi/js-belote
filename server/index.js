@@ -12,6 +12,7 @@ var io = require('socket.io')(server, {
 
 server.listen(8000);
 
+const DEBUG_LOG = false;
 const rooms = [];
 const room_limit = 4;
 const server_connections = []
@@ -23,7 +24,7 @@ io.on("connection", async (socket) => {
                 try {
                     sendAvailableRoomsToServerClient(clientID);
                 } catch (err) {
-                    console.log(`Error handling request: ${err}`)
+                    log("error", "SERVER", `Error handling request: ${err}`)
                 }
             });
 
@@ -34,12 +35,14 @@ io.on("connection", async (socket) => {
 
                     for (const room of rooms) {
                         if (room.id === roomID)
-                            if (room.clients.length >= room_limit)
+                            if (room.clients.length >= room_limit) {
                                 canJoin = false;
+                                break;
+                            }
                     }
                     io.to(clientID).emit('canJoinRoom', canJoin);
                 } catch (err) {
-                    console.log(`Error handling request: ${err}`)
+                    log("error", roomID, `Error handling request: ${err}`)
                 }
             });
 
@@ -53,13 +56,15 @@ io.on("connection", async (socket) => {
                         if (room.id === roomID)
                             if (room.clients.length < room_limit)
                                 for (const client_entry of room.clients)
-                                    if (client_entry.displayName == displayName)
-                                        isInRoom = true
+                                    if (client_entry.displayName == displayName) {
+                                        isInRoom = true;
+                                        break;
+                                    }
 
 
                     io.to(clientID).emit('isUsernameAvailable', !isInRoom)
                 } catch (err) {
-                    console.log(`Error handling request: ${err}`)
+                    log("error", roomID, `Error handling request: ${err}`)
                 }
             });
         });
@@ -77,7 +82,7 @@ io.on("connection", async (socket) => {
             socket.on("disconnect", () => {
                 try {
                     socket.leave(client_id);
-                    console.log(`${client_id} left ${room_id}`)
+                    log("info", room_id, `${client_id} left room`)
                     for (const client_entry of room_entry.clients) {
                         if (client_entry.id == client_id) {
                             const index = room_entry.clients.indexOf(client_entry);
@@ -95,21 +100,20 @@ io.on("connection", async (socket) => {
                                 const index = rooms.indexOf(entry);
                                 if (index > -1) {
                                     rooms.splice(index, 1);
-                                    console.log(`Deleted room ${room_id}`)
+                                    log("info", room_id, `Deleted room ${room_id}`)
                                 }
                             }
                         }
                     }
-
                     sendRoomsUpdateToServerClients();
                 } catch (err) {
-                    console.log(`Error handling request: ${err}`)
+                    log("error", room_id, `Error handling request: ${err}`)
                 }
             });
 
             socket.on('splitDeck', (args) => {
                 try {
-                    console.log(`Getting command to split deck: ${args} from ${displayName} (${client_id})`);
+                    log("info", room_id, `Getting command to split deck: ${args} from ${displayName} (${client_id})`)
                     if (room_entry.gameInstance) {
                         if (room_entry.gameInstance.currentRound.splitDeck(displayName, args)) {
                             sendToAllPlayersInRoom(room_entry, 'roundStatusUpdate', room_entry.gameInstance.currentRound.getRoundStatus())
@@ -117,13 +121,13 @@ io.on("connection", async (socket) => {
                         }
                     }
                 } catch (err) {
-                    console.log(`Error handling request: ${err}`)
+                    log("error", room_id, `Error handling request: ${err}`)
                 }
             });
 
             socket.on('anouncePremium', (args) => {
                 try {
-                    console.log(`Getting command to anounce premiums: ${JSON.stringify(args)} from ${displayName} (${client_id})`);
+                    log("info", room_id, `Getting command to anounce premiums: ${JSON.stringify(args)} from ${displayName} (${client_id})`)
 
                     for (const premium of args) {
                         if (room_entry.gameInstance)
@@ -133,13 +137,13 @@ io.on("connection", async (socket) => {
                             }
                     }
                 } catch (err) {
-                    console.log(`Error handling request: ${err}`)
+                    log("error", room_id, `Error handling request: ${err}`)
                 }
             });
 
             socket.on('suitSelect', async (args) => {
                 try {
-                    console.log(`Getting command to select suit: ${args} from ${displayName} (${client_id})`);
+                    log("info", room_id, `Getting command to select suit: ${args} from ${displayName} (${client_id})`)
 
                     if (room_entry.gameInstance) {
                         let suitRes = false;
@@ -183,13 +187,13 @@ io.on("connection", async (socket) => {
                         }
                     }
                 } catch (err) {
-                    console.log(`Error handling request: ${err}`)
+                    log("error", room_id, `Error handling request: ${err}`)
                 }
             });
 
             socket.on('cardPlay', async (args) => {
                 try {
-                    console.log(`Getting command to play card: ${JSON.stringify(args)} from ${displayName} (${client_id})`);
+                    log("info", room_id, `Getting command to play card: ${JSON.stringify(args)} from ${displayName} (${client_id})`)
                     if (room_entry.gameInstance) {
                         //create a copy of the round state in case 4 cards are placed and game needs to pause
                         const startingRoundState = JSON.parse(JSON.stringify(await room_entry.gameInstance.currentRound.getRoundStatus()));
@@ -216,7 +220,7 @@ io.on("connection", async (socket) => {
                         }
                     }
                 } catch (err) {
-                    console.log(`Error handling request: ${err}`)
+                    log("error", room_id, `Error handling request: ${err}`)
                 }
             });
         });
@@ -265,10 +269,10 @@ const getRoomEntryAndJoin = async (socket) => {
 
     // get rooms arr entry
     let room_entry = null
-    for (const item of rooms) {
+    for (const item of rooms)
         if (item.id == room_id)
             room_entry = item
-    }
+
 
     // init room data if needed
     if (!room_entry) {
@@ -297,7 +301,7 @@ const getRoomEntryAndJoin = async (socket) => {
     let isRoomFull = false;
     if (room_entry.clients.length >= room_limit) {
         isRoomFull = true;
-        console.log(`Room ${room_id} is full`)
+        log("info", room_id, `Room is full!`)
         sendToAllPlayersInRoom(room_entry, 'lobbyUpdate', { error: "lobby_full" })
     }
 
@@ -311,14 +315,13 @@ const getRoomEntryAndJoin = async (socket) => {
             displayName: displayName
         }
         room_entry.clients.push(new_connection);
-        console.log(`client ${client_id} with username ${displayName} has joined room ${room_id}`);
+        log("info", room_id, `client ${client_id} with username ${displayName} has joined room ${room_id}`)
 
         sendToAllPlayersInRoom(room_entry, 'lobbyUpdate', { client: new_connection, action: "joined" })
 
         //create new game if room has 4 people in it
-
-        console.log(room_entry.clients)
-        // this doesnt work...
+        log("info", room_id, room_entry.clients)
+        // this doesn't work...
         if (shouldCreateNewGame(room_entry.gameInstance, room_entry.clients)) {
             room_entry.gameInstance = new Game([
                 room_entry.clients[0] ? room_entry.clients[0].displayName : null,
@@ -370,13 +373,13 @@ const connectToServer = async (socket) => {
     if (server_connections.indexOf(connID) == -1) {
         server_connections.push(connID);
         socket.join(connID);
-        console.log(`${connID} joined the server`)
+        log("info", "SERVER", `${connID} joined the server`)
     }
 
     socket.on("disconnect", () => {
         server_connections.splice(server_connections.indexOf(connID), 1)
         socket.leave(connID);
-        console.log(`${connID} left the server`)
+        log("info", "SERVER", `${connID} left the server`)
     });
 
     return connID;
@@ -414,4 +417,39 @@ const sendAvailableRoomsToServerClient = (clientID) => {
         }
     }
     io.to(clientID).emit('roomListUpdate', data)
+}
+
+// valid types/levels are 'error', 'info' and 'debug'
+//                         = 0      = 1        = 2
+const log = (type, roomID, message) => {
+    if (type === "debug" && DEBUG_LOG === true) {
+        console.log(`DEBUG INFO: ${message}`)
+    }
+    else {
+        let now = new Date();
+        // generate datetime string
+        let datetimeStr =
+            now.getFullYear()
+            + '-'
+            + (now.getMonth() + 1)
+            + '-'
+            + now.getDate()
+            + ' '
+            + now.getHours()
+            + ":"
+            + now.getMinutes()
+            + ":"
+            + now.getSeconds();
+
+        if (typeof (message) !== "string")
+            message = JSON.stringify(message)
+
+
+
+        if (type === "info")
+            console.log(`[INFO] ${datetimeStr}@[${roomID}]: ${message}`);
+        if (type === "error")
+            console.error(`[ERROR] ${datetimeStr}@[${roomID}]: ${message}`);
+    }
+
 }
