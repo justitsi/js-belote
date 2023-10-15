@@ -20,7 +20,7 @@ function RoomIndicator(props) {
     }
 
     const joinRoom = () => {
-        window.location.href = (`#/belote/${props.roomID}`);
+        window.location.href = (`/belote/room/${props.roomID}`);
     }
 
     return (
