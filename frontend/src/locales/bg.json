@@ -120,7 +120,8 @@
     },
     "activeRoomCard": {
         "label": "Стая",
-        "teamLabel": "Отбор"
+        "teamLabel": "Отбор",
+        "connected": "свързани"
     },
     "gameUsernamePrompt": {
         "roomIDLabel": "ID на стаята:",

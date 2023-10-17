@@ -121,7 +121,8 @@
     },
     "activeRoomCard": {
         "label": "Lobby",
-        "teamLabel": "Team"
+        "teamLabel": "Team",
+        "connected": "connected"
     },
     "gameUsernamePrompt": {
         "roomIDLabel": "Room ID:",

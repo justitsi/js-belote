@@ -1,8 +1,10 @@
 import styles from './RoomIndicator.module.scss'
 import { Card, Button, Table } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
-function RoomIndicator(props) {
+const RoomIndicator = (props) => {
+    const navigate = useNavigate();
     const { t } = useTranslation('translations');
     const players = [...props.players]
 
@@ -20,14 +22,16 @@ function RoomIndicator(props) {
     }
 
     const joinRoom = () => {
-        window.location.href = (`/belote/room/${props.roomID}`);
+        navigate(`/belote/room/${props.roomID}`);
     }
 
     return (
         <div className={styles.container}>
             <Card>
                 <Card.Body>
-                    <Card.Title>{t('activeRoomCard.label')}</Card.Title>
+                    <Card.Title>{t('activeRoomCard.label')} {props.roomID}</Card.Title>
+                    <Card.Subtitle>{players.length}/4 {t("activeRoomCard.connected")}</Card.Subtitle>
+                    <br />
                     <Table size="sm" hover>
                         <thead>
                             <tr>
@@ -36,9 +40,13 @@ function RoomIndicator(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td className={styles.tablePlayerNameCell}>{teams[0]}</td>
-                                <td className={styles.tablePlayerNameCell}>{teams[1]}</td>
+                            <tr className={styles.tablePlayerNameRow}>
+                                <td className={styles.tablePlayerNameCell}>{teams[0][0]}</td>
+                                <td className={styles.tablePlayerNameCell}>{teams[1][0]}</td>
+                            </tr>
+                            <tr className={styles.tablePlayerNameRow}>
+                                <td className={styles.tablePlayerNameCell}>{teams[1][1]}</td>
+                                <td className={styles.tablePlayerNameCell}>{teams[0][1]}</td>
                             </tr>
                         </tbody>
                     </Table>

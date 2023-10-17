@@ -1,4 +1,4 @@
-.joinBtnContainer{
+.joinBtnContainer {
     display: flex;
 }
 
@@ -8,4 +8,8 @@
 
 .tablePlayerNameCell {
     text-overflow: ellipsis;
+}
+
+.tablePlayerNameRow {
+    height: 2rem;
 }
