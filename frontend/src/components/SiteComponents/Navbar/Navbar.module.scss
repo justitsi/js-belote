@@ -1,0 +1,16 @@
+.logo {
+    max-height: 2rem;
+    margin-right: -0.75rem;
+}
+
+.playersOnlineIndicator {
+    @media screen and (max-width: 992px) {
+        font-size: 1rem;
+    }
+
+    @media screen and (min-width: 992px) {
+        font-size: 0.75rem;
+    }
+
+    user-select: none;
+}

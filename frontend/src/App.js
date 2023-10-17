@@ -11,9 +11,7 @@ import styles from './App.module.scss'
 import './App.scss';
 
 // imports for handling server connection
-import {
-  connectToServerSocket
-} from './modules/socketActions';
+import { connectToServerSocket } from './modules/socketActions';
 
 
 const App = () => {
@@ -29,7 +27,9 @@ const App = () => {
       <div className={styles.App}>
         <div className={styles.content}>
           <BrowserRouter>
-            <Navbar />
+            <SocketContext.Provider value={[serverClientID, serverSocket]}>
+              <Navbar />
+            </SocketContext.Provider>
             <Routes>
               <Route exact
                 path='/'

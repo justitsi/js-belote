@@ -1,15 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Navbar, Nav, Form, Button, FormControl } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { generateRoomName } from '../../../modules/util';
+import { SocketContext } from '../../../modules/socketContexts';
+import styles from './Navbar.module.scss';
+import favicon from '../../../assets/icons/favicon.png'
+
 
 const Our_Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation('translations');
+    const [serverClientID, serverSocket] = useContext(SocketContext);
     const [roomID, setRoomID] = useState("");
+
+    // state variables for number of connected players
+    const [numConnected, setNumConnected] = useState(-1);
+    const [isConnected, setIsConnected] = useState(false);
+
+    useEffect(() => {
+        // get data from socket
+        serverSocket.on("numClientsPlayingUpdate", updateNumConnected);
+        serverSocket.emit('getNumClientsPlaying');
+
+        setIsConnected(true);
+        return (() => {
+            serverSocket.off("numClientsPlayingUpdate", updateNumConnected);
+        })
+    }, [serverClientID, serverSocket]);
+
+    const updateNumConnected = (args) => {
+        setNumConnected(args)
+    }
 
     const handleSubmit = (evt) => {
         if (roomID) navigate(`/belote/room/${roomID}`);
@@ -26,11 +50,24 @@ const Our_Navbar = () => {
 
     return (
         <Navbar bg="light" expand="lg">
-            <LinkContainer to={'/'}>
-                <Navbar.Brand>
-                    {t('navbar.brand')}
-                </Navbar.Brand>
-            </LinkContainer>
+            <Navbar.Brand>
+                <LinkContainer to={'/'}>
+                    {/* {t('navbar.brand')} */}
+                    <Nav.Link>
+
+                        <div>
+                            <img src={favicon} className={styles.logo} alt="fireSpot" />
+                        </div>
+                    </Nav.Link>
+                </LinkContainer>
+            </Navbar.Brand>
+            <div>
+                {(isConnected && numConnected > 0) &&
+                    <div className={styles.playersOnlineIndicator}>
+                        {numConnected} {t('navbar.playersOnline')}
+                    </div>
+                }
+            </div>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
@@ -63,7 +100,7 @@ const Our_Navbar = () => {
                     </Button>
                 </Form>
             </Navbar.Collapse>
-        </Navbar>
+        </Navbar >
     );
 }
 

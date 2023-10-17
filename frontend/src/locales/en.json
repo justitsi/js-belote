@@ -6,7 +6,8 @@
         "test_room": "Join the test room",
         "create_new_room": "Create new room",
         "gameIDLabel": "Enter game ID to join",
-        "joinGameBtnLabel": "Join"
+        "joinGameBtnLabel": "Join",
+        "playersOnline": "Players Online"
     },
     "footer": {
         "moreInfoLabel": "More info below",

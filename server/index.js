@@ -1,4 +1,3 @@
-const { emit } = require('process');
 const Game = require('./modules/gameObjects')
 
 var app = require('express')();
@@ -16,6 +15,7 @@ const DEBUG_LOG = false;
 const rooms = [];
 const room_limit = 4;
 const server_connections = []
+let clients_currently_playing = 0;
 
 io.on("connection", async (socket) => {
     if (socket.handshake.query.action === "connectToServer") {
@@ -23,6 +23,15 @@ io.on("connection", async (socket) => {
             socket.on('getRoomList', () => {
                 try {
                     sendAvailableRoomsToServerClient(clientID);
+                } catch (err) {
+                    log("error", "SERVER", `Error handling request: ${err}`)
+                }
+            });
+
+            socket.on('getNumClientsPlaying', () => {
+                try {
+                    // note: number of clients divided by two as two connections per client
+                    io.to(clientID).emit('numClientsPlayingUpdate', clients_currently_playing)
                 } catch (err) {
                     log("error", "SERVER", `Error handling request: ${err}`)
                 }
@@ -105,6 +114,7 @@ io.on("connection", async (socket) => {
                             }
                         }
                     }
+                    updateNumPlayersOnline(-1);
                     sendRoomsUpdateToServerClients();
                 } catch (err) {
                     log("error", room_id, `Error handling request: ${err}`)
@@ -318,6 +328,8 @@ const getRoomEntryAndJoin = async (socket) => {
         log("info", room_id, `client ${client_id} with username ${displayName} has joined room ${room_id}`)
 
         sendToAllPlayersInRoom(room_entry, 'lobbyUpdate', { client: new_connection, action: "joined" })
+        // update global players counter
+        updateNumPlayersOnline(1);
 
         //create new game if room has 4 people in it
         log("info", room_id, room_entry.clients)
@@ -365,7 +377,6 @@ const shouldCreateNewGame = (currentInstance, clients) => {
 }
 
 // all server funcs
-
 const connectToServer = async (socket) => {
     const connID = socket.handshake.query.client;
 
@@ -403,6 +414,12 @@ const broadCastToAllServerClients = (evntType, data) => {
     for (const client of server_connections) {
         io.to(client).emit(evntType, data)
     }
+}
+
+// modifier should be +1 or -1;
+const updateNumPlayersOnline = (modifier) => {
+    clients_currently_playing += modifier;
+    broadCastToAllServerClients('numClientsPlayingUpdate', clients_currently_playing);
 }
 
 const sendAvailableRoomsToServerClient = (clientID) => {
