@@ -1,4 +1,7 @@
-const DEBUG_LOG = true;
+import ADJ_LIST from './dicts/adjs_filt.json';
+import NOUN_LIST from './dicts/nouns_filt.json';
+
+const DEBUG_LOG = false;
 
 // valid types/levels are 'error', 'info' and 'debug'
 //                         = 0      = 1        = 2
@@ -39,4 +42,18 @@ export const generateRandomString = (length) => {
         result.push(characters.charAt(Math.floor(Math.random() * characters.length)));
     }
     return result.join('');
+}
+
+export const getWordCombo = () => {
+    let adj = ADJ_LIST['adjs'][
+        (Math.floor(Math.random() * ADJ_LIST['adjs'].length))
+    ];
+    let noun = NOUN_LIST['nouns'][
+        (Math.floor(Math.random() * NOUN_LIST['nouns'].length))
+    ];
+    return `${adj}-${noun}`;
+}
+
+export const generateRoomName = () => {
+    return getWordCombo();
 }

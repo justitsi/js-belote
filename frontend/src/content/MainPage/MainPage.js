@@ -1,7 +1,7 @@
 import styles from './MainPage.module.scss';
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { generateRandomString } from './../../modules/util';
+import { generateRoomName } from './../../modules/util';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Jumbotron, Row, Form, FormControl } from 'react-bootstrap';
 import RoomIndicatorContainer from './../../components/SiteComponents/RoomIndicatorContainer';
@@ -26,7 +26,7 @@ const MainPage = (props) => {
 
     const handleCTASubmit = (evt) => {
         let destRoom = roomID;
-        if (!destRoom) destRoom = generateRandomString(6)
+        if (!destRoom) destRoom = generateRoomName();
 
         navigate(`/belote/room/${destRoom}`);
         evt.stopPropagation();

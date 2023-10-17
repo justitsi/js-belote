@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Navbar, Nav, Form, Button, FormControl } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { generateRandomString } from '../../../modules/util';
+import { generateRoomName } from '../../../modules/util';
 
 const Our_Navbar = () => {
     const navigate = useNavigate();
@@ -19,8 +19,8 @@ const Our_Navbar = () => {
 
     const handleRandomRoomClick = () => {
         if (!window.location.toString().includes("/belote/room/")) {
-            let destRoom = generateRandomString(6)
-            navigate(`/belote/room/${destRoom}`)
+            let destRoom = generateRoomName();
+            navigate(`/belote/room/${destRoom}`);
         };
     }
 

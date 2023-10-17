@@ -1,0 +1,3 @@
+Files procured from:
+adjs.json: https://github.com/dariusk/corpora/blob/master/data/words/adjs.json
+nouns.json: https://github.com/dariusk/corpora/blob/master/data/words/nouns.json
