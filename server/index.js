@@ -419,6 +419,10 @@ const broadCastToAllServerClients = (evntType, data) => {
 // modifier should be +1 or -1;
 const updateNumPlayersOnline = (modifier) => {
     clients_currently_playing += modifier;
+
+    // sometimes the server miscounts because of web-sockets being flaky
+    if (clients_currently_playing < 0)
+        clients_currently_playing = 0;
     broadCastToAllServerClients('numClientsPlayingUpdate', clients_currently_playing);
 }
 
