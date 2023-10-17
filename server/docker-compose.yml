@@ -1,9 +1,0 @@
-version: "2.2"
-   
-services:
-  socket:
-    build: .
-    command: >
-        bash -c "NODE_ENV=production node index.js"
-    ports:
-      - "8000:8000"

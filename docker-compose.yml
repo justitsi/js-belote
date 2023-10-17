@@ -1,0 +1,27 @@
+version: "3"
+   
+services:
+  websocket:
+    build: ./server/
+    command: >
+        bash -c "NODE_ENV=production node index.js"
+    restart: always
+    deploy:
+      replicas: 1
+
+  frontend:
+    build: ./frontend/
+    restart: always
+    deploy:
+      replicas: 1
+
+  reverse-proxy:
+    build: ./reverse-proxy/
+    restart: always
+    deploy:
+      replicas: 1
+    depends_on:
+      - frontend
+      - websocket
+    ports: 
+      - "8000:80"
