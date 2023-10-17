@@ -2,6 +2,7 @@
 git switch deploy
 
 docker compose build
+docker compose down
 docker compose up -d
 
 # remove dangling images as per 
