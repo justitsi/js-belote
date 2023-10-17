@@ -1,24 +1,22 @@
 import styles from './GameUsernamePrompt.module.scss'
-import { Row, Form, FormControl, Button, Jumbotron } from 'react-bootstrap';
+import { Row, Form, FormControl, Button, Jumbotron, FormLabel } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { connectToServerSocket, disconnectFromSocket } from './../../../modules/socketActions'
 
-function GameUsernamePrompt(props) {
+const GameUsernamePrompt = (props) => {
     const { t } = useTranslation('translations');
     const [socket, setSocket] = useState(null)
     const [clientID] = useState(uuidv4())
     const [usernameAvailable, setUsernameAvailable] = useState(false)
     const [spaceInGameRoom, setSpaceInGameRoom] = useState(false)
-    const [error, setError] = useState(null);
-    const [username, setUsername] = useState('');
+    const [error, setError] = useState("");
 
     //connect to server to check if room has space to join
     useEffect(() => {
         if (socket) disconnectFromSocket(socket);
         let socket_connection = connectToServerSocket(clientID);
-        socket_connection.emit('canJoinRoom', props.roomID)
 
         socket_connection.on("canJoinRoom", (args) => {
             setSpaceInGameRoom(args)
@@ -33,19 +31,27 @@ function GameUsernamePrompt(props) {
             else setError(null)
         });
 
+        // emit event to check default name
+        socket_connection.emit('canJoinRoom', props.roomID)
+        socket_connection.emit('isUsernameAvailable', { roomID: props.roomID, displayName: props.displayName })
         setSocket(socket_connection);
         return () => {
             disconnectFromSocket(socket_connection);
         }
-    }, [clientID, props.roomID]);
+    }, [clientID, props.displayName, props.roomID]);
 
     const handleUsernameEnter = (event) => {
-        props.setDisplayName(event.target.value.trim());
-        setUsername(event.target.value.trim());
-        socket.emit('isUsernameAvailable', { roomID: props.roomID, displayName: event.target.value.trim() })
+        // splitting this function in order to allow for checking of the
+        // pre-generated username 
+        handleUsernameUpdate(event.target.value.trim());
     }
 
-    const btnActive = !(username && spaceInGameRoom && usernameAvailable);
+    const handleUsernameUpdate = (username) => {
+        props.setDisplayName(username);
+        socket.emit('isUsernameAvailable', { roomID: props.roomID, displayName: username })
+    }
+
+    const btnActive = !(props.displayName && spaceInGameRoom && usernameAvailable);
     return (
         <div className={styles.loginContainer}>
             <Row className={styles.firstRow} />
@@ -64,9 +70,12 @@ function GameUsernamePrompt(props) {
                                             type="text"
                                             placeholder={t('gameUsernamePrompt.usernameInputPlaceholder')}
                                             className="mr-sm-2"
-                                            value={username}
+                                            value={props.displayName}
                                             onChange={handleUsernameEnter}
                                         />
+                                        <Form.Text className={"text-muted"}>
+                                            {t("gameUsernamePrompt.usernameInputTooltip")}
+                                        </Form.Text>
                                     </Form.Group>
                                     <div className={styles.joinBtnContainer}>
                                         <Button

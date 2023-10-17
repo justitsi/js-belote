@@ -45,13 +45,19 @@ export const generateRandomString = (length) => {
 }
 
 export const getWordCombo = () => {
-    let adj = ADJ_LIST['adjs'][
+    return `${getAdjective()}-${getNoun()}`;
+}
+
+export const getAdjective = () => {
+    return ADJ_LIST['adjs'][
         (Math.floor(Math.random() * ADJ_LIST['adjs'].length))
     ];
-    let noun = NOUN_LIST['nouns'][
+}
+
+export const getNoun = () => {
+    return NOUN_LIST['nouns'][
         (Math.floor(Math.random() * NOUN_LIST['nouns'].length))
     ];
-    return `${adj}-${noun}`;
 }
 
 export const generateRoomName = () => {

@@ -13,13 +13,14 @@ import GameUsernamePrompt from './../../components/SiteComponents/GameUsernamePr
 import { Row, Col, Tabs, Tab } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { GameContext } from '../../modules/socketContexts';
+import { getNoun } from '../../modules/util';
 
 const BelotePage = (props) => {
     // window rendering vars
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     // server conn vars
     const { roomID } = useParams();
-    const [displayName, setDisplayName] = useState(null)
+    const [displayName, setDisplayName] = useState(getNoun());
     const [socket, setSocket] = useState(null)
     const [gameSocketID] = useContext(GameContext);
     const [usernameSet, setUsernameSet] = useState(false)
@@ -122,12 +123,12 @@ const BelotePage = (props) => {
 
     // check if player is switching belote lobbies to reset socket and vars
     useEffect(() => {
-        if (socket) disconnectFromSocket(socket);
+        if (socket)
+            disconnectFromSocket(socket);
         setSocket(null)
         setUsernameSet(false)
-        setDisplayName(null)
         setLobbyEvents([])
-    }, [])
+    }, [roomID])
 
 
 
@@ -271,6 +272,7 @@ const BelotePage = (props) => {
                 <div className={styles.nameEntryFormContainer}>
                     <GameUsernamePrompt
                         roomID={roomID}
+                        displayName={displayName}
                         setDisplayName={setDisplayName}
                         handleReadyToConnect={handleReadyToConnect}
                     />

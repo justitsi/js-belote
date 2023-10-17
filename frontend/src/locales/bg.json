@@ -127,6 +127,7 @@
     "gameUsernamePrompt": {
         "roomIDLabel": "ID на стаята:",
         "usernameInputPlaceholder": "Въведете име",
-        "joinGameBtnLabel": "Влезте в игра"
+        "joinGameBtnLabel": "Влезте в игра",
+        "usernameInputTooltip": "Ако влизате в стая повторно, използвайте същото име като миналия път"
     }
 }

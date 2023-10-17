@@ -128,6 +128,7 @@
     "gameUsernamePrompt": {
         "roomIDLabel": "Room ID:",
         "usernameInputPlaceholder": "Enter username",
-        "joinGameBtnLabel": "Join Game"
+        "joinGameBtnLabel": "Join Game",
+        "usernameInputTooltip": "If rejoining a lobby, use the exact username you used last time"
     }
 }
