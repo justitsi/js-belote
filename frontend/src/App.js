@@ -25,8 +25,8 @@ const App = () => {
 
 
   return (
-    <div className={styles.App}>
-      <I18nextProvider i18n={i18n}>
+    <I18nextProvider i18n={i18n}>
+      <div className={styles.App}>
         <div className={styles.content}>
           <BrowserRouter>
             <Navbar />
@@ -52,8 +52,8 @@ const App = () => {
           </BrowserRouter>
         </div>
         <Footer />
-      </I18nextProvider >
-    </div >
+      </div >
+    </I18nextProvider >
   );
 }
 

@@ -8,15 +8,6 @@ function Footer(props) {
 
     return (
         <Jumbotron className={styles.footerContainer}>
-            {/* <Row>
-                <Col sm={3} md={4} lg={4} />
-                <Col sm={6} md={4} lg={4}>
-                    <p className={styles.moreInfoLabel}>
-                        {t('footer.moreInfoLabel')}
-                    </p>
-                </Col>
-            </Row>
-            <br /> */}
             <Row>
                 <Col sm={0} md={1} lg={2} />
                 <Col sm={12} md={10} lg={8}>
