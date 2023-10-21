@@ -1,7 +1,7 @@
 #################################################
 # Container to build application code
 #################################################
-FROM node:bookworm as node-build
+FROM node:20 as node-build
 WORKDIR /app
 
 # Install dependencies
@@ -18,7 +18,7 @@ LABEL stage=builder
 # Container to host application code in
 # production
 #################################################
-FROM nginx:bookworm as frontend-production
+FROM nginx as frontend-production
 
 EXPOSE 80
 COPY ./nginx_config/nginx.conf /etc/nginx/conf.d/default.conf
