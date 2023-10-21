@@ -1,6 +1,8 @@
 #################################################
 # Container to build application code
 #################################################
+
+# THIS CONTAINER IS CURRENTLY UNUSED
 FROM node:20 as node-build
 WORKDIR /app
 
