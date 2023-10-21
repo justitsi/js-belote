@@ -61,13 +61,29 @@ const Our_Navbar = () => {
                     </Nav.Link>
                 </LinkContainer>
             </Navbar.Brand>
-            <div>
-                {(isConnected && numConnected > 0) &&
-                    <div className={styles.playersOnlineIndicator}>
-                        {numConnected} {t('navbar.playersOnline')}
-                    </div>
-                }
-            </div>
+            {/*
+            isConnected represent connection attempt, not actual connection - rely on 
+            check in server that guarantees never less than 0 players connected 
+            */}
+            {isConnected &&
+                <div>
+                    {(numConnected > 0) &&
+                        <div className={styles.playersOnlineIndicator}>
+                            <a className={styles.onlineIcon}>{'\u25CF'} </a> {numConnected} {t('navbar.playersOnline')}
+                        </div>
+                    }
+                    {(numConnected === 0) &&
+                        <div className={styles.playersOnlineIndicator}>
+                            <a className={styles.onlineIcon}>{'\u25CF'} </a> {t('navbar.connected')}
+                        </div>
+                    }
+                    {(numConnected === -1) &&
+                        <div className={styles.playersOnlineIndicator}>
+                            <a className={styles.offlineIcon}>{'\u25CF'} </a> {t('navbar.disconnected')}
+                        </div>
+                    }
+                </div>
+            }
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">

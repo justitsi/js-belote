@@ -7,7 +7,9 @@
         "create_new_room": "Create new room",
         "gameIDLabel": "Enter game ID to join",
         "joinGameBtnLabel": "Join",
-        "playersOnline": "Players Online"
+        "playersOnline": "Players Online",
+        "connected": "Connected",
+        "disconnected": "Disconnected"
     },
     "footer": {
         "moreInfoLabel": "More info below",

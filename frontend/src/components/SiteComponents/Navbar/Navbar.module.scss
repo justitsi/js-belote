@@ -14,3 +14,28 @@
 
     user-select: none;
 }
+
+.onlineIcon {
+    color: green;
+    animation: blink 2.5s linear infinite;
+}
+
+.offlineIcon {
+    color: red;
+    animation: blink 2.5s linear infinite;
+}
+
+
+@keyframes blink {
+    25% {
+        opacity: 0.75;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    75% {
+        opacity: 0.75;
+    }
+}

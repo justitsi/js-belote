@@ -6,7 +6,9 @@
         "create_new_room": "Създайте нова стая",
         "gameIDLabel": "Въведете ID за да влезете",
         "joinGameBtnLabel": "Влез",
-        "playersOnline": "Играчи онлайн"
+        "playersOnline": "Играчи онлайн",
+        "connected": "Успешна връзка",
+        "disconnected": "Неуспешна връзка"
     },
     "footer": {
         "moreInfoLabel": "Повече информажия",
