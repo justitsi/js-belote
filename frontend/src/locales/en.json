@@ -9,7 +9,12 @@
         "joinGameBtnLabel": "Join",
         "playersOnline": "Players Online",
         "connected": "Connected",
-        "disconnected": "Disconnected"
+        "disconnected": "Disconnected",
+        "lang": "Language",
+        "langs": {
+            "bg": "Bulgarian",
+            "en": "English"
+        }
     },
     "footer": {
         "moreInfoLabel": "More info below",

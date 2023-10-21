@@ -8,7 +8,12 @@
         "joinGameBtnLabel": "Влез",
         "playersOnline": "Играчи онлайн",
         "connected": "Успешна връзка",
-        "disconnected": "Неуспешна връзка"
+        "disconnected": "Неуспешна връзка",
+        "lang": "Език",
+        "langs": {
+            "bg": "Български",
+            "en": "Английски"
+        }
     },
     "footer": {
         "moreInfoLabel": "Повече информажия",

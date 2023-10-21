@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Navbar, Nav, Form, Button, FormControl } from 'react-bootstrap';
+import { Navbar, Nav, Form, Button, FormControl, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { generateRoomName } from '../../../modules/util';
 import { SocketContext } from '../../../modules/socketContexts';
@@ -12,9 +12,10 @@ import favicon from '../../../assets/icons/favicon.png'
 const Our_Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { t } = useTranslation('translations');
+    const { t, i18n } = useTranslation('translations');
     const [serverClientID, serverSocket] = useContext(SocketContext);
     const [roomID, setRoomID] = useState("");
+    const [navExpanded, setNavExpanded] = useState(false);
 
     // state variables for number of connected players
     const [numConnected, setNumConnected] = useState(-1);
@@ -45,11 +46,15 @@ const Our_Navbar = () => {
         if (!window.location.toString().includes("/belote/room/")) {
             let destRoom = generateRoomName();
             navigate(`/belote/room/${destRoom}`);
+            setNavExpanded(false)
         };
     }
 
+    // get local language settings
+    const getLanguage = () => i18n.language || window.localStorage.i18nextLng;
+
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="light" expand="lg" expanded={navExpanded}>
             <Navbar.Brand>
                 <LinkContainer to={'/'}>
                     {/* {t('navbar.brand')} */}
@@ -84,8 +89,11 @@ const Our_Navbar = () => {
                     }
                 </div>
             }
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
+            {/* controlling navbar expansion state manually to allow for collapse only on certain events  */}
+            <Navbar.Toggle aria-controls="basic-navbar-nav"
+                onClick={() => { setNavExpanded(!navExpanded) }}
+            />
+            <Navbar.Collapse id="basic-navbar-nav" >
                 <Nav className="mr-auto">
                     <LinkContainer to={'/'}>
                         <Nav.Link>
@@ -97,7 +105,26 @@ const Our_Navbar = () => {
                         <Nav.Link onClick={handleRandomRoomClick}>{t('navbar.create_new_room')}</Nav.Link>
                     }
                 </Nav>
-                <Form inline>
+                <Nav>
+                    <NavDropdown title={t('navbar.lang')}>
+                        {(getLanguage() !== 'bg') &&
+                            <NavDropdown.Item>
+                                <div onClick={() => { i18n.changeLanguage("bg") }}>
+                                    {t('navbar.langs.bg')}
+                                </div>
+                            </NavDropdown.Item>
+                        }
+                        {(getLanguage() !== 'en') &&
+                            <NavDropdown.Item>
+                                <div onClick={() => { i18n.changeLanguage("en") }}>
+                                    {t('navbar.langs.en')}
+                                </div>
+                            </NavDropdown.Item>
+                        }
+                    </NavDropdown>
+                </Nav>
+
+                {/* <Form inline>
                     <FormControl
                         type="text"
                         placeholder={t('navbar.gameIDLabel')}
@@ -114,7 +141,7 @@ const Our_Navbar = () => {
                     >
                         {t('navbar.joinGameBtnLabel')}
                     </Button>
-                </Form>
+                </Form> */}
             </Navbar.Collapse>
         </Navbar >
     );
