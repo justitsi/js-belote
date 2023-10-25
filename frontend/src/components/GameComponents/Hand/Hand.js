@@ -76,34 +76,34 @@ const Hand = (props) => {
         }
     }
 
-    // setup event listeners for keyboard controls for game
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            console.log(event)
-            // handle selecting cards with keyboard
-            if (event.code.includes("Digit")) {
-                const digit = parseInt(event.key)
-                log("debug", `Handling selecting card ${digit} using keyboard`)
-                if (digit > 0) {
-                    if (digit < cardsInHand.length + 1) {
-                        // check if card can even be selected
-                        const toSelectIndex = digit - 1;
-                        if (activeCards[toSelectIndex] === true)
-                            setSelected(toSelectIndex);
-                    }
+    // function to handle keyboard events
+    const handleKeyDown = (event) => {
+        // handle selecting cards with keyboard
+        if (event.code.includes("Digit")) {
+            const digit = parseInt(event.key)
+            log("debug", `Handling selecting card ${digit} using keyboard`)
+            if (digit > 0) {
+                if (digit < cardsInHand.length + 1) {
+                    // check if card can even be selected
+                    const toSelectIndex = digit - 1;
+                    if (activeCards[toSelectIndex] === true)
+                        setSelected(toSelectIndex);
                 }
             }
-            // handle playing selected card with keyboard
-            if (event.code.toLowerCase() === "enter") {
-                log("debug", 'Handling playing selected card from ENTER key');
-                playSelectedCard();
-            }
-            if (event.code.toLowerCase() === "space") {
-                log("debug", 'Handling playing selected card from SPACE key');
-                playSelectedCard();
-            }
         }
+        // handle playing selected card with keyboard
+        if (event.code.toLowerCase() === "enter") {
+            log("debug", 'Handling playing selected card from ENTER key');
+            playSelectedCard();
+        }
+        if (event.code.toLowerCase() === "space") {
+            log("debug", 'Handling playing selected card from SPACE key');
+            playSelectedCard();
+        }
+    }
 
+    // setup event listeners for keyboard controls for game
+    useEffect(() => {
         // handle adding event listener
         document.addEventListener('keydown', handleKeyDown);
 
