@@ -42,7 +42,8 @@ const BelotePage = () => {
         const roomNameAvailable = ((roomID.length > 0) || (urlRoomId))
         if (!roomID.length > 0) {
             if (urlRoomId) {
-                setRoomID(urlRoomId);
+                // user should go to lobby as we don't know if they are not already in room
+                navigate(`/belote/lobby/${urlRoomId}`)
             }
         }
         if (displayName && roomNameAvailable) {

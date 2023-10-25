@@ -55,7 +55,7 @@ const App = () => {
 
   useEffect(() => {
     console.log("Welcome to Belote with Friends")
-  })
+  }, [])
 
   return (
     <I18nextProvider i18n={i18n}>

@@ -37,7 +37,7 @@ io.on("connection", async (socket) => {
                 }
             });
 
-            socket.on('canJoinRoom', (args) => {
+            socket.on('doesRoomHaveCapacity', (args) => {
                 try {
                     const roomID = args;
                     let canJoin = true;
@@ -49,7 +49,7 @@ io.on("connection", async (socket) => {
                                 break;
                             }
                     }
-                    io.to(clientID).emit('canJoinRoom', canJoin);
+                    io.to(clientID).emit('doesRoomHaveCapacity', canJoin);
                 } catch (err) {
                     log("error", roomID, `Error handling request: ${err}`)
                 }

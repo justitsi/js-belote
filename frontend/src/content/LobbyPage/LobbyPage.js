@@ -23,7 +23,7 @@ const LobbyPage = (props) => {
 
     //connect to server to check if room has space to join
     useEffect(() => {
-        serverSocketRef.on("canJoinRoom", (args) => {
+        serverSocketRef.on("doesRoomHaveCapacity", (args) => {
             setSpaceInGameRoom(args)
             if (args === false) setError('Room is full')
             else setError(null)
@@ -37,11 +37,11 @@ const LobbyPage = (props) => {
         });
 
         // emit event to check default name
-        serverSocketRef.emit('canJoinRoom', roomID)
+        serverSocketRef.emit('doesRoomHaveCapacity', roomID)
         serverSocketRef.emit('isUsernameAvailable', { roomID: roomID, displayName: displayName })
         return () => {
             serverSocketRef.off("isUsernameAvailable");
-            serverSocketRef.off("canJoinRoom");
+            serverSocketRef.off("doesRoomHaveCapacity");
         }
     }, [roomID, serverId, serverSocketRef]);
 
