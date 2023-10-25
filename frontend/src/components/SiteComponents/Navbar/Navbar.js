@@ -42,10 +42,13 @@ const Our_Navbar = () => {
         setRoomID("");
     }
 
+    const inRoom = window.location.toString().includes("/belote/lobby/") ||
+        window.location.toString().includes("/belote/game/")
+
     const handleRandomRoomClick = () => {
-        if (!window.location.toString().includes("/belote/room/")) {
+        if (!inRoom) {
             let destRoom = generateRoomName();
-            navigate(`/belote/room/${destRoom}`);
+            navigate(`/belote/lobby/${destRoom}`);
             setNavExpanded(false)
         };
     }
@@ -101,7 +104,7 @@ const Our_Navbar = () => {
                         </Nav.Link>
                     </LinkContainer>
                     {/* only show new room button if not currently entering room */}
-                    {(!location.pathname.includes("/belote/room/")) &&
+                    {(!inRoom) &&
                         <Nav.Link onClick={handleRandomRoomClick}>{t('navbar.create_new_room')}</Nav.Link>
                     }
                 </Nav>

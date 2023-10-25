@@ -28,7 +28,7 @@ const MainPage = (props) => {
         let destRoom = roomID;
         if (!destRoom) destRoom = generateRoomName();
 
-        navigate(`/belote/room/${destRoom}`);
+        navigate(`/belote/lobby/${destRoom}`);
         evt.stopPropagation();
         setRoomID("");
     }

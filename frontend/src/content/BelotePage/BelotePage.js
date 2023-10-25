@@ -1,5 +1,6 @@
 import styles from './BelotePage.module.scss';
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { log } from "../../modules/util";
 import { connectToGameSocket, disconnectFromSocket } from '../../modules/socketActions';
 import GameStatusIndicator from './../../components/GameComponents//GameStatusIndicator';
@@ -9,21 +10,21 @@ import GameBoard from '../../components/GameComponents/GameBoard';
 import RoomChat from '../../components/GameComponents/RoomChat';
 import HandHistory from './../../components/GameComponents/HandHistory';
 import PremiumOptions from './../../components/GameComponents/PremiumOptions';
-import GameUsernamePrompt from './../../components/SiteComponents/GameUsernamePrompt';
-import { Row, Col, Tabs, Tab } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
-import { GameContext } from '../../modules/socketContexts';
-import { getNoun } from '../../modules/util';
 
-const BelotePage = (props) => {
+import { Row, Col, Tabs, Tab } from 'react-bootstrap';
+import { GameSocketContext, GameSettingsContext } from '../../modules/socketContexts';
+
+const BelotePage = () => {
+    // get application context
+    const [displayName, setDisplayName, roomID, setRoomID] = useContext(GameSettingsContext);
+    const [gameSocketID] = useContext(GameSocketContext);
+    // get navigation hook
+    const navigate = useNavigate();
+    const { urlRoomId } = useParams();
     // window rendering vars
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     // server conn vars
-    const { roomID } = useParams();
-    const [displayName, setDisplayName] = useState(getNoun());
     const [socket, setSocket] = useState(null)
-    const [gameSocketID] = useContext(GameContext);
-    const [usernameSet, setUsernameSet] = useState(false)
     // game state vars
     const [gameStatus, setGameStatus] = useState(null)
     const [roundStatus, setRoundStatus] = useState(false)
@@ -38,98 +39,110 @@ const BelotePage = (props) => {
 
     // manage socket communication
     useEffect(() => {
-        if (displayName && usernameSet) {
-            if (socket) disconnectFromSocket(socket);
-            let socket_connection = connectToGameSocket(roomID, gameSocketID, displayName);
-
-            socket_connection.on("gameStatusUpdate", (args) => {
-                log("debug", `Received game status update ${JSON.stringify(args)}`)
-                setGameStatus(args)
-            });
-
-            socket_connection.on("roundStatusUpdate", (args) => {
-                log("debug", `Received round status update ${JSON.stringify(args)}`)
-                setRoundStatus(args)
-            });
-
-            socket_connection.on('playerHandUpdate', (args) => {
-                log("debug", `Received player hand update ${JSON.stringify(args.cards)}`)
-                setPlayerHand(args.cards)
-            })
-
-            socket_connection.on('playerValidSuitOptionsUpdate', (args) => {
-                log("debug", `Received player valid suit options update ${JSON.stringify(args)}`)
-                setValidSuitOptions(args)
-            })
-
-            socket_connection.on('playerHandValidOptionsUpdate', (args) => {
-                log("debug", `Received player valid hand options update ${JSON.stringify(args)}`)
-                setPlayerHandValidOptions(args)
-            })
-
-            socket_connection.on('roundScoreUpdate', (args) => {
-                log("debug", `Received round score update ${JSON.stringify(args)}`)
-                setRoundScore(args)
-            })
-
-            socket_connection.on('lobbyUpdate', (args) => {
-                log("debug", `Receivedlobby update ${JSON.stringify(args)}`)
-                const events = lobbyEvents
-                events.push(args)
-                setLobbyEvents(events)
-            })
-
-            socket_connection.on('playerPremiumValidOptions', (args) => {
-                log("debug", `Received player valid premium options update ${JSON.stringify(args)}`)
-                setPremiumOptions(args)
-                // args need to be reformated in order to create a *valid* list of all premiums
-                if (args) {
-                    const validPremiums = []
-                    for (const premiumCards of args.C) {
-                        const validPremium = {
-                            cards: premiumCards,
-                            type: 'C'
-                        }
-                        validPremiums.push(validPremium)
-                    }
-                    for (const premiumCards of args.S) {
-                        const validPremium = {
-                            cards: premiumCards,
-                            type: 'S'
-                        }
-                        validPremiums.push(validPremium)
-                    }
-                    setSelectedPremiums(validPremiums)
-                }
-                else setSelectedPremiums([])
-            })
-
-
-            socket_connection.on('suitSelectionUpdate', (args) => {
-                log("debug", `Received suit selection update ${JSON.stringify(args)}`)
-                const selections = suitSelectionHistory;
-                selections.push(args)
-                setSuitSelectionHistory(selections)
-            })
-
-            setSocket(socket_connection)
-
-            // disconnect from socket on component unmount
-            return () => {
-                disconnectFromSocket(socket_connection)
+        const roomNameAvailable = ((roomID.length > 0) || (urlRoomId))
+        if (!roomID.length > 0) {
+            if (urlRoomId) {
+                setRoomID(urlRoomId);
             }
         }
-    }, [roomID, props.game_clientID, usernameSet]);
+        if (displayName && roomNameAvailable) {
+            if (roomID) {
+                if (socket) disconnectFromSocket(socket);
+                let socket_connection = connectToGameSocket(roomID, gameSocketID, displayName);
+
+                socket_connection.on("gameStatusUpdate", (args) => {
+                    log("debug", `Received game status update ${JSON.stringify(args)}`)
+                    setGameStatus(args)
+                });
+
+                socket_connection.on("roundStatusUpdate", (args) => {
+                    log("debug", `Received round status update ${JSON.stringify(args)}`)
+                    setRoundStatus(args)
+                });
+
+                socket_connection.on('playerHandUpdate', (args) => {
+                    log("debug", `Received player hand update ${JSON.stringify(args.cards)}`)
+                    setPlayerHand(args.cards)
+                })
+
+                socket_connection.on('playerValidSuitOptionsUpdate', (args) => {
+                    log("debug", `Received player valid suit options update ${JSON.stringify(args)}`)
+                    setValidSuitOptions(args)
+                })
+
+                socket_connection.on('playerHandValidOptionsUpdate', (args) => {
+                    log("debug", `Received player valid hand options update ${JSON.stringify(args)}`)
+                    setPlayerHandValidOptions(args)
+                })
+
+                socket_connection.on('roundScoreUpdate', (args) => {
+                    log("debug", `Received round score update ${JSON.stringify(args)}`)
+                    setRoundScore(args)
+                })
+
+                socket_connection.on('lobbyUpdate', (args) => {
+                    log("debug", `Receivedlobby update ${JSON.stringify(args)}`)
+                    const events = lobbyEvents
+                    events.push(args)
+                    setLobbyEvents(events)
+                })
+
+                socket_connection.on('playerPremiumValidOptions', (args) => {
+                    log("debug", `Received player valid premium options update ${JSON.stringify(args)}`)
+                    setPremiumOptions(args)
+                    // args need to be reformated in order to create a *valid* list of all premiums
+                    if (args) {
+                        const validPremiums = []
+                        for (const premiumCards of args.C) {
+                            const validPremium = {
+                                cards: premiumCards,
+                                type: 'C'
+                            }
+                            validPremiums.push(validPremium)
+                        }
+                        for (const premiumCards of args.S) {
+                            const validPremium = {
+                                cards: premiumCards,
+                                type: 'S'
+                            }
+                            validPremiums.push(validPremium)
+                        }
+                        setSelectedPremiums(validPremiums)
+                    }
+                    else setSelectedPremiums([])
+                })
+
+
+                socket_connection.on('suitSelectionUpdate', (args) => {
+                    log("debug", `Received suit selection update ${JSON.stringify(args)}`)
+                    const selections = suitSelectionHistory;
+                    selections.push(args)
+                    setSuitSelectionHistory(selections)
+                })
+
+                setSocket(socket_connection)
+
+                // disconnect from socket on component unmount
+                return () => {
+                    disconnectFromSocket(socket_connection)
+                }
+            }
+        }
+        else {
+            // if no username go set one here
+            if (roomNameAvailable) {
+                if (roomID) navigate(`/belote/lobby/${roomID}`)
+                if (urlRoomId) navigate(`/belote/lobby/${urlRoomId}`)
+            }
+            // if no room and no username just go home
+            else navigate("/")
+        }
+    }, [roomID, gameSocketID, displayName]);
 
     // check if player is switching belote lobbies to reset socket and vars
     useEffect(() => {
-        if (socket)
-            disconnectFromSocket(socket);
-        setSocket(null)
-        setUsernameSet(false)
         setLobbyEvents([])
     }, [roomID])
-
 
 
     const handleDeckSplit = (index) => {
@@ -147,10 +160,6 @@ const BelotePage = (props) => {
             setSelectedPremiums([])
         }
         socket.emit("cardPlay", card);
-    }
-
-    const handleReadyToConnect = () => {
-        setUsernameSet(true);
     }
 
     const handleAnouncePremiums = (premiums) => {
@@ -266,17 +275,6 @@ const BelotePage = (props) => {
                         </Row>
                     }
                 </div >
-            }
-            {
-                usernameSet === false && !socket &&
-                <div className={styles.nameEntryFormContainer}>
-                    <GameUsernamePrompt
-                        roomID={roomID}
-                        displayName={displayName}
-                        setDisplayName={setDisplayName}
-                        handleReadyToConnect={handleReadyToConnect}
-                    />
-                </div>
             }
         </div >
     );

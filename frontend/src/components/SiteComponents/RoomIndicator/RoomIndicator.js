@@ -22,7 +22,7 @@ const RoomIndicator = (props) => {
     }
 
     const joinRoom = () => {
-        navigate(`/belote/room/${props.roomID}`);
+        navigate(`/belote/lobby/${props.roomID}`);
     }
 
     return (
