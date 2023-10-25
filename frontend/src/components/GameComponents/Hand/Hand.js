@@ -70,6 +70,7 @@ const Hand = (props) => {
                         <Card />
                     </div >
             }
+            // store which cards can be selected to be used for keyboard controls 
             activeCards.push(cardShouldBeActive && props.roundStatus === 'in_progress')
             cardsToShow.push(cardElement)
         }
@@ -117,7 +118,7 @@ const Hand = (props) => {
             // remove event listener after component unmount
             document.removeEventListener('keydown', handleKeyDown);
         }
-    }, [props.validOptions])
+    }, [props.validOptions, selected])
 
     return (
         <div className={styles.handContainer}>
