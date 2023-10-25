@@ -51,13 +51,13 @@ export const getWordCombo = () => {
 export const getAdjective = () => {
     return ADJ_LIST['adjs'][
         (Math.floor(Math.random() * ADJ_LIST['adjs'].length))
-    ];
+    ].toLowerCase();
 }
 
 export const getNoun = () => {
     return NOUN_LIST['nouns'][
         (Math.floor(Math.random() * NOUN_LIST['nouns'].length))
-    ];
+    ].toLowerCase();
 }
 
 export const generateRoomName = () => {

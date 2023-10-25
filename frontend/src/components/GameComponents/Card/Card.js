@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ManagerComponent from './../../../assets/cards/ManagerComponent'
 
 
-function Card(props) {
+const Card = (props) => {
     const { t } = useTranslation('translations');
 
     const handleOnCLick = () => {

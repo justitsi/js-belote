@@ -1,12 +1,13 @@
 import styles from './Hand.module.scss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Card from '../Card'
 import { useTranslation } from 'react-i18next';
 import { sortCards } from './../../../modules/GameFunctions';
 import { ReactComponent as ArrowIcon } from './../../../assets/icons/ArrowCardOrder.svg';
-import { Button, Container } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
+import { log } from '../../../modules/util';
 
-function Hand(props) {
+const Hand = (props) => {
     const { t } = useTranslation('translations');
     const [selected, setSelected] = useState(-1);
     const [reverseCardOrder, setReverseCardOrder] = useState(false);
@@ -28,25 +29,30 @@ function Hand(props) {
 
 
     let cardsToShow = []
-    if (props.roundStatus === 'in_progress' || props.roundStatus === 'started_selecting_suit' || props.roundStatus === 'suit_selected') {
+    let activeCards = []
+    if (props.roundStatus === 'in_progress' ||
+        props.roundStatus === 'started_selecting_suit' ||
+        props.roundStatus === 'suit_selected') {
 
         for (let i = 0; i < props.cardCount; i++) {
             let cardElement = null;
+            let cardShouldBeActive = false
+
             if (props.showCards === true) {
                 const selectHandler = (index) => {
                     if (index !== selected) setSelected(index)
                     else setSelected(-1)
-                    console.log(index, selected,)
+                    log("debug", `${index}, ${selected}`)
                 }
 
-                let cardShouldBeActive = false
                 for (const activeCard of props.validOptions) {
                     if (activeCard.suit === cardsInHand[i].suit && activeCard.rank === cardsInHand[i].rank)
                         cardShouldBeActive = true
                 }
 
                 cardElement =
-                    <div className={props.vertical ? styles.verticalListItem : styles.horizontalListItem} key={i}>
+                    <div className={props.vertical ? styles.verticalListItem : styles.horizontalListItem}
+                        key={i}>
                         <Card
                             rank={cardsInHand[i].rank}
                             suit={cardsInHand[i].suit}
@@ -59,13 +65,54 @@ function Hand(props) {
             }
             else {
                 cardElement =
-                    <div className={props.vertical ? styles.verticalListItem : styles.horizontalListItem} key={i}>
+                    <div className={props.vertical ? styles.verticalListItem : styles.horizontalListItem}
+                        key={i}>
                         <Card />
                     </div >
             }
+            // store selectable card list for keyboard controls
+            activeCards.push(cardShouldBeActive && props.roundStatus === 'in_progress')
             cardsToShow.push(cardElement)
         }
     }
+
+    // setup event listeners for keyboard controls for game
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            console.log(event)
+            // handle selecting cards with keyboard
+            if (event.code.includes("Digit")) {
+                const digit = parseInt(event.key)
+                log("debug", `Handling selecting card ${digit} using keyboard`)
+                if (digit > 0) {
+                    if (digit < cardsInHand.length + 1) {
+                        // check if card can even be selected
+                        const toSelectIndex = digit - 1;
+                        if (activeCards[toSelectIndex] === true)
+                            setSelected(toSelectIndex);
+                    }
+                }
+            }
+            // handle playing selected card with keyboard
+            if (event.code.toLowerCase() === "enter") {
+                log("debug", 'Handling playing selected card from ENTER key');
+                playSelectedCard();
+            }
+            if (event.code.toLowerCase() === "space") {
+                log("debug", 'Handling playing selected card from SPACE key');
+                playSelectedCard();
+            }
+        }
+
+        // handle adding event listener
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            // remove event listener after component unmount
+            document.removeEventListener('keydown', handleKeyDown);
+        }
+
+    }, [])
 
     return (
         <div className={styles.handContainer}>
