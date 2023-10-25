@@ -19,7 +19,9 @@ const GameUsernamePrompt = (props) => {
     const handleSubmit = (event) => {
         // stop form submit from reloading page
         event.stopPropagation();
-        props.handleReadyToConnect();
+        event.preventDefault();
+        if (props.displayName && props.spaceInGameRoom && props.usernameAvailable)
+            props.handleReadyToConnect();
     }
 
     const btnActive = !(props.displayName && props.spaceInGameRoom && props.usernameAvailable);
@@ -32,7 +34,7 @@ const GameUsernamePrompt = (props) => {
                         <Jumbotron>
                             <h3>{t('gameUsernamePrompt.roomIDLabel')} {props.roomID}</h3>
                             <div>
-                                <Form>
+                                <Form onSubmit={handleSubmit}>
                                     {props.error &&
                                         <label className={styles.errorText}>{props.error}</label>
                                     }
