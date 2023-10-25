@@ -70,7 +70,6 @@ const Hand = (props) => {
                         <Card />
                     </div >
             }
-            // store selectable card list for keyboard controls
             activeCards.push(cardShouldBeActive && props.roundStatus === 'in_progress')
             cardsToShow.push(cardElement)
         }
@@ -78,27 +77,34 @@ const Hand = (props) => {
 
     // function to handle keyboard events
     const handleKeyDown = (event) => {
-        // handle selecting cards with keyboard
-        if (event.code.includes("Digit")) {
-            const digit = parseInt(event.key)
-            log("debug", `Handling selecting card ${digit} using keyboard`)
-            if (digit > 0) {
-                if (digit < cardsInHand.length + 1) {
-                    // check if card can even be selected
-                    const toSelectIndex = digit - 1;
-                    if (activeCards[toSelectIndex] === true)
-                        setSelected(toSelectIndex);
+        // handle selecting cards with keyboard only if event is not repeat
+        if (event.repeat === false) {
+            if (event.code.includes("Digit")) {
+                const digit = parseInt(event.key)
+
+                if (digit > 0) {
+                    if (digit < cardsInHand.length + 1) {
+                        // check if card can even be selected
+                        let toSelectIndex = digit - 1;
+                        if (reverseCardOrder) toSelectIndex = toSelectIndex % 8
+
+                        log("debug", `Handling selecting card ${digit} using keyboard`)
+
+                        // handle selection
+                        if (activeCards[toSelectIndex]) setSelected(toSelectIndex);
+                        else setSelected(-1);
+                    }
                 }
             }
-        }
-        // handle playing selected card with keyboard
-        if (event.code.toLowerCase() === "enter") {
-            log("debug", 'Handling playing selected card from ENTER key');
-            playSelectedCard();
-        }
-        if (event.code.toLowerCase() === "space") {
-            log("debug", 'Handling playing selected card from SPACE key');
-            playSelectedCard();
+            // handle playing selected card with keyboard
+            if (event.code.toLowerCase() === "enter") {
+                log("debug", 'Handling playing selected card from ENTER key');
+                playSelectedCard();
+            }
+            if (event.code.toLowerCase() === "space") {
+                log("debug", 'Handling playing selected card from SPACE key');
+                playSelectedCard();
+            }
         }
     }
 
@@ -111,8 +117,7 @@ const Hand = (props) => {
             // remove event listener after component unmount
             document.removeEventListener('keydown', handleKeyDown);
         }
-
-    }, [])
+    }, [props.validOptions])
 
     return (
         <div className={styles.handContainer}>
